@@ -26,13 +26,14 @@ We follow **Clean Architecture** principles, which enforce separation of concern
 
 **Dependencies point inward:**
 - API Layer → Application Layer
-- Application Layer → Domain Layer (if exists)
-- Infrastructure Layer → Application Layer
+- Application Layer → Domain Layer
+- Infrastructure Layer → Domain Layer + Application Layer
 
 **Never:**
 - ❌ Application Layer → API Layer
-- ❌ Domain Layer → Application Layer
+- ❌ Domain Layer → Any other layer (Domain is the innermost layer)
 - ❌ Application Layer → Infrastructure Layer (use interfaces/abstractions)
+- ❌ Domain Layer → Infrastructure Layer
 
 ### 2. CQRS (Command Query Responsibility Segregation)
 
@@ -44,7 +45,7 @@ We **MUST** use CQRS pattern for all operations. This separates read operations 
 ```
 Application/
   Features/
-    {FeatureName}/              ← Plural form (e.g., WeatherForecasts, Users)
+    {FeatureName}/              ← Plural form (e.g., Products, Users)
       Queries/
         Get{Entity}/            ← Query folder (without "Query" suffix)
           Get{Entity}.cs        ← Query + Handler in same file
@@ -62,19 +63,19 @@ Application/
 
 **Example:**
 ```csharp
-// Queries/GetWeatherForecast/GetWeatherForecast.cs - Query and Handler combined
+// Queries/GetProduct/GetProduct.cs - Query and Handler combined
 using MediatR;
-using PoopNPour.Application.WeatherForecasts.Models;
+using PoopNPour.Application.Products.Models;
 
-namespace PoopNPour.Application.WeatherForecasts.Queries;
+namespace PoopNPour.Application.Products.Queries;
 
-public record GetWeatherForecastQuery : IRequest<IEnumerable<WeatherForecast>>;
+public record GetProductQuery : IRequest<IEnumerable<Product>>;
 
-public class GetWeatherForecastQueryHandler 
-    : IRequestHandler<GetWeatherForecastQuery, IEnumerable<WeatherForecast>>
+public class GetProductQueryHandler 
+    : IRequestHandler<GetProductQuery, IEnumerable<Product>>
 {
-    public Task<IEnumerable<WeatherForecast>> Handle(
-        GetWeatherForecastQuery request, 
+    public Task<IEnumerable<Product>> Handle(
+        GetProductQuery request, 
         CancellationToken cancellationToken)
     {
         // Read-only logic
@@ -88,7 +89,7 @@ public class GetWeatherForecastQueryHandler
 ```
 Application/
   Features/
-    {FeatureName}/              ← Plural form (e.g., WeatherForecasts, Users)
+    {FeatureName}/              ← Plural form (e.g., Products, Users)
       Commands/
         Create{Entity}/         ← Command folder (without "Command" suffix)
           Create{Entity}.cs     ← Command + Handler in same file
@@ -106,18 +107,18 @@ Application/
 **Example:**
 ```csharp
 // Command
-public record CreateWeatherForecastCommand(
-    DateOnly Date, 
-    int TemperatureC, 
-    string? Summary
-) : IRequest<WeatherForecast>;
+public record CreateProductCommand(
+    string Name, 
+    decimal Price, 
+    string? Description
+) : IRequest<Product>;
 
 // Handler
-public class CreateWeatherForecastCommandHandler 
-    : IRequestHandler<CreateWeatherForecastCommand, WeatherForecast>
+public class CreateProductCommandHandler 
+    : IRequestHandler<CreateProductCommand, Product>
 {
-    public Task<WeatherForecast> Handle(
-        CreateWeatherForecastCommand request, 
+    public Task<Product> Handle(
+        CreateProductCommand request, 
         CancellationToken cancellationToken)
     {
         // Write logic
@@ -127,13 +128,44 @@ public class CreateWeatherForecastCommandHandler
 
 ## Project Structure Conventions
 
+### Domain Layer (`PoopNPour.Domain`)
+
+**Required Structure:**
+```
+PoopNPour.Domain/
+  Entities/
+    {Entity}.cs                 ← Domain entities (database models)
+```
+
+**Rules:**
+- ✅ Domain entities represent the core business objects
+- ✅ Entities contain only data properties (no business logic)
+- ✅ Domain layer has **NO dependencies** on other layers
+- ✅ Entities are used by Infrastructure layer for database mapping
+- ✅ Application layer works with DTOs, not directly with domain entities
+
+**Example:**
+```csharp
+namespace PoopNPour.Domain.Entities;
+
+public class Product
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public decimal Price { get; set; }
+    public string? Description { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+}
+```
+
 ### Application Layer (`PoopNPour.Application`)
 
 **Required Structure:**
 ```
 PoopNPour.Application/
   Features/
-    {FeatureName}/              ← Plural form (e.g., WeatherForecasts, Users)
+    {FeatureName}/              ← Plural form (e.g., Products, Users)
       Queries/
         Get{Entity}/            ← Query folder (without "Query" suffix)
           Get{Entity}.cs        ← Query + Handler in same file
@@ -141,18 +173,22 @@ PoopNPour.Application/
         Create{Entity}/         ← Command folder (without "Command" suffix)
           Create{Entity}.cs     ← Command + Handler in same file
       Models/
-        {Entity}.cs             ← Domain models/DTOs
+        {Entity}.cs             ← DTOs (Data Transfer Objects)
+      Repositories/
+        I{Entity}Repository.cs ← Repository interfaces
       DTOs/                     ← Optional: Response DTOs if different from models
         {Entity}Dto.cs
 ```
 
 **Rules:**
-- ✅ Feature folders use **plural** names (e.g., `WeatherForecasts`, `Users`, `Products`)
+- ✅ Feature folders use **plural** names (e.g., `Products`, `Users`, `Orders`)
 - ✅ One feature per folder
 - ✅ All business logic lives in handlers
-- ✅ Models/DTOs are in the `Models` folder
+- ✅ Models are DTOs (Data Transfer Objects), not domain entities
+- ✅ Repository interfaces are defined here (implemented in Infrastructure)
 - ✅ No direct database access (use repositories/interfaces)
 - ✅ **Query/Command and Handler MUST be in the same file**
+- ✅ Application layer references Domain layer for entity types (if needed)
 
 ### API Layer (`PoopNPour.Api`)
 
@@ -166,7 +202,7 @@ PoopNPour.Api/
 
 **Rules:**
 - ✅ One endpoint file per feature: `{FeatureName}Endpoints.cs` (plural, matches Application layer)
-- ✅ Endpoint class name matches Application layer feature name (e.g., `WeatherForecasts` → `WeatherForecastsEndpoints`)
+- ✅ Endpoint class name matches Application layer feature name (e.g., `Products` → `ProductsEndpoints`)
 - ✅ Endpoint route matches Application layer feature name (e.g., `/weatherforecasts`)
 - ✅ Endpoints are **thin** - they only:
   - Receive HTTP requests
@@ -180,25 +216,25 @@ PoopNPour.Api/
 
 **Example:**
 ```csharp
-// Application layer: Features/WeatherForecasts/
-// API layer: Endpoints/WeatherForecastsEndpoints.cs
-public static class WeatherForecastsEndpoints
+// Application layer: Features/Products/
+// API layer: Endpoints/ProductsEndpoints.cs
+public static class ProductsEndpoints
 {
-    public static void MapWeatherForecastsEndpoints(this IEndpointRouteBuilder app)
+    public static void MapProductsEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/weatherforecasts")  // Plural, matches Application layer
-            .WithTags("WeatherForecasts");
+        var group = app.MapGroup("/products")  // Plural, matches Application layer
+            .WithTags("Products");
 
-        group.MapGet("/", GetWeatherForecast)
-            .WithName("GetWeatherForecast")
-            .Produces<IEnumerable<WeatherForecast>>();
+        group.MapGet("/", GetProducts)
+            .WithName("GetProducts")
+            .Produces<IEnumerable<Product>>();
     }
 
-    private static async Task<IResult> GetWeatherForecast(IMediator mediator)
+    private static async Task<IResult> GetProducts(IMediator mediator)
     {
-        var query = new GetWeatherForecastQuery();
-        var forecast = await mediator.Send(query);
-        return Results.Ok(forecast);
+        var query = new GetProductsQuery();
+        var products = await mediator.Send(query);
+        return Results.Ok(products);
     }
 }
 ```
@@ -206,7 +242,7 @@ public static class WeatherForecastsEndpoints
 ## Naming Conventions
 
 ### Files and Folders
-- ✅ Feature folders: **Plural** (e.g., `WeatherForecasts`, `Users`)
+- ✅ Feature folders: **Plural** (e.g., `Products`, `Users`)
 - ✅ Query folders: `Get{Entity}/` (without "Query" suffix)
 - ✅ Query files: `Get{Entity}.cs` (contains Query + Handler, inside query folder)
 - ✅ Command folders: `Create{Entity}/` (without "Command" suffix)
@@ -225,7 +261,7 @@ public static class WeatherForecastsEndpoints
 ```csharp
 // In Program.cs
 builder.Services.AddMediatR(cfg => 
-    cfg.RegisterServicesFromAssembly(typeof(GetWeatherForecastQuery).Assembly));
+    cfg.RegisterServicesFromAssembly(typeof(GetProductsQuery).Assembly));
 ```
 
 **Rules:**
@@ -240,14 +276,14 @@ builder.Services.AddMediatR(cfg =>
 1. **Business Logic in API Layer**
    ```csharp
    // ❌ BAD
-   app.MapGet("/weatherforecast", () => {
-       var summaries = new[] { "Freezing", "Bracing" };
+   app.MapGet("/products", () => {
+       var products = new[] { "Product1", "Product2" };
        // Business logic here
    });
    
    // ✅ GOOD
-   app.MapGet("/weatherforecast", async (IMediator mediator) => {
-       var query = new GetWeatherForecastQuery();
+   app.MapGet("/products", async (IMediator mediator) => {
+       var query = new GetProductsQuery();
        return await mediator.Send(query);
    });
    ```
@@ -255,33 +291,33 @@ builder.Services.AddMediatR(cfg =>
 2. **Direct Database Access in Handlers**
    ```csharp
    // ❌ BAD - Direct DbContext access
-   public class GetWeatherForecastQueryHandler {
+   public class GetProductsQueryHandler {
        private readonly AppDbContext _context; // ❌
    }
    
    // ✅ GOOD - Use repository interface
-   public class GetWeatherForecastQueryHandler {
-       private readonly IWeatherForecastRepository _repository; // ✅
+   public class GetProductsQueryHandler {
+       private readonly IProductRepository _repository; // ✅
    }
    ```
 
 3. **Skipping CQRS**
    ```csharp
    // ❌ BAD - Direct service call
-   app.MapGet("/weatherforecast", (IWeatherService service) => {
-       return service.GetForecasts();
+   app.MapGet("/products", (IProductService service) => {
+       return service.GetProducts();
    });
    
    // ✅ GOOD - Use MediatR query
-   app.MapGet("/weatherforecast", async (IMediator mediator) => {
-       return await mediator.Send(new GetWeatherForecastQuery());
+   app.MapGet("/products", async (IMediator mediator) => {
+       return await mediator.Send(new GetProductsQuery());
    });
    ```
 
 4. **Mixing Read and Write Operations**
    ```csharp
    // ❌ BAD - Query that modifies state
-   public class GetWeatherForecastQueryHandler {
+   public class GetProductsQueryHandler {
        public Task Handle(...) {
            _context.Logs.Add(...); // ❌ Modifying in query
        }

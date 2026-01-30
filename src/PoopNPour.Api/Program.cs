@@ -1,14 +1,21 @@
 using MediatR;
-using PoopNPour.Api.Endpoints;
-using PoopNPour.Application.WeatherForecasts.Queries;
+using Microsoft.AspNetCore.Identity;
+using PoopNPour.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Load database configuration from separate file (not in version control)
+builder.Configuration.AddJsonFile("database.config.json", optional: false, reloadOnChange: true);
 
 // Add services to the container.
 builder.Services.AddOpenApi();
 
+// Add Infrastructure (Database, Repositories, Identity)
+builder.Services.AddInfrastructure(builder.Configuration);
+
 // Add MediatR
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetWeatherForecastQuery).Assembly));
+// TODO: Replace with a type from Application layer when adding features
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 var app = builder.Build();
 
@@ -20,7 +27,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Map endpoints
-app.MapWeatherForecastsEndpoints();
+// Add Identity middleware
+app.UseAuthentication();
+app.UseAuthorization();
+
+// Map endpoints here as they are created
+// Example: app.Map{FeatureName}Endpoints();
 
 app.Run();

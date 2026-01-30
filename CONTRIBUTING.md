@@ -84,7 +84,7 @@ Create `src/PoopNPour.Api/Endpoints/{FeatureName}Endpoints.cs`:
 - **Route MUST match Application layer feature name** (plural, lowercase)
 
 ```csharp
-// If Application layer feature is "WeatherForecasts", endpoint is "WeatherForecastsEndpoints"
+// If Application layer feature is "Products", endpoint is "ProductsEndpoints"
 using MediatR;
 using PoopNPour.Application.{Feature}.Models;
 using PoopNPour.Application.{Feature}.Queries;

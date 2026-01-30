@@ -55,5 +55,18 @@ PoopNPour/
 
 - .NET 10.0
 - ASP.NET Core Minimal APIs
+- ASP.NET Core Identity with JWT Authentication
+- Entity Framework Core with SQL Server
 - MediatR (CQRS)
 - OpenAPI/Swagger
+
+## Package Management
+
+All NuGet package versions are centrally managed in `Directory.Packages.props` at the solution root. This makes it easy to:
+- Update package versions across all projects at once
+- Ensure version consistency across projects
+- Manage dependencies in a single location
+
+To add a new package:
+1. Add the package version to `Directory.Packages.props`
+2. Add the package reference (without version) to the appropriate `.csproj` file
