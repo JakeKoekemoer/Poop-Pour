@@ -1,3 +1,6 @@
 <Solution>
-  <Project Path=".\src\PoopNPour.Api\PoopNPour.Api.csproj" />
+  <Folder Name="/AppSource/">
+    <Project Path="PoopNPour.Application/PoopNPour.Application.csproj" Id="fdeaa81b-ca3b-4ad8-8924-4b5d6d6dac97" />
+    <Project Path="src/PoopNPour.Api/PoopNPour.Api.csproj" />
+  </Folder>
 </Solution>
