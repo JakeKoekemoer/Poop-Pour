@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using PoopNPour.Application.Authorization;
+using PoopNPour.Domain.Common.Auth;
 using PoopNPour.Infrastructure.Data;
 using PoopNPour.Infrastructure.Data.Entities;
 using System.Text;
@@ -97,7 +100,23 @@ public static class DependencyInjection
         });
 
         // Add Authorization services
-        services.AddAuthorization();
+        services.AddAuthorization(options =>
+        {
+            // Configure custom policies here
+            options.AddPolicy(Policies.RequireAdministrator, policy =>
+                policy.RequireRole(Roles.Administrator));
+            
+            options.AddPolicy(Policies.RequireUser, policy =>
+                policy.RequireRole(Roles.User));
+            
+            // Add more custom policies as needed
+            // Example:
+            // options.AddPolicy(Policies.CanManageProducts, policy =>
+            //     policy.RequireRole(Roles.Administrator, Roles.Manager));
+        });
+
+        // Register authorization policy handler for custom policy requirements
+        services.AddScoped<IAuthorizationHandler, PolicyRequirementHandler>();
 
         // Register repositories here as they are created
 

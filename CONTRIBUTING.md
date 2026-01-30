@@ -10,26 +10,25 @@
 
 ### Step 1: Create Application Layer Structure
 
-Create the feature folder structure in `PoopNPour.Application/Features/`:
+Create the feature folder structure directly in `PoopNPour.Application/`:
 
 ```
-Features/
-  {FeatureName}/              ← Use plural (e.g., Products, Users)
-    Queries/
-      Get{Entity}/            ← Query folder (without "Query" suffix)
-        Get{Entity}.cs        ← Query + Handler in same file
-    Commands/                 ← If write operations needed
-      Create{Entity}/         ← Command folder (without "Command" suffix)
-        Create{Entity}.cs     ← Command + Handler in same file
-    Models/
-      {Entity}.cs
+{FeatureName}/              ← Use plural (e.g., Products, Users)
+  Queries/
+    Get{Entity}/            ← Query folder (without "Query" suffix)
+      Get{Entity}.cs        ← Query + Handler in same file
+  Commands/                 ← If write operations needed
+    Create{Entity}/         ← Command folder (without "Command" suffix)
+      Create{Entity}.cs     ← Command + Handler in same file
+  Models/
+    {Entity}.cs
 ```
 
 ### Step 2: Implement Query/Command
 
 **For Queries (Read Operations):**
 ```csharp
-// Application/Features/{Feature}/Queries/Get{Entity}/Get{Entity}.cs
+// Application/{Feature}/Queries/Get{Entity}/Get{Entity}.cs
 // Query and Handler MUST be in the same file
 using MediatR;
 using PoopNPour.Application.{Feature}.Models;
@@ -53,7 +52,7 @@ public class Get{Entity}QueryHandler
 
 **For Commands (Write Operations):**
 ```csharp
-// Application/Features/{Feature}/Commands/Create{Entity}/Create{Entity}.cs
+// Application/{Feature}/Commands/Create{Entity}/Create{Entity}.cs
 // Command and Handler MUST be in the same file
 using MediatR;
 using PoopNPour.Application.{Feature}.Models;
@@ -124,7 +123,7 @@ app.Map{FeatureName}Endpoints();
 
 Before submitting, ensure:
 
-- [ ] Feature follows folder structure in `Application/Features/{FeatureName}/` (plural)
+- [ ] Feature follows folder structure in `Application/{FeatureName}/` (plural)
 - [ ] Query/Command properly implements `IRequest<TResponse>`
 - [ ] Handler implements `IRequestHandler<TRequest, TResponse>`
 - [ ] **Query/Command and Handler are in the same file**

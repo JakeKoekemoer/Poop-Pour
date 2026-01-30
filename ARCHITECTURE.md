@@ -44,13 +44,12 @@ We **MUST** use CQRS pattern for all operations. This separates read operations 
 **Structure:**
 ```
 Application/
-  Features/
-    {FeatureName}/              ← Plural form (e.g., Products, Users)
-      Queries/
-        Get{Entity}/            ← Query folder (without "Query" suffix)
-          Get{Entity}.cs        ← Query + Handler in same file
-      Models/
-        {Entity}.cs             ← Domain model/DTO
+  {FeatureName}/              ← Plural form (e.g., Products, Users)
+    Queries/
+      Get{Entity}/            ← Query folder (without "Query" suffix)
+        Get{Entity}.cs        ← Query + Handler in same file
+    Models/
+      {Entity}.cs             ← Domain model/DTO
 ```
 
 **Rules:**
@@ -63,7 +62,7 @@ Application/
 
 **Example:**
 ```csharp
-// Queries/GetProduct/GetProduct.cs - Query and Handler combined
+// Products/Queries/GetProduct/GetProduct.cs - Query and Handler combined
 using MediatR;
 using PoopNPour.Application.Products.Models;
 
@@ -88,12 +87,11 @@ public class GetProductQueryHandler
 **Structure:**
 ```
 Application/
-  Features/
-    {FeatureName}/              ← Plural form (e.g., Products, Users)
-      Commands/
-        Create{Entity}/         ← Command folder (without "Command" suffix)
-          Create{Entity}.cs     ← Command + Handler in same file
-          Create{Entity}Validator.cs  ← Validation (optional, separate file)
+  {FeatureName}/              ← Plural form (e.g., Products, Users)
+    Commands/
+      Create{Entity}/         ← Command folder (without "Command" suffix)
+        Create{Entity}.cs     ← Command + Handler in same file
+        Create{Entity}Validator.cs  ← Validation (optional, separate file)
 ```
 
 **Rules:**
@@ -164,20 +162,19 @@ public class Product
 **Required Structure:**
 ```
 PoopNPour.Application/
-  Features/
-    {FeatureName}/              ← Plural form (e.g., Products, Users)
-      Queries/
-        Get{Entity}/            ← Query folder (without "Query" suffix)
-          Get{Entity}.cs        ← Query + Handler in same file
-      Commands/
-        Create{Entity}/         ← Command folder (without "Command" suffix)
-          Create{Entity}.cs     ← Command + Handler in same file
-      Models/
-        {Entity}.cs             ← DTOs (Data Transfer Objects)
-      Repositories/
-        I{Entity}Repository.cs ← Repository interfaces
-      DTOs/                     ← Optional: Response DTOs if different from models
-        {Entity}Dto.cs
+  {FeatureName}/              ← Plural form (e.g., Products, Users)
+    Queries/
+      Get{Entity}/            ← Query folder (without "Query" suffix)
+        Get{Entity}.cs        ← Query + Handler in same file
+    Commands/
+      Create{Entity}/         ← Command folder (without "Command" suffix)
+        Create{Entity}.cs     ← Command + Handler in same file
+    Models/
+      {Entity}.cs             ← DTOs (Data Transfer Objects)
+    Repositories/
+      I{Entity}Repository.cs ← Repository interfaces
+    DTOs/                     ← Optional: Response DTOs if different from models
+      {Entity}Dto.cs
 ```
 
 **Rules:**
@@ -216,7 +213,7 @@ PoopNPour.Api/
 
 **Example:**
 ```csharp
-// Application layer: Features/Products/
+// Application layer: Products/
 // API layer: Endpoints/ProductsEndpoints.cs
 public static class ProductsEndpoints
 {
@@ -328,7 +325,7 @@ builder.Services.AddMediatR(cfg =>
 
 When adding a new feature, ensure:
 
-- [ ] Feature folder created in `Application/Features/{FeatureName}/`
+- [ ] Feature folder created in `Application/{FeatureName}/`
 - [ ] Query/Command created with proper naming
 - [ ] Handler implements `IRequestHandler<TRequest, TResponse>`
 - [ ] Endpoint file created: `Api/Endpoints/{FeatureName}Endpoints.cs`

@@ -20,11 +20,10 @@ This project follows **Clean Architecture** and **CQRS (Command Query Responsibi
 ```
 PoopNPour/
 ├── PoopNPour.Application/          # Application layer (Business logic, CQRS)
-│   └── Features/
-│       └── {FeatureName}/
-│           ├── Queries/            # Read operations
-│           ├── Commands/           # Write operations
-│           └── Models/             # Domain models/DTOs
+│   └── {FeatureName}/              # Business logic units (plural)
+│       ├── Queries/                # Read operations
+│       ├── Commands/               # Write operations
+│       └── Models/                 # Domain models/DTOs
 │
 └── src/
     └── PoopNPour.Api/              # API layer (Presentation)
@@ -45,8 +44,8 @@ PoopNPour/
 
 ### Quick Reference
 
-- **Queries** (Read): `Application/Features/{Feature}/Queries/`
-- **Commands** (Write): `Application/Features/{Feature}/Commands/`
+- **Queries** (Read): `Application/{Feature}/Queries/`
+- **Commands** (Write): `Application/{Feature}/Commands/`
 - **Endpoints**: `Api/Endpoints/{Feature}Endpoints.cs`
 - **No business logic in API layer**
 - **Always use MediatR for operations**
