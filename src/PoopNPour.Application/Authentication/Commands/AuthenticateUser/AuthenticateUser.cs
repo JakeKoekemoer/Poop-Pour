@@ -11,7 +11,7 @@ namespace PoopNPour.Application.Authentication.Commands;
 /// <summary>
 /// Command to authenticate a user and return JWT token
 /// </summary>
-public record AuthenticateUserCommand(string EmailOrUserName, string Password) 
+public record AuthenticateUserCommand(string Username, string Password) 
     : IRequest<LoginResponseDto>;
 
 /// <summary>
@@ -37,7 +37,7 @@ public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCo
     {
         // Validate password
         var user = await _identityService.ValidatePasswordAsync(
-            request.EmailOrUserName, 
+            request.Username, 
             request.Password, 
             cancellationToken);
 

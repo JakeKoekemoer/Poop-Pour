@@ -55,6 +55,17 @@ builder.Services.AddSwaggerGen(options =>
 // Add HTTP Context Accessor (required for authorization behavior)
 builder.Services.AddHttpContextAccessor();
 
+// Add CORS for Swagger UI
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 // Add Infrastructure (Database, Repositories, Identity)
 builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -71,6 +82,9 @@ var app = builder.Build();
 
 // Enable static files (for custom Swagger CSS/JS)
 app.UseStaticFiles();
+
+// Enable CORS
+app.UseCors();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

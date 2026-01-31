@@ -237,7 +237,7 @@
       "LoginRequestDto": {
         "type": "object",
         "properties": {
-          "emailOrUserName": {
+          "username": {
             "type": "string",
             "nullable": true
           },

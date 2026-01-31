@@ -5,6 +5,6 @@ namespace PoopNPour.Application.Authentication.Models;
 /// </summary>
 public class LoginRequestDto
 {
-    public string EmailOrUserName { get; set; } = string.Empty;
+    public string Username { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
 }

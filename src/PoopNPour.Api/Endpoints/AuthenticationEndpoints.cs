@@ -37,7 +37,8 @@ public static class AuthenticationEndpoints
     {
         try
         {
-            var command = new AuthenticateUserCommand(request.EmailOrUserName, request.Password);
+            
+            var command = new AuthenticateUserCommand(request.Username, request.Password);
             var result = await mediator.Send(command, cancellationToken);
             return Results.Ok(result);
         }
