@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -94,18 +95,29 @@ public class DatabaseSeeder
 
     private async Task SeedDefaultRolesAsync(CancellationToken cancellationToken)
     {
-        var roles = new[]
-        {
-            Roles.Administrator,
-            Roles.User,
-            Roles.Guest
-        };
+        // Use reflection to get all public const string fields from the Roles class
+        var rolesType = typeof(Roles);
+        var roleFields = rolesType.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+            .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(string))
+            .Select(fi => fi.GetValue(null) as string)
+            .Where(role => !string.IsNullOrWhiteSpace(role))
+            .ToList();
 
-        foreach (var role in roles)
+        if (roleFields.Count == 0)
         {
-            await _identityService.EnsureRoleExistsAsync(role, cancellationToken);
+            _logger.LogWarning("No roles found in Roles class. Skipping role seeding.");
+            return;
         }
 
-        _logger.LogInformation("Default roles seeded successfully");
+        _logger.LogInformation("Seeding {Count} roles from Roles class", roleFields.Count);
+
+        foreach (var role in roleFields)
+        {
+            await _identityService.EnsureRoleExistsAsync(role!, cancellationToken);
+        }
+
+        _logger.LogInformation("Successfully seeded {Count} roles: {Roles}", 
+            roleFields.Count, 
+            string.Join(", ", roleFields));
     }
 }

@@ -5,11 +5,11 @@ namespace PoopNPour.Domain.Common.Auth;
 /// </summary>
 public static class Policies
 {
-    public const string RequireAdministrator = nameof(RequireAdministrator);
-    public const string RequireUser = nameof(RequireUser);
-    
-    // Add your custom policies here
-    // Example:
-    // public const string CanManageProducts = nameof(CanManageProducts);
-    // public const string CanViewReports = nameof(CanViewReports);
+    #region User Policies
+
+    public const string AccountRegistration = nameof(AccountRegistration);
+    public const string AccountForgotPassword = nameof(AccountForgotPassword);
+    public const string AccountLogin = nameof(AccountLogin);
+
+    #endregion User Policies
 }

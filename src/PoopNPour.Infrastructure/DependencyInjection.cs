@@ -9,6 +9,7 @@ using PoopNPour.Application.Authorization;
 using PoopNPour.Application.Identity;
 using PoopNPour.Domain.Common.Auth;
 using PoopNPour.Domain.Common.Identity;
+using PoopNPour.Infrastructure.Authorization;
 using PoopNPour.Infrastructure.Data;
 using PoopNPour.Infrastructure.Identity;
 using System.Text;
@@ -104,17 +105,8 @@ public static class DependencyInjection
         // Add Authorization services
         services.AddAuthorization(options =>
         {
-            // Configure custom policies here
-            options.AddPolicy(Policies.RequireAdministrator, policy =>
-                policy.RequireRole(Roles.Administrator));
-            
-            options.AddPolicy(Policies.RequireUser, policy =>
-                policy.RequireRole(Roles.User));
-            
-            // Add more custom policies as needed
-            // Example:
-            // options.AddPolicy(Policies.CanManageProducts, policy =>
-            //     policy.RequireRole(Roles.Administrator, Roles.Manager));
+            // Configure all policies using centralized mappings
+            PolicyRoleMappings.AddRolesToPolicies(options);
         });
 
         // Register authorization policy handler for custom policy requirements
