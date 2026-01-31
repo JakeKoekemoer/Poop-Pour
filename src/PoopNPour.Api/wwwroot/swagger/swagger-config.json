@@ -1,0 +1,58 @@
+{
+  "title": "Poop & Pour API - Documentation",
+  "header": {
+    "logoEmoji": "🚽",
+    "appName": "Poop & Pour API",
+    "appSubtitle": "Documentation",
+    "version": "v1.0"
+  },
+  "navigation": {
+    "homeLabel": "Home",
+    "homeUrl": "/",
+    "openApiSpecLabel": "OpenAPI Spec",
+    "openApiSpecUrl": "/swagger/v1/swagger.json",
+    "copySpecLabel": "📋 Copy Spec",
+    "copySpecLabelCopied": "✓ Copied!",
+    "quickLoginLabel": "⚡ Quick Login",
+    "quickLoginLabelLoading": "⏳ Logging in..."
+  },
+  "quickActions": {
+    "endpointsLabel": "📊 {count} endpoints",
+    "schemasLabel": "📦 {count} schemas"
+  },
+  "footer": {
+    "copyright": "© 2026 Poop & Pour. Built with ❤️ and lots of ☕",
+    "privacyPolicyLabel": "Privacy Policy",
+    "privacyPolicyUrl": "#",
+    "termsLabel": "Terms of Service",
+    "termsUrl": "#",
+    "poweredByLabel": "Powered by Swagger",
+    "poweredByUrl": "https://swagger.io"
+  },
+  "authentication": {
+    "defaultUsername": "admin@poopnpour.com",
+    "defaultPassword": "Admin@123",
+    "loginSuccessMessage": "✅ Logged in successfully! Token applied.",
+    "loginErrorMessage": "❌ Login failed: {error}",
+    "swaggerNotReadyMessage": "⚠️ Swagger UI not ready",
+    "authenticatedLabel": "Authenticated"
+  },
+  "toast": {
+    "specCopiedMessage": "OpenAPI spec copied to clipboard!",
+    "specCopyFailedMessage": "Failed to copy spec"
+  },
+  "swagger": {
+    "specUrl": "/swagger/v1/swagger.json",
+    "domId": "#swagger-ui",
+    "deepLinking": true,
+    "tryItOutEnabled": true,
+    "filter": true,
+    "displayRequestDuration": true,
+    "defaultModelsExpandDepth": 2,
+    "docExpansion": "list",
+    "persistAuthorization": true
+  },
+  "methods": {
+    "available": ["GET", "POST", "PUT", "DELETE"]
+  }
+}
