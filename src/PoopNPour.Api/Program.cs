@@ -1,7 +1,6 @@
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using PoopNPour.Application.Authorization;
+using PoopNPour.Api.Endpoints;
 using PoopNPour.Infrastructure;
 using PoopNPour.Infrastructure.Data;
 
@@ -20,10 +19,9 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // Add MediatR with pipeline behaviors
-// TODO: Replace with a type from Application layer when adding features
 builder.Services.AddMediatR(cfg =>
 {
-    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(PoopNPour.Application.Authentication.Commands.AuthenticateUserCommand).Assembly);
 });
 
 // Register authorization pipeline behavior
@@ -50,7 +48,8 @@ using (var scope = app.Services.CreateScope())
     await seeder.SeedAsync();
 }
 
-// Map endpoints here as they are created
-// Example: app.Map{FeatureName}Endpoints();
+// Map endpoints
+app.MapAuthenticationEndpoints();
+app.MapUsersEndpoints();
 
 app.Run();

@@ -75,4 +75,35 @@ public interface IIdentityService
     Task EnsureRoleExistsAsync(
         string role,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Validates user password
+    /// </summary>
+    Task<ApplicationUser?> ValidatePasswordAsync(
+        string userNameOrEmail,
+        string password,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets all users with pagination support
+    /// </summary>
+    Task<(IEnumerable<ApplicationUser> Users, int TotalCount)> GetUsersAsync(
+        int pageNumber,
+        int pageSize,
+        string? searchTerm = null,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets user roles
+    /// </summary>
+    Task<IEnumerable<string>> GetUserRolesAsync(
+        ApplicationUser user,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates user information
+    /// </summary>
+    Task<ApplicationUser> UpdateUserAsync(
+        ApplicationUser user,
+        CancellationToken cancellationToken = default);
 }

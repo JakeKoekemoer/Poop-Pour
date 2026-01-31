@@ -12,4 +12,11 @@ public static class Policies
     public const string AccountLogin = nameof(AccountLogin);
 
     #endregion User Policies
+
+    #region User Management Policies
+
+    public const string CanViewUsers = nameof(CanViewUsers);
+    public const string CanManageUsers = nameof(CanManageUsers);
+
+    #endregion User Management Policies
 }

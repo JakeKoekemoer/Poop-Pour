@@ -39,6 +39,12 @@ public static class PolicyRoleMappings
             ])
         );
 
+        options.AddPolicy(Policies.CanViewUsers,
+            policy => policy.RequireRole(Roles.Administrator));
+
+        options.AddPolicy(Policies.CanManageUsers,
+            policy => policy.RequireRole(Roles.Administrator));
+
         #endregion User Management Policies
 
         return options;

@@ -9,6 +9,8 @@ using PoopNPour.Application.Authorization;
 using PoopNPour.Application.Identity;
 using PoopNPour.Domain.Common.Auth;
 using PoopNPour.Domain.Common.Identity;
+using PoopNPour.Application.Authentication;
+using PoopNPour.Infrastructure.Authentication;
 using PoopNPour.Infrastructure.Authorization;
 using PoopNPour.Infrastructure.Data;
 using PoopNPour.Infrastructure.Identity;
@@ -114,6 +116,12 @@ public static class DependencyInjection
 
         // Register Identity Service
         services.AddScoped<IIdentityService, IdentityService>();
+
+        // Register JWT Token Service
+        services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+        // Register AutoMapper
+        services.AddAutoMapper(typeof(PoopNPour.Application.Users.Mappings.UserMappingProfile).Assembly);
 
         // Register Database Seeder
         services.AddScoped<DatabaseSeeder>();

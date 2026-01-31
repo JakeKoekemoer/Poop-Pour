@@ -134,4 +134,76 @@ public class IdentityService : IIdentityService
             }
         }
     }
+
+    public async Task<ApplicationUser?> ValidatePasswordAsync(
+        string userNameOrEmail,
+        string password,
+        CancellationToken cancellationToken = default)
+    {
+        // Try to find user by email first, then by username
+        var user = await _userManager.FindByEmailAsync(userNameOrEmail) 
+                   ?? await _userManager.FindByNameAsync(userNameOrEmail);
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        // Validate password
+        var isValid = await _userManager.CheckPasswordAsync(user, password);
+        
+        return isValid ? user : null;
+    }
+
+    public async Task<(IEnumerable<ApplicationUser> Users, int TotalCount)> GetUsersAsync(
+        int pageNumber,
+        int pageSize,
+        string? searchTerm = null,
+        CancellationToken cancellationToken = default)
+    {
+        var query = _userManager.Users.AsQueryable();
+
+        // Apply search filter if provided
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            searchTerm = searchTerm.ToLower();
+            query = query.Where(u => 
+                (u.Email != null && u.Email.ToLower().Contains(searchTerm)) ||
+                (u.UserName != null && u.UserName.ToLower().Contains(searchTerm)) ||
+                (u.FirstName != null && u.FirstName.ToLower().Contains(searchTerm)) ||
+                (u.LastName != null && u.LastName.ToLower().Contains(searchTerm)));
+        }
+
+        var totalCount = await query.CountAsync(cancellationToken);
+
+        var users = await query
+            .OrderBy(u => u.UserName)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return (users, totalCount);
+    }
+
+    public async Task<IEnumerable<string>> GetUserRolesAsync(
+        ApplicationUser user,
+        CancellationToken cancellationToken = default)
+    {
+        return await _userManager.GetRolesAsync(user);
+    }
+
+    public async Task<ApplicationUser> UpdateUserAsync(
+        ApplicationUser user,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await _userManager.UpdateAsync(user);
+        
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => $"{e.Code}: {e.Description}"));
+            throw new InvalidOperationException($"Failed to update user: {errors}");
+        }
+
+        return user;
+    }
 }
