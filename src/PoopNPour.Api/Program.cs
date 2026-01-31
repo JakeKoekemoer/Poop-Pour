@@ -1,7 +1,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using PoopNPour.Application.Authorization;
 using PoopNPour.Infrastructure;
+using PoopNPour.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +42,13 @@ app.UseHttpsRedirection();
 // Add Identity middleware
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Seed database
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+    await seeder.SeedAsync();
+}
 
 // Map endpoints here as they are created
 // Example: app.Map{FeatureName}Endpoints();

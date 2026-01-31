@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using PoopNPour.Infrastructure.Data.Entities;
+using PoopNPour.Domain.Common.Identity;
 
 namespace PoopNPour.Infrastructure.Data;
 

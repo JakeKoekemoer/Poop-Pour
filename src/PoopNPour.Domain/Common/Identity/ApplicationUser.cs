@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace PoopNPour.Infrastructure.Data.Entities;
+namespace PoopNPour.Domain.Common.Identity;
 
 public class ApplicationUser : IdentityUser
 {

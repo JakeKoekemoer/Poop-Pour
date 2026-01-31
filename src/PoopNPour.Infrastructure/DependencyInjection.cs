@@ -6,9 +6,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using PoopNPour.Application.Authorization;
+using PoopNPour.Application.Identity;
 using PoopNPour.Domain.Common.Auth;
+using PoopNPour.Domain.Common.Identity;
 using PoopNPour.Infrastructure.Data;
-using PoopNPour.Infrastructure.Data.Entities;
+using PoopNPour.Infrastructure.Identity;
 using System.Text;
 
 namespace PoopNPour.Infrastructure;
@@ -69,7 +71,7 @@ public static class DependencyInjection
             options.Lockout.AllowedForNewUsers = true;
 
             // Sign-in settings
-            options.SignIn.RequireConfirmedEmail = false;
+            options.SignIn.RequireConfirmedEmail = true;
             options.SignIn.RequireConfirmedPhoneNumber = false;
         })
         .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -117,6 +119,12 @@ public static class DependencyInjection
 
         // Register authorization policy handler for custom policy requirements
         services.AddScoped<IAuthorizationHandler, PolicyRequirementHandler>();
+
+        // Register Identity Service
+        services.AddScoped<IIdentityService, IdentityService>();
+
+        // Register Database Seeder
+        services.AddScoped<DatabaseSeeder>();
 
         // Register repositories here as they are created
 
