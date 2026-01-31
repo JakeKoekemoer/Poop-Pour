@@ -69,17 +69,18 @@ builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(AuthorizationBeh
 
 var app = builder.Build();
 
+// Enable static files (for custom Swagger CSS/JS)
+app.UseStaticFiles();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    // Enable Swagger UI
+    // Enable Swagger UI (custom theme via static index.html with Tailwind + Alpine.js)
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "Poop & Pour API v1");
-        options.RoutePrefix = "swagger"; // Swagger UI will be available at /swagger
-        options.DisplayRequestDuration();
-        options.EnableTryItOutByDefault();
+        options.RoutePrefix = "swagger";
     });
 }
 

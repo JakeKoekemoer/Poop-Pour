@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poop & Pour API - Documentation</title>
+    
+    <!-- Swagger UI CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                        },
+                        accent: {
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Custom Swagger Overrides (minimal) -->
+    <style>
+        /* Dark mode overrides for Swagger UI */
+        .swagger-ui { background: transparent !important; }
+        .swagger-ui .topbar { display: none !important; }
+        .swagger-ui .info { margin: 0 !important; padding: 0 !important; }
+        .swagger-ui .info .title { display: none !important; }
+        .swagger-ui .info .description { color: #94a3b8 !important; }
+        .swagger-ui .info a { color: #6366f1 !important; }
+        
+        /* Operation blocks */
+        .swagger-ui .opblock { background: #1e293b !important; border-radius: 0.5rem !important; margin-bottom: 0.75rem !important; }
+        .swagger-ui .opblock .opblock-summary { border-radius: 0.5rem !important; }
+        .swagger-ui .opblock.opblock-get { border-left: 4px solid #3b82f6 !important; }
+        .swagger-ui .opblock.opblock-post { border-left: 4px solid #22c55e !important; }
+        .swagger-ui .opblock.opblock-put { border-left: 4px solid #f59e0b !important; }
+        .swagger-ui .opblock.opblock-delete { border-left: 4px solid #ef4444 !important; }
+        .swagger-ui .opblock.opblock-patch { border-left: 4px solid #8b5cf6 !important; }
+        
+        /* Text colors */
+        .swagger-ui, .swagger-ui .opblock-tag, .swagger-ui .opblock-summary-path,
+        .swagger-ui .opblock-summary-description, .swagger-ui table thead tr th,
+        .swagger-ui table tbody tr td, .swagger-ui .parameter__name,
+        .swagger-ui .response-col_status, .swagger-ui .model-title,
+        .swagger-ui section.models h4, .swagger-ui .model { color: #e2e8f0 !important; }
+        
+        /* Backgrounds */
+        .swagger-ui .opblock-body, .swagger-ui .opblock-section-header,
+        .swagger-ui section.models, .swagger-ui .model-box { background: #334155 !important; }
+        .swagger-ui table thead tr th, .swagger-ui table thead tr td { background: #475569 !important; }
+        
+        /* Inputs */
+        .swagger-ui input, .swagger-ui textarea, .swagger-ui select {
+            background: #334155 !important; color: #e2e8f0 !important;
+            border: 1px solid #475569 !important; border-radius: 0.375rem !important;
+        }
+        
+        /* Buttons */
+        .swagger-ui .btn.execute { background: #6366f1 !important; border: none !important; }
+        .swagger-ui .btn.cancel { background: #ef4444 !important; }
+        .swagger-ui .btn.authorize { background: #10b981 !important; color: white !important; }
+        .swagger-ui .btn.authorize svg { fill: white !important; }
+        
+        /* Code blocks */
+        .swagger-ui .microlight { background: #0f172a !important; border-radius: 0.5rem !important; }
+        
+        /* Modal */
+        .swagger-ui .dialog-ux .modal-ux { background: #1e293b !important; border: 1px solid #475569 !important; }
+        .swagger-ui .dialog-ux .modal-ux-header { background: #334155 !important; }
+        .swagger-ui .dialog-ux .modal-ux-header h3, .swagger-ui .dialog-ux .modal-ux-content p,
+        .swagger-ui .dialog-ux .modal-ux-content label { color: #e2e8f0 !important; }
+    </style>
+</head>
+<body class="bg-slate-900 min-h-screen" x-data="swaggerApp()">
+    
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-primary-600 via-primary-500 to-accent-500 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">🚽</span>
+                    <div>
+                        <h1 class="text-white font-bold text-xl">Poop & Pour API</h1>
+                        <span class="text-white/70 text-xs">Documentation</span>
+                    </div>
+                    <span class="ml-2 px-2 py-0.5 bg-white/20 rounded-full text-white text-xs font-medium">v1.0</span>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="flex items-center gap-6">
+                    <a href="/" class="text-white/90 hover:text-white text-sm font-medium transition">Home</a>
+                    <a href="/swagger/v1/swagger.json" target="_blank" class="text-white/90 hover:text-white text-sm font-medium transition">OpenAPI Spec</a>
+                    <button @click="copySpec()" class="text-white/90 hover:text-white text-sm font-medium transition flex items-center gap-1">
+                        <span x-text="copied ? '✓ Copied!' : '📋 Copy Spec'"></span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Quick Actions Bar -->
+    <div class="bg-slate-800 border-b border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <!-- Search -->
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            x-model="searchTerm"
+                            @input="filterEndpoints()"
+                            placeholder="Search endpoints... (Ctrl+K)"
+                            class="w-64 px-4 py-2 pl-10 bg-slate-700 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        >
+                        <svg class="absolute left-3 top-2.5 h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                    
+                    <!-- Method Filters -->
+                    <div class="flex items-center gap-2">
+                        <template x-for="method in ['GET', 'POST', 'PUT', 'DELETE']" :key="method">
+                            <button 
+                                @click="toggleMethodFilter(method)"
+                                :class="methodFilters.includes(method) ? methodColors[method].active : methodColors[method].inactive"
+                                class="px-3 py-1 rounded-full text-xs font-semibold transition"
+                                x-text="method"
+                            ></button>
+                        </template>
+                    </div>
+                </div>
+                
+                <!-- Stats -->
+                <div class="flex items-center gap-4 text-sm text-slate-400">
+                    <span>📊 <span class="text-slate-200" x-text="endpointCount"></span> endpoints</span>
+                    <span>📦 <span class="text-slate-200" x-text="schemaCount"></span> schemas</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- API Info Card -->
+        <div class="bg-slate-800 rounded-xl p-6 mb-8 border border-slate-700">
+            <div class="flex items-start justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-white mb-2">Poop & Pour API</h2>
+                    <p class="text-slate-400 mb-4">REST API for the Poop & Pour web and mobile applications.</p>
+                    <div class="flex items-center gap-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400">
+                            <span class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
+                            API Online
+                        </span>
+                        <span class="text-slate-500 text-sm">Base URL: <code class="text-primary-400">https://api.poopnpour.co.za</code></span>
+                    </div>
+                </div>
+                <button 
+                    @click="authorize()"
+                    class="flex items-center gap-2 px-4 py-2 bg-accent-500 hover:bg-accent-600 text-white rounded-lg font-medium transition"
+                >
+                    🔐 Authorize
+                </button>
+            </div>
+        </div>
+        
+        <!-- Swagger UI Container -->
+        <div id="swagger-ui" class="swagger-container"></div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-slate-800 border-t border-slate-700 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex items-center justify-between">
+                <p class="text-slate-400 text-sm">
+                    © 2026 Poop & Pour. Built with ❤️ and lots of ☕
+                </p>
+                <div class="flex items-center gap-4 text-sm">
+                    <a href="#" class="text-slate-400 hover:text-primary-400 transition">Privacy Policy</a>
+                    <a href="#" class="text-slate-400 hover:text-primary-400 transition">Terms of Service</a>
+                    <a href="https://swagger.io" target="_blank" class="text-slate-400 hover:text-primary-400 transition">Powered by Swagger</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Toast Notifications -->
+    <div 
+        x-show="toast.show" 
+        x-transition
+        class="fixed bottom-4 right-4 px-4 py-3 rounded-lg shadow-lg text-white text-sm font-medium"
+        :class="toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'"
+        x-text="toast.message"
+    ></div>
+    
+    <!-- Swagger UI Scripts -->
+    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-standalone-preset.js"></script>
+    
+    <!-- App Logic -->
+    <script>
+        function swaggerApp() {
+            return {
+                searchTerm: '',
+                copied: false,
+                endpointCount: 0,
+                schemaCount: 0,
+                methodFilters: ['GET', 'POST', 'PUT', 'DELETE'],
+                methodColors: {
+                    GET: { active: 'bg-blue-500 text-white', inactive: 'bg-slate-700 text-slate-400 hover:bg-slate-600' },
+                    POST: { active: 'bg-green-500 text-white', inactive: 'bg-slate-700 text-slate-400 hover:bg-slate-600' },
+                    PUT: { active: 'bg-amber-500 text-white', inactive: 'bg-slate-700 text-slate-400 hover:bg-slate-600' },
+                    DELETE: { active: 'bg-red-500 text-white', inactive: 'bg-slate-700 text-slate-400 hover:bg-slate-600' },
+                },
+                toast: { show: false, message: '', type: 'success' },
+                
+                init() {
+                    this.initSwagger();
+                    this.setupKeyboardShortcuts();
+                },
+                
+                initSwagger() {
+                    const ui = SwaggerUIBundle({
+                        url: "/swagger/v1/swagger.json",
+                        dom_id: '#swagger-ui',
+                        deepLinking: true,
+                        presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+                        plugins: [SwaggerUIBundle.plugins.DownloadUrl],
+                        layout: "BaseLayout",
+                        tryItOutEnabled: true,
+                        filter: true,
+                        displayRequestDuration: true,
+                        defaultModelsExpandDepth: 2,
+                        docExpansion: "list",
+                        persistAuthorization: true,
+                        onComplete: () => {
+                            this.countEndpoints();
+                            this.countSchemas();
+                        }
+                    });
+                    window.ui = ui;
+                },
+                
+                setupKeyboardShortcuts() {
+                    document.addEventListener('keydown', (e) => {
+                        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                            e.preventDefault();
+                            document.querySelector('input[x-model="searchTerm"]').focus();
+                        }
+                    });
+                },
+                
+                async copySpec() {
+                    try {
+                        const response = await fetch('/swagger/v1/swagger.json');
+                        const spec = await response.text();
+                        await navigator.clipboard.writeText(spec);
+                        this.copied = true;
+                        this.showToast('OpenAPI spec copied to clipboard!', 'success');
+                        setTimeout(() => this.copied = false, 2000);
+                    } catch (err) {
+                        this.showToast('Failed to copy spec', 'error');
+                    }
+                },
+                
+                authorize() {
+                    const authBtn = document.querySelector('.btn.authorize');
+                    if (authBtn) authBtn.click();
+                },
+                
+                filterEndpoints() {
+                    const filter = document.querySelector('.swagger-ui .operation-filter-input');
+                    if (filter) {
+                        filter.value = this.searchTerm;
+                        filter.dispatchEvent(new Event('input', { bubbles: true }));
+                    }
+                },
+                
+                toggleMethodFilter(method) {
+                    const index = this.methodFilters.indexOf(method);
+                    if (index > -1) {
+                        this.methodFilters.splice(index, 1);
+                    } else {
+                        this.methodFilters.push(method);
+                    }
+                    this.applyMethodFilters();
+                },
+                
+                applyMethodFilters() {
+                    document.querySelectorAll('.opblock').forEach(block => {
+                        const method = block.classList.contains('opblock-get') ? 'GET' :
+                                      block.classList.contains('opblock-post') ? 'POST' :
+                                      block.classList.contains('opblock-put') ? 'PUT' :
+                                      block.classList.contains('opblock-delete') ? 'DELETE' : null;
+                        block.style.display = this.methodFilters.includes(method) ? '' : 'none';
+                    });
+                },
+                
+                countEndpoints() {
+                    setTimeout(() => {
+                        this.endpointCount = document.querySelectorAll('.opblock').length;
+                    }, 500);
+                },
+                
+                countSchemas() {
+                    setTimeout(() => {
+                        this.schemaCount = document.querySelectorAll('.model-container').length;
+                    }, 500);
+                },
+                
+                showToast(message, type = 'success') {
+                    this.toast = { show: true, message, type };
+                    setTimeout(() => this.toast.show = false, 3000);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
