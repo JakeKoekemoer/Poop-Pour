@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.OpenApi.Models;
 using PoopNPour.Application.Authorization;
 using PoopNPour.Api.Endpoints;
 using PoopNPour.Infrastructure;
@@ -9,8 +10,47 @@ var builder = WebApplication.CreateBuilder(args);
 // Load database configuration from separate file (not in version control)
 builder.Configuration.AddJsonFile("database.config.json", optional: false, reloadOnChange: true);
 
-// Add services to the container.
-builder.Services.AddOpenApi();
+// Add Swagger/OpenAPI services
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Poop & Pour API",
+        Version = "v1",
+        Description = "Poop & Pour API for its web & mobile application.",
+        Contact = new OpenApiContact
+        {
+            Name = "Poop & Pour Team",
+            Email = "info@poopnpour.co.za"
+        }
+    });
+
+    // Add JWT Bearer authentication to Swagger
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            []
+        }
+    });
+});
 
 // Add HTTP Context Accessor (required for authorization behavior)
 builder.Services.AddHttpContextAccessor();
@@ -32,7 +72,15 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi("api/v1.json");
+    // Enable Swagger UI
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Poop & Pour API v1");
+        options.RoutePrefix = "swagger"; // Swagger UI will be available at /swagger
+        options.DisplayRequestDuration();
+        options.EnableTryItOutByDefault();
+    });
 }
 
 app.UseHttpsRedirection();

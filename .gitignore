@@ -56,3 +56,4 @@ nunit-*.xml
 
 # Database Configuration (contains sensitive connection strings)
 **/database.config.json
+generated/api-client.ts
