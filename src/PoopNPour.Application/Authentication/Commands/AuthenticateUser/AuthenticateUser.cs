@@ -20,26 +20,15 @@ public record AuthenticateUserCommand(string Username, string Password)
 /// <summary>
 /// Handler for AuthenticateUserCommand
 /// </summary>
-public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCommand, LoginResponseDto>
+public class AuthenticateUserCommandHandler(
+    IIdentityService identityService,
+    IJwtTokenService jwtTokenService,
+    IMapper mapper) : IRequestHandler<AuthenticateUserCommand, LoginResponseDto>
 {
-    private readonly IIdentityService _identityService;
-    private readonly IJwtTokenService _jwtTokenService;
-    private readonly IMapper _mapper;
-
-    public AuthenticateUserCommandHandler(
-        IIdentityService identityService,
-        IJwtTokenService jwtTokenService,
-        IMapper mapper)
-    {
-        _identityService = identityService;
-        _jwtTokenService = jwtTokenService;
-        _mapper = mapper;
-    }
-
     public async Task<LoginResponseDto> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
     {
         // Validate password
-        var user = await _identityService.ValidatePasswordAsync(
+        var user = await identityService.ValidatePasswordAsync(
             request.Username, 
             request.Password, 
             cancellationToken);
@@ -50,13 +39,13 @@ public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCo
         }
 
         // Get user roles
-        var roles = await _identityService.GetUserRolesAsync(user, cancellationToken);
+        var roles = await identityService.GetUserRolesAsync(user, cancellationToken);
 
         // Generate JWT token
-        (string token, DateTime expiresAt) = await _jwtTokenService.GenerateTokenAsync(user, roles);
+        (string token, DateTime expiresAt) = await jwtTokenService.GenerateTokenAsync(user, roles);
 
         // Map user to DTO
-        var userDto = _mapper.Map<UserDto>(user);
+        var userDto = mapper.Map<UserDto>(user);
         userDto.Roles = roles;
 
         return new LoginResponseDto
