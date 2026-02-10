@@ -1,7 +1,6 @@
-using AutoMapper;
 using MediatR;
+using PoopNPour.Abstractions.User;
 using PoopNPour.Application.Authorization;
-using PoopNPour.Abstractions.Identity;
 using PoopNPour.Application.Users.Models;
 using PoopNPour.Domain.Common.Auth;
 
@@ -19,38 +18,24 @@ public record GetUsersQuery(int PageNumber, int PageSize, string? SearchTerm = n
 /// </summary>
 public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, PaginatedResponseDto<UserDto>>
 {
-    private readonly IIdentityService _identityService;
-    private readonly IMapper _mapper;
+    private readonly IUserService _userService;
 
-    public GetUsersQueryHandler(
-        IIdentityService identityService,
-        IMapper mapper)
+    public GetUsersQueryHandler(IUserService userService)
     {
-        _identityService = identityService;
-        _mapper = mapper;
+        _userService = userService;
     }
 
     public async Task<PaginatedResponseDto<UserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
     {
-        var (users, totalCount) = await _identityService.GetUsersAsync(
+        var (users, totalCount) = await _userService.GetUsersAsync(
             request.PageNumber,
             request.PageSize,
             request.SearchTerm,
             cancellationToken);
 
-        var userDtos = new List<UserDto>();
-
-        foreach (var user in users)
-        {
-            var roles = await _identityService.GetUserRolesAsync(user, cancellationToken);
-            var userDto = _mapper.Map<UserDto>(user);
-            userDto.Roles = roles;
-            userDtos.Add(userDto);
-        }
-
         return new PaginatedResponseDto<UserDto>
         {
-            Items = userDtos,
+            Items = users,
             PageNumber = request.PageNumber,
             PageSize = request.PageSize,
             TotalCount = totalCount

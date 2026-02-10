@@ -1,4 +1,4 @@
-namespace PoopNPour.Application.Users.Models;
+namespace PoopNPour.Abstractions.User;
 
 /// <summary>
 /// User data transfer object

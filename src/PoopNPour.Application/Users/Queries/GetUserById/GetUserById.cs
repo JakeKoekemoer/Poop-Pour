@@ -1,7 +1,6 @@
-using AutoMapper;
 using MediatR;
+using PoopNPour.Abstractions.User;
 using PoopNPour.Application.Authorization;
-using PoopNPour.Abstractions.Identity;
 using PoopNPour.Application.Users.Exceptions;
 using PoopNPour.Application.Users.Models;
 using PoopNPour.Domain.Common.Auth;
@@ -20,30 +19,22 @@ public record GetUserByIdQuery(string UserId)
 /// </summary>
 public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto>
 {
-    private readonly IIdentityService _identityService;
-    private readonly IMapper _mapper;
+    private readonly IUserService _userService;
 
-    public GetUserByIdQueryHandler(
-        IIdentityService identityService,
-        IMapper mapper)
+    public GetUserByIdQueryHandler(IUserService userService)
     {
-        _identityService = identityService;
-        _mapper = mapper;
+        _userService = userService;
     }
 
     public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _identityService.GetUserByIdAsync(request.UserId, cancellationToken);
+        var user = await _userService.GetUserByIdAsync(request.UserId, cancellationToken);
 
         if (user == null)
         {
             throw new UserNotFoundException(request.UserId);
         }
 
-        var roles = await _identityService.GetUserRolesAsync(user, cancellationToken);
-        var userDto = _mapper.Map<UserDto>(user);
-        userDto.Roles = roles;
-
-        return userDto;
+        return user;
     }
 }

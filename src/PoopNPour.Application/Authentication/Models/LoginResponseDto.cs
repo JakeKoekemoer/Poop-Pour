@@ -1,4 +1,4 @@
-using PoopNPour.Application.Users.Models;
+using PoopNPour.Abstractions.User;
 
 namespace PoopNPour.Application.Authentication.Models;
 

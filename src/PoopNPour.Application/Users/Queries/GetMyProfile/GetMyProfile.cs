@@ -1,7 +1,7 @@
-using AutoMapper;
 using MediatR;
-using PoopNPour.Application.Authorization;
 using PoopNPour.Abstractions.Identity;
+using PoopNPour.Abstractions.User;
+using PoopNPour.Application.Authorization;
 using PoopNPour.Application.Users.Exceptions;
 using PoopNPour.Application.Users.Models;
 using PoopNPour.Domain.Common.Auth;
@@ -20,34 +20,26 @@ public record GetMyProfileQuery()
 /// </summary>
 public class GetMyProfileQueryHandler : IRequestHandler<GetMyProfileQuery, UserDto>
 {
-    private readonly IIdentityService _identityService;
+    private readonly IUserService _userService;
     private readonly IUser _user;
-    private readonly IMapper _mapper;
 
     public GetMyProfileQueryHandler(
-        IIdentityService identityService,
-        IUser user,
-        IMapper mapper)
+        IUserService userService,
+        IUser user)
     {
-        _identityService = identityService;
+        _userService = userService;
         _user = user;
-        _mapper = mapper;
     }
 
     public async Task<UserDto> Handle(GetMyProfileQuery request, CancellationToken cancellationToken)
     {
-        // Authorization behavior ensures user is authenticated and _user.Id is not null
-        var user = await _identityService.GetUserByIdAsync(_user.Id!, cancellationToken);
+        var user = await _userService.GetUserByIdAsync(_user.Id!, cancellationToken);
 
         if (user == null)
         {
             throw new UserNotFoundException(_user.Id!);
         }
 
-        var roles = await _identityService.GetUserRolesAsync(user, cancellationToken);
-        var userDto = _mapper.Map<UserDto>(user);
-        userDto.Roles = roles;
-
-        return userDto;
+        return user;
     }
 }

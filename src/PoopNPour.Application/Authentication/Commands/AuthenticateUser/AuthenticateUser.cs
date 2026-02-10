@@ -1,11 +1,9 @@
-using AutoMapper;
 using MediatR;
 using PoopNPour.Abstractions.Authentication;
-using PoopNPour.Abstractions.Identity;
+using PoopNPour.Abstractions.User;
 using PoopNPour.Application.Authentication.Exceptions;
 using PoopNPour.Application.Authentication.Models;
 using PoopNPour.Application.Authorization;
-using PoopNPour.Application.Users.Models;
 using PoopNPour.Domain.Common.Auth;
 
 namespace PoopNPour.Application.Authentication.Commands;
@@ -21,16 +19,14 @@ public record AuthenticateUserCommand(string Username, string Password)
 /// Handler for AuthenticateUserCommand
 /// </summary>
 public class AuthenticateUserCommandHandler(
-    IIdentityService identityService,
-    IJwtTokenService jwtTokenService,
-    IMapper mapper) : IRequestHandler<AuthenticateUserCommand, LoginResponseDto>
+    IUserService userService,
+    IJwtTokenService jwtTokenService) : IRequestHandler<AuthenticateUserCommand, LoginResponseDto>
 {
     public async Task<LoginResponseDto> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
     {
-        // Validate password
-        var user = await identityService.ValidatePasswordAsync(
-            request.Username, 
-            request.Password, 
+        var user = await userService.ValidatePasswordAndGetUserAsync(
+            request.Username,
+            request.Password,
             cancellationToken);
 
         if (user == null)
@@ -38,21 +34,17 @@ public class AuthenticateUserCommandHandler(
             throw new InvalidCredentialsException();
         }
 
-        // Get user roles
-        var roles = await identityService.GetUserRolesAsync(user, cancellationToken);
-
-        // Generate JWT token
-        (string token, DateTime expiresAt) = await jwtTokenService.GenerateTokenAsync(user, roles);
-
-        // Map user to DTO
-        var userDto = mapper.Map<UserDto>(user);
-        userDto.Roles = roles;
+        (string token, DateTime expiresAt) = await jwtTokenService.GenerateTokenAsync(
+            user.Id,
+            user.Email,
+            user.UserName,
+            user.Roles);
 
         return new LoginResponseDto
         {
             Token = token,
             ExpiresAt = expiresAt,
-            User = userDto
+            User = user
         };
     }
 }

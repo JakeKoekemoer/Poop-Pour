@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PoopNPour.Abstractions.Authentication;
-using PoopNPour.Domain.Common.Identity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -21,7 +20,9 @@ public class JwtTokenService : IJwtTokenService
     }
 
     public Task<(string Token, DateTime ExpiresAt)> GenerateTokenAsync(
-        ApplicationUser user,
+        string userId,
+        string email,
+        string userName,
         IEnumerable<string> roles)
     {
         var jwtSettings = _configuration.GetSection("Jwt");
@@ -38,9 +39,9 @@ public class JwtTokenService : IJwtTokenService
 
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
-            new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
-            new Claim(ClaimTypes.Name, user.UserName ?? string.Empty)
+            new Claim(ClaimTypes.NameIdentifier, userId),
+            new Claim(ClaimTypes.Email, email ?? string.Empty),
+            new Claim(ClaimTypes.Name, userName ?? string.Empty)
         };
 
         // Add role claims
