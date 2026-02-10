@@ -2,7 +2,7 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using PoopNPour.Application.Identity;
+using PoopNPour.Abstractions.Identity;
 using PoopNPour.Domain.Common.Auth;
 
 namespace PoopNPour.Infrastructure.Data;

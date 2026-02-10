@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using PoopNPour.Application.Identity;
+using PoopNPour.Abstractions.Identity;
 using PoopNPour.Domain.Common.Identity;
 using PoopNPour.Infrastructure.Data;
 

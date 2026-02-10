@@ -1,4 +1,4 @@
-namespace PoopNPour.Application.Common.Interfaces;
+namespace PoopNPour.Abstractions.Identity;
 
 /// <summary>
 /// Represents the current authenticated user

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using PoopNPour.Application.Authentication;
+using PoopNPour.Abstractions.Authentication;
 using PoopNPour.Domain.Common.Identity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

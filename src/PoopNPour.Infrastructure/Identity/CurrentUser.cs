@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Http;
-using PoopNPour.Application.Common.Interfaces;
+using PoopNPour.Abstractions.Identity;
 using System.Security.Claims;
 
 namespace PoopNPour.Infrastructure.Identity;

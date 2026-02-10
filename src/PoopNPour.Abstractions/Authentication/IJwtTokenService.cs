@@ -1,6 +1,6 @@
 using PoopNPour.Domain.Common.Identity;
 
-namespace PoopNPour.Application.Authentication;
+namespace PoopNPour.Abstractions.Authentication;
 
 /// <summary>
 /// Service for generating JWT tokens

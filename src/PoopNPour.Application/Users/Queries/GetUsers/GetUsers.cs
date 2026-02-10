@@ -1,7 +1,7 @@
 using AutoMapper;
 using MediatR;
 using PoopNPour.Application.Authorization;
-using PoopNPour.Application.Identity;
+using PoopNPour.Abstractions.Identity;
 using PoopNPour.Application.Users.Models;
 using PoopNPour.Domain.Common.Auth;
 

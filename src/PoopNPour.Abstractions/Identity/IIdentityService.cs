@@ -1,6 +1,6 @@
 using PoopNPour.Domain.Common.Identity;
 
-namespace PoopNPour.Application.Identity;
+namespace PoopNPour.Abstractions.Identity;
 
 /// <summary>
 /// Service for managing user identity and authorization operations

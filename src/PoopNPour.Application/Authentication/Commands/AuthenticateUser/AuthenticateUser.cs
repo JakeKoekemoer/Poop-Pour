@@ -1,10 +1,10 @@
 using AutoMapper;
 using MediatR;
-using PoopNPour.Application.Authentication;
+using PoopNPour.Abstractions.Authentication;
+using PoopNPour.Abstractions.Identity;
 using PoopNPour.Application.Authentication.Exceptions;
 using PoopNPour.Application.Authentication.Models;
 using PoopNPour.Application.Authorization;
-using PoopNPour.Application.Identity;
 using PoopNPour.Application.Users.Models;
 using PoopNPour.Domain.Common.Auth;
 
