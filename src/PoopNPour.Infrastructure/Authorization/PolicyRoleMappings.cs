@@ -20,22 +20,29 @@ public static class PolicyRoleMappings
 
         options.AddPolicy(Policies.AccountRegistration,
             policy => policy.RequireRole([
-                Roles.WebApi,
-                Roles.MobileApi
+                Roles.Web_Api,
+                Roles.Mobile_Api
             ])
         );
 
         options.AddPolicy(Policies.AccountForgotPassword,
             policy => policy.RequireRole([
-                Roles.WebApi,
-                Roles.MobileApi
+                Roles.Web_Api,
+                Roles.Mobile_Api
             ])
         );
 
         options.AddPolicy(Policies.AccountLogin,
             policy => policy.RequireRole([
-                Roles.WebApi,
-                Roles.MobileApi
+                Roles.Web_Api,
+                Roles.Mobile_Api
+            ])
+        );
+
+        options.AddPolicy(Policies.Can_AuthenticateUser,
+            policy => policy.RequireRole([
+                Roles.Web_Api,
+                Roles.Mobile_Api
             ])
         );
 

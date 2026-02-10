@@ -10,6 +10,7 @@ public static class Policies
     public const string AccountRegistration = nameof(AccountRegistration);
     public const string AccountForgotPassword = nameof(AccountForgotPassword);
     public const string AccountLogin = nameof(AccountLogin);
+    public const string Can_AuthenticateUser = nameof(Can_AuthenticateUser);
 
     #endregion User Policies
 

@@ -3,14 +3,17 @@ using MediatR;
 using PoopNPour.Application.Authentication;
 using PoopNPour.Application.Authentication.Exceptions;
 using PoopNPour.Application.Authentication.Models;
+using PoopNPour.Application.Authorization;
 using PoopNPour.Application.Identity;
 using PoopNPour.Application.Users.Models;
+using PoopNPour.Domain.Common.Auth;
 
 namespace PoopNPour.Application.Authentication.Commands;
 
 /// <summary>
 /// Command to authenticate a user and return JWT token
 /// </summary>
+[Authorize(Policy = Policies.Can_AuthenticateUser)]
 public record AuthenticateUserCommand(string Username, string Password) 
     : IRequest<LoginResponseDto>;
 

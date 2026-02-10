@@ -3,6 +3,7 @@ using MediatR;
 using PoopNPour.Application.Authentication;
 using PoopNPour.Application.Authentication.Exceptions;
 using PoopNPour.Application.Authentication.Models;
+using PoopNPour.Application.Authorization;
 using PoopNPour.Application.Identity;
 using PoopNPour.Application.Users.Models;
 using PoopNPour.Domain.Common.Auth;
@@ -12,6 +13,7 @@ namespace PoopNPour.Application.Authentication.Commands;
 /// <summary>
 /// Command to register a new user
 /// </summary>
+[Authorize(Policy = Policies.AccountRegistration)]
 public record RegisterUserCommand(
     string Email,
     string UserName,
@@ -60,7 +62,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
             cancellationToken);
 
         // Assign default role (WebApi or MobileApi - for now using WebApi)
-        await _identityService.AddUserToRoleAsync(user, Roles.WebApi, cancellationToken);
+        await _identityService.AddUserToRoleAsync(user, Roles.Web_Api, cancellationToken);
 
         // Get user roles
         var roles = await _identityService.GetUserRolesAsync(user, cancellationToken);
