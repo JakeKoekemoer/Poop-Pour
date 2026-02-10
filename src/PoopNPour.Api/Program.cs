@@ -31,7 +31,7 @@ builder.Services.AddSwaggerGen(options =>
     // Add JWT Bearer authentication to Swagger
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.",
+        Description = "Paste your JWT token below. Swagger will add the 'Bearer ' prefix automatically.",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
@@ -56,6 +56,7 @@ builder.Services.AddSwaggerGen(options =>
     // Add operation filters (.NET 10 Swashbuckle approach)
     options.OperationFilter<EndpointDocumentationFilter>();  // Summary/Description
     options.OperationFilter<AutoResponseTypesFilter>();      // Automatic response types
+    options.SchemaFilter<SchemaExampleFilter>();             // User-friendly request examples
 
 });
 

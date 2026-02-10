@@ -42,15 +42,40 @@
     <!-- Vue 3 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     
-    <!-- Custom Swagger Overrides (minimal) -->
+    <!-- Custom Swagger Overrides - ensure all text is readable -->
     <style>
-        /* Dark mode overrides for Swagger UI */
+        /* Base: force readable text everywhere in Swagger UI */
+        .swagger-ui,
+        .swagger-ui *,
+        .swagger-ui *::before,
+        .swagger-ui *::after {
+            color: #f1f5f9 !important;
+            font-size: 14px !important;
+        }
+        
+        /* Let method badges keep their colors */
+        .swagger-ui .opblock-summary-method { color: #fff !important; }
+        
+        /* Code/JSON blocks - light text on dark */
+        .swagger-ui .microlight,
+        .swagger-ui .microlight *,
+        .swagger-ui pre,
+        .swagger-ui .body-param__text,
+        .swagger-ui textarea {
+            color: #e2e8f0 !important;
+            background: #0f172a !important;
+            font-size: 13px !important;
+        }
+        
+        /* "required" badge - ensure visible */
+        .swagger-ui .opblock-body .opblock-description-wrapper span { color: #fca5a5 !important; }
+        
         .swagger-ui { background: transparent !important; }
         .swagger-ui .topbar { display: none !important; }
         .swagger-ui .info { margin: 0 !important; padding: 0 !important; }
         .swagger-ui .info .title { display: none !important; }
         .swagger-ui .info .description { color: #94a3b8 !important; }
-        .swagger-ui .info a { color: #6366f1 !important; }
+        .swagger-ui .info a { color: #818cf8 !important; }
         
         /* Operation blocks */
         .swagger-ui .opblock { background: #1e293b !important; border-radius: 0.5rem !important; margin-bottom: 0.75rem !important; }
@@ -61,56 +86,52 @@
         .swagger-ui .opblock.opblock-delete { border-left: 4px solid #ef4444 !important; }
         .swagger-ui .opblock.opblock-patch { border-left: 4px solid #8b5cf6 !important; }
         
-        /* Text colors */
-        .swagger-ui, .swagger-ui .opblock-tag, .swagger-ui .opblock-summary-path,
-        .swagger-ui .opblock-summary-description, .swagger-ui table thead tr th,
-        .swagger-ui table tbody tr td, .swagger-ui .parameter__name,
-        .swagger-ui .response-col_status, .swagger-ui .model-title,
-        .swagger-ui section.models h4, .swagger-ui .model { color: #e2e8f0 !important; }
+        /* Path, description - slightly larger */
+        .swagger-ui .opblock-tag { font-size: 18px !important; color: #f8fafc !important; }
+        .swagger-ui .opblock-summary-path { font-size: 15px !important; font-weight: 600 !important; }
+        .swagger-ui .opblock-summary-description { font-size: 13px !important; color: #cbd5e1 !important; }
+        
+        /* Tables */
+        .swagger-ui table thead tr th,
+        .swagger-ui table tbody tr td,
+        .swagger-ui .parameter__name,
+        .swagger-ui .response-col_status,
+        .swagger-ui .model-title,
+        .swagger-ui section.models h4,
+        .swagger-ui .model { color: #f1f5f9 !important; }
         
         /* Backgrounds */
         .swagger-ui .opblock-body, .swagger-ui .opblock-section-header,
         .swagger-ui section.models, .swagger-ui .model-box { background: #334155 !important; }
         .swagger-ui table thead tr th, .swagger-ui table thead tr td { background: #475569 !important; }
         
-        /* Inputs */
+        /* Inputs - explicit light text */
         .swagger-ui input, .swagger-ui textarea, .swagger-ui select {
-            background: #334155 !important; color: #e2e8f0 !important;
-            border: 1px solid #475569 !important; border-radius: 0.375rem !important;
+            background: #1e293b !important;
+            color: #f1f5f9 !important;
+            border: 1px solid #475569 !important;
+            border-radius: 0.375rem !important;
+            font-size: 14px !important;
         }
         
         /* Buttons */
-        .swagger-ui .btn.execute { background: #6366f1 !important; border: none !important; }
-        .swagger-ui .btn.cancel { background: #ef4444 !important; }
+        .swagger-ui .btn.execute { background: #6366f1 !important; color: #fff !important; border: none !important; }
+        .swagger-ui .btn.cancel { background: #475569 !important; color: #f1f5f9 !important; }
         .swagger-ui .btn.authorize { background: #10b981 !important; color: white !important; }
         .swagger-ui .btn.authorize svg { fill: white !important; }
         
-        /* Authorized/Locked state */
-        .swagger-ui .btn.authorize.locked { 
-            background: #3b82f6 !important; 
-            color: white !important;
-        }
+        .swagger-ui .btn.authorize.locked { background: #3b82f6 !important; color: white !important; }
         .swagger-ui .btn.authorize.locked svg { fill: white !important; }
-        .swagger-ui .btn.authorize.locked::after {
-            content: ' ✓';
-            margin-left: 4px;
-        }
-        
-        /* Code blocks */
-        .swagger-ui .microlight { background: #0f172a !important; border-radius: 0.5rem !important; }
+        .swagger-ui .btn.authorize.locked::after { content: ' ✓'; margin-left: 4px; }
         
         /* Modal */
         .swagger-ui .dialog-ux .modal-ux { background: #1e293b !important; border: 1px solid #475569 !important; }
         .swagger-ui .dialog-ux .modal-ux-header { background: #334155 !important; }
-        .swagger-ui .dialog-ux .modal-ux-header h3, .swagger-ui .dialog-ux .modal-ux-content p,
-        .swagger-ui .dialog-ux .modal-ux-content label { color: #e2e8f0 !important; }
+        .swagger-ui .dialog-ux .modal-ux-header h3,
+        .swagger-ui .dialog-ux .modal-ux-content p,
+        .swagger-ui .dialog-ux .modal-ux-content label { color: #f1f5f9 !important; }
         
-        /* Scheme container (Authorize section) */
-        .swagger-ui .scheme-container { 
-            background: transparent !important; 
-            box-shadow: none !important;
-            border: none !important;
-        }
+        .swagger-ui .scheme-container { background: transparent !important; box-shadow: none !important; border: none !important; }
     </style>
 </head>
 <body class="bg-slate-900 min-h-screen">

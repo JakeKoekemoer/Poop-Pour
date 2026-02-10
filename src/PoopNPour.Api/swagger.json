@@ -13,10 +13,10 @@
     "/api/authentication/login": {
       "post": {
         "tags": [
-          "AuthenticationEndpoints"
+          "Authentication"
         ],
-        "summary": "Authenticate user and get JWT token",
-        "description": "Validates user credentials and returns a JWT access token for subsequent API requests",
+        "summary": "Log in",
+        "description": "Returns a JWT token for authenticated requests",
         "operationId": "LoginAsync",
         "requestBody": {
           "content": {
@@ -41,10 +41,10 @@
     "/api/authentication/register": {
       "post": {
         "tags": [
-          "AuthenticationEndpoints"
+          "Authentication"
         ],
-        "summary": "Register a new user",
-        "description": "Creates a new user account with the provided credentials and profile information",
+        "summary": "Register",
+        "description": "Create a new user account",
         "operationId": "RegisterAsync",
         "requestBody": {
           "content": {
@@ -69,10 +69,10 @@
     "/api/users": {
       "get": {
         "tags": [
-          "UsersEndpoints"
+          "Users"
         ],
-        "summary": "Get paginated list of users",
-        "description": "Returns a paginated list of all users in the system",
+        "summary": "List users",
+        "description": "Paginated list with optional search",
         "operationId": "GetUsersAsync",
         "parameters": [
           {
@@ -117,10 +117,10 @@
     "/api/users/{id}": {
       "get": {
         "tags": [
-          "UsersEndpoints"
+          "Users"
         ],
-        "summary": "Get user by ID",
-        "description": "Returns detailed information for a specific user",
+        "summary": "Get user",
+        "description": "Fetch a user by ID",
         "operationId": "GetUserByIdAsync",
         "parameters": [
           {
@@ -151,10 +151,10 @@
     "/api/users/me": {
       "get": {
         "tags": [
-          "UsersEndpoints"
+          "Users"
         ],
-        "summary": "Get current user's profile",
-        "description": "Returns the profile of the currently authenticated user",
+        "summary": "My profile",
+        "description": "Get the current user's profile",
         "operationId": "GetMyProfileAsync",
         "responses": {
           "200": {
@@ -167,10 +167,10 @@
       },
       "put": {
         "tags": [
-          "UsersEndpoints"
+          "Users"
         ],
-        "summary": "Update current user's profile",
-        "description": "Updates the profile information of the currently authenticated user",
+        "summary": "Update my profile",
+        "description": "Update the current user's profile",
         "operationId": "UpdateMyProfileAsync",
         "requestBody": {
           "content": {
@@ -260,7 +260,7 @@
     "securitySchemes": {
       "Bearer": {
         "type": "apiKey",
-        "description": "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.",
+        "description": "Paste your JWT token below. Swagger will add the 'Bearer ' prefix automatically.",
         "name": "Authorization",
         "in": "header"
       }

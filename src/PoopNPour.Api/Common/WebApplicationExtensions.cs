@@ -20,8 +20,10 @@ public static class WebApplicationExtensions
         // Convert PascalCase to lowercase (e.g., "UsersEndpoints" -> "users")
         var routeName = ConvertToRouteName(groupName);
 
+        // Use friendly tag name (e.g. "Authentication") instead of class name ("AuthenticationEndpoints")
+        var tagName = ToDisplayName(groupName);
         return app.MapGroup($"/api/{routeName}")
-            .WithTags(groupName);
+            .WithTags(tagName);
     }
 
     /// <summary>
@@ -65,6 +67,19 @@ public static class WebApplicationExtensions
         }
 
         return app;
+    }
+
+    /// <summary>
+    /// Converts a class name to a display-friendly tag name for Swagger.
+    /// Examples: "AuthenticationEndpoints" -> "Authentication", "UsersEndpoints" -> "Users"
+    /// </summary>
+    private static string ToDisplayName(string className)
+    {
+        if (className.EndsWith("Endpoints", StringComparison.OrdinalIgnoreCase))
+        {
+            className = className.Substring(0, className.Length - "Endpoints".Length);
+        }
+        return char.ToUpperInvariant(className[0]) + className[1..].ToLowerInvariant();
     }
 
     /// <summary>

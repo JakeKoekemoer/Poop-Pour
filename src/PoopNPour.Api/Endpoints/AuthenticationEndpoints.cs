@@ -16,10 +16,10 @@ public class AuthenticationEndpoints : EndpointGroupBase
     {
         app.MapGroup(this)
             .MapPost(LoginAsync, "login", route => route
-                .WithDocumentation("Authenticate user and get JWT token", "Validates user credentials and returns a JWT access token for subsequent API requests")
+                .WithDocumentation("Log in", "Returns a JWT token for authenticated requests")
                 .Accepts<LoginRequestDto>("application/json"))
             .MapPost(RegisterAsync, "register", route => route
-                .WithDocumentation("Register a new user", "Creates a new user account with the provided credentials and profile information")
+                .WithDocumentation("Register", "Create a new user account")
                 .Accepts<RegisterRequestDto>("application/json"));
     }
 

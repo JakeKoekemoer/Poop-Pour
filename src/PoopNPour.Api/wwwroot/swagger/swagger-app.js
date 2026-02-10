@@ -134,7 +134,7 @@ createApp({
                 const baseUrl = window.location.origin;
                 
                 // Call the login endpoint with credentials from config
-                const response = await fetch(`${baseUrl}/api/auth/login`, {
+                const response = await fetch(`${baseUrl}/api/authentication/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
