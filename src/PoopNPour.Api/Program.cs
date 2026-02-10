@@ -56,6 +56,7 @@ builder.Services.AddSwaggerGen(options =>
     // Add operation filters (.NET 10 Swashbuckle approach)
     options.OperationFilter<EndpointDocumentationFilter>();  // Summary/Description
     options.OperationFilter<AutoResponseTypesFilter>();      // Automatic response types
+
 });
 
 // Add HTTP Context Accessor (required for authorization behavior)
@@ -96,18 +97,6 @@ app.UseStaticFiles();
 // Enable CORS
 app.UseCors();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    // Enable Swagger UI (custom theme via static index.html with Tailwind + Alpine.js)
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Poop & Pour API v1");
-        options.RoutePrefix = "swagger";
-    });
-}
-
 app.UseHttpsRedirection();
 
 // Add Identity middleware
@@ -122,6 +111,19 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Map all endpoints automatically using reflection
+// NB: Run before Swagger UI is configured
 app.MapEndpointGroups();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    // Enable Swagger UI (custom theme via static index.html with Tailwind + Alpine.js)
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Poop & Pour API v1");
+        options.RoutePrefix = "swagger";
+    });
+}
 
 app.Run();

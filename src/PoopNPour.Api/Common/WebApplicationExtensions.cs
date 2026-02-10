@@ -1,4 +1,5 @@
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 
 namespace PoopNPour.Api.Common;
 
@@ -20,10 +21,7 @@ public static class WebApplicationExtensions
         var routeName = ConvertToRouteName(groupName);
 
         return app.MapGroup($"/api/{routeName}")
-            .WithGroupName(groupName)
             .WithTags(groupName);
-        // Note: OpenAPI documentation is handled via Swashbuckle IOperationFilter
-        // See EndpointDocumentationFilter in SwaggerExtensions.cs
     }
 
     /// <summary>
@@ -32,17 +30,37 @@ public static class WebApplicationExtensions
     public static WebApplication MapEndpointGroups(this WebApplication app)
     {
         var endpointGroupType = typeof(EndpointGroupBase);
-        var assembly = Assembly.GetExecutingAssembly();
+        
+        // Get the assembly where EndpointGroupBase is defined (the API assembly)
+        var assembly = endpointGroupType.Assembly;
 
         var endpointGroupTypes = assembly.GetTypes()
             .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(endpointGroupType))
-            .OrderBy(t => t.Name);
+            .OrderBy(t => t.Name)
+            .ToList();
+        
+        var logger = app.Services.GetRequiredService<ILogger<WebApplication>>();
+        logger.LogInformation("Discovered {Count} endpoint groups", endpointGroupTypes.Count);
 
         foreach (var type in endpointGroupTypes)
         {
-            if (Activator.CreateInstance(type) is EndpointGroupBase instance)
+            logger.LogInformation("Mapping endpoint group: {TypeName}", type.Name);
+            
+            try
             {
-                instance.Map(app);
+                if (Activator.CreateInstance(type) is EndpointGroupBase instance)
+                {
+                    instance.Map(app);
+                    logger.LogInformation("Successfully mapped endpoint group: {TypeName}", type.Name);
+                }
+                else
+                {
+                    logger.LogWarning("Failed to create instance of {TypeName}", type.Name);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error mapping endpoint group {TypeName}", type.Name);
             }
         }
 
@@ -64,4 +82,5 @@ public static class WebApplicationExtensions
         // Convert to lowercase
         return className.ToLowerInvariant();
     }
+
 }

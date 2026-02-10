@@ -10,13 +10,14 @@
     "version": "v1"
   },
   "paths": {
-    "/api/auth/login": {
+    "/api/authentication/login": {
       "post": {
         "tags": [
-          "Authentication"
+          "AuthenticationEndpoints"
         ],
         "summary": "Authenticate user and get JWT token",
-        "operationId": "Login",
+        "description": "Validates user credentials and returns a JWT access token for subsequent API requests",
+        "operationId": "LoginAsync",
         "requestBody": {
           "content": {
             "application/json": {
@@ -29,28 +30,22 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LoginResponseDto"
-                }
-              }
-            }
+            "description": "OK"
           },
-          "401": {
-            "description": "Unauthorized"
+          "400": {
+            "description": "Bad Request"
           }
         }
       }
     },
-    "/api/auth/register": {
+    "/api/authentication/register": {
       "post": {
         "tags": [
-          "Authentication"
+          "AuthenticationEndpoints"
         ],
         "summary": "Register a new user",
-        "operationId": "Register",
+        "description": "Creates a new user account with the provided credentials and profile information",
+        "operationId": "RegisterAsync",
         "requestBody": {
           "content": {
             "application/json": {
@@ -62,15 +57,8 @@
           "required": true
         },
         "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RegisterResponseDto"
-                }
-              }
-            }
+          "200": {
+            "description": "OK"
           },
           "400": {
             "description": "Bad Request"
@@ -81,10 +69,11 @@
     "/api/users": {
       "get": {
         "tags": [
-          "Users"
+          "UsersEndpoints"
         ],
         "summary": "Get paginated list of users",
-        "operationId": "GetUsers",
+        "description": "Returns a paginated list of all users in the system",
+        "operationId": "GetUsersAsync",
         "parameters": [
           {
             "name": "page",
@@ -114,14 +103,10 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDtoPaginatedResponseDto"
-                }
-              }
-            }
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "403": {
             "description": "Forbidden"
@@ -132,10 +117,11 @@
     "/api/users/{id}": {
       "get": {
         "tags": [
-          "Users"
+          "UsersEndpoints"
         ],
         "summary": "Get user by ID",
-        "operationId": "GetUserById",
+        "description": "Returns detailed information for a specific user",
+        "operationId": "GetUserByIdAsync",
         "parameters": [
           {
             "name": "id",
@@ -148,20 +134,16 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              }
-            }
+            "description": "OK"
           },
-          "404": {
-            "description": "Not Found"
+          "401": {
+            "description": "Unauthorized"
           },
           "403": {
             "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -169,23 +151,14 @@
     "/api/users/me": {
       "get": {
         "tags": [
-          "Users"
+          "UsersEndpoints"
         ],
         "summary": "Get current user's profile",
-        "operationId": "GetMyProfile",
+        "description": "Returns the profile of the currently authenticated user",
+        "operationId": "GetMyProfileAsync",
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
+            "description": "OK"
           },
           "401": {
             "description": "Unauthorized"
@@ -194,10 +167,11 @@
       },
       "put": {
         "tags": [
-          "Users"
+          "UsersEndpoints"
         ],
         "summary": "Update current user's profile",
-        "operationId": "UpdateMyProfile",
+        "description": "Updates the profile information of the currently authenticated user",
+        "operationId": "UpdateMyProfileAsync",
         "requestBody": {
           "content": {
             "application/json": {
@@ -210,23 +184,13 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
+            "description": "OK"
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       }
@@ -244,23 +208,6 @@
           "password": {
             "type": "string",
             "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "LoginResponseDto": {
-        "type": "object",
-        "properties": {
-          "token": {
-            "type": "string",
-            "nullable": true
-          },
-          "expiresAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "user": {
-            "$ref": "#/components/schemas/UserDto"
           }
         },
         "additionalProperties": false
@@ -291,23 +238,6 @@
         },
         "additionalProperties": false
       },
-      "RegisterResponseDto": {
-        "type": "object",
-        "properties": {
-          "user": {
-            "$ref": "#/components/schemas/UserDto"
-          },
-          "token": {
-            "type": "string",
-            "nullable": true
-          },
-          "expiresAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
       "UpdateProfileRequestDto": {
         "type": "object",
         "properties": {
@@ -322,78 +252,6 @@
           "email": {
             "type": "string",
             "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "userName": {
-            "type": "string",
-            "nullable": true
-          },
-          "firstName": {
-            "type": "string",
-            "nullable": true
-          },
-          "lastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "roles": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserDtoPaginatedResponseDto": {
-        "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/UserDto"
-            },
-            "nullable": true
-          },
-          "pageNumber": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "pageSize": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "totalCount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "totalPages": {
-            "type": "integer",
-            "format": "int32",
-            "readOnly": true
           }
         },
         "additionalProperties": false
