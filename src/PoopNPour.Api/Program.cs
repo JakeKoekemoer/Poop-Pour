@@ -1,6 +1,5 @@
 using MediatR;
 using Microsoft.OpenApi.Models;
-using PoopNPour.Application.Authorization;
 using PoopNPour.Application.Common.Behaviours;
 using PoopNPour.Api.Common;
 using PoopNPour.Api.Middleware;

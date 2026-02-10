@@ -2,8 +2,9 @@ using MediatR;
 using PoopNPour.Application.Common.Exceptions;
 using PoopNPour.Abstractions.Identity;
 using System.Reflection;
+using PoopNPour.Application.Authorization;
 
-namespace PoopNPour.Application.Authorization;
+namespace PoopNPour.Application.Common.Behaviours;
 
 /// <summary>
 /// MediatR pipeline behavior that enforces authorization based on AuthorizeAttribute
