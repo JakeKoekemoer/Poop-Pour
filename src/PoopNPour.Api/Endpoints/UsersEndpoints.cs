@@ -17,17 +17,14 @@ public class UsersEndpoints : EndpointGroupBase
     {
         app.MapGroup(this)
             .MapGet(GetUsersAsync, "", route => route
-                .WithSummary("Get paginated list of users")
-            )
+                .WithDocumentation("Get paginated list of users", "Returns a paginated list of all users in the system"))
             .MapGet(GetUserByIdAsync, "{id}", route => route
-                .WithSummary("Get user by ID")
-            )
+                .WithDocumentation("Get user by ID", "Returns detailed information for a specific user"))
             .MapGet(GetMyProfileAsync, "me", route => route
-                .WithSummary("Get current user's profile")
-            )
+                .WithDocumentation("Get current user's profile", "Returns the profile of the currently authenticated user"))
             .MapPut(UpdateMyProfileAsync, "me", route => route
-                .WithSummary("Update current user's profile")
-            );
+                .WithDocumentation("Update current user's profile", "Updates the profile information of the currently authenticated user")
+                .Accepts<UpdateProfileRequestDto>("application/json"));
     }
 
     public async Task<IResult> GetUsersAsync(

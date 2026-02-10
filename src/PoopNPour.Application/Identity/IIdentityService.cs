@@ -3,10 +3,13 @@ using PoopNPour.Domain.Common.Identity;
 namespace PoopNPour.Application.Identity;
 
 /// <summary>
-/// Service for managing user identity operations
+/// Service for managing user identity and authorization operations
+/// Consolidated interface for all identity-related functionality
 /// </summary>
 public interface IIdentityService
 {
+    #region User Management
+
     /// <summary>
     /// Creates a new user with the specified password
     /// </summary>
@@ -54,34 +57,10 @@ public interface IIdentityService
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Adds a role to a user
+    /// Updates user information
     /// </summary>
-    Task AddUserToRoleAsync(
+    Task<ApplicationUser> UpdateUserAsync(
         ApplicationUser user,
-        string role,
-        CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Checks if a user is in a role
-    /// </summary>
-    Task<bool> IsUserInRoleAsync(
-        ApplicationUser user,
-        string role,
-        CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Ensures a role exists, creates it if it doesn't
-    /// </summary>
-    Task EnsureRoleExistsAsync(
-        string role,
-        CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Validates user password
-    /// </summary>
-    Task<ApplicationUser?> ValidatePasswordAsync(
-        string userNameOrEmail,
-        string password,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -94,16 +73,68 @@ public interface IIdentityService
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Gets user roles
+    /// Validates user password
+    /// </summary>
+    Task<ApplicationUser?> ValidatePasswordAsync(
+        string userNameOrEmail,
+        string password,
+        CancellationToken cancellationToken = default);
+
+    #endregion
+
+    #region Role Management
+
+    /// <summary>
+    /// Adds a role to a user
+    /// </summary>
+    Task AddUserToRoleAsync(
+        ApplicationUser user,
+        string role,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Checks if a user is in a role (by ApplicationUser object)
+    /// </summary>
+    Task<bool> IsUserInRoleAsync(
+        ApplicationUser user,
+        string role,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Checks if a user is in a specific role (by user ID)
+    /// Used by authorization pipeline
+    /// </summary>
+    Task<bool> IsInRoleAsync(string userId, string role);
+
+    /// <summary>
+    /// Ensures a role exists, creates it if it doesn't
+    /// </summary>
+    Task EnsureRoleExistsAsync(
+        string role,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets user roles (by ApplicationUser object)
     /// </summary>
     Task<IEnumerable<string>> GetUserRolesAsync(
         ApplicationUser user,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Updates user information
+    /// Gets all roles for a user (by user ID)
+    /// Used by authorization pipeline
     /// </summary>
-    Task<ApplicationUser> UpdateUserAsync(
-        ApplicationUser user,
-        CancellationToken cancellationToken = default);
+    Task<IList<string>> GetUserRolesAsync(string userId);
+
+    #endregion
+
+    #region Authorization
+
+    /// <summary>
+    /// Checks if a user satisfies a specific policy
+    /// Used by authorization pipeline
+    /// </summary>
+    Task<bool> AuthorizeAsync(string userId, string policyName);
+
+    #endregion
 }

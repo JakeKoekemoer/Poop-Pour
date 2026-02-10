@@ -52,6 +52,10 @@ builder.Services.AddSwaggerGen(options =>
             []
         }
     });
+
+    // Add operation filters (.NET 10 Swashbuckle approach)
+    options.OperationFilter<EndpointDocumentationFilter>();  // Summary/Description
+    options.OperationFilter<AutoResponseTypesFilter>();      // Automatic response types
 });
 
 // Add HTTP Context Accessor (required for authorization behavior)

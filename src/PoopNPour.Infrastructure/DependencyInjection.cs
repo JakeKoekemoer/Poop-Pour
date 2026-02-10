@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using PoopNPour.Application.Authentication;
 using PoopNPour.Application.Authorization;
 using PoopNPour.Application.Common.Interfaces;
 using PoopNPour.Application.Identity;
 using PoopNPour.Domain.Common.Auth;
 using PoopNPour.Domain.Common.Identity;
-using PoopNPour.Application.Authentication;
 using PoopNPour.Infrastructure.Authentication;
 using PoopNPour.Infrastructure.Authorization;
 using PoopNPour.Infrastructure.Data;
@@ -112,17 +112,11 @@ public static class DependencyInjection
             PolicyRoleMappings.AddRolesToPolicies(options);
         });
 
-        // Register authorization policy handler for custom policy requirements
-        services.AddScoped<IAuthorizationHandler, PolicyRequirementHandler>();
-
         // Register Current User (for authorization)
         services.AddScoped<IUser, CurrentUser>();
 
-        // Register Identity Service (supports both interfaces)
-        services.AddScoped<Application.Identity.IIdentityService, IdentityService>();
-        services.AddScoped<IIdentityService>(sp => 
-            sp.GetRequiredService<Application.Identity.IIdentityService>() as IdentityService 
-            ?? throw new InvalidOperationException("IdentityService not registered"));
+        // Register Identity Service (consolidated interface)
+        services.AddScoped<IIdentityService, IdentityService>();
 
         // Register JWT Token Service
         services.AddScoped<IJwtTokenService, JwtTokenService>();

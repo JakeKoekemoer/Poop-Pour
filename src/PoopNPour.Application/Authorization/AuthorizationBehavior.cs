@@ -1,6 +1,7 @@
 using MediatR;
 using PoopNPour.Application.Common.Exceptions;
 using PoopNPour.Application.Common.Interfaces;
+using PoopNPour.Application.Identity;
 using System.Reflection;
 
 namespace PoopNPour.Application.Authorization;

@@ -1,0 +1,9 @@
+# Environment files with sensitive data
+.env
+
+# Backup files
+*.tar.gz
+*.bak
+
+# SQL Server error logs (if mounted locally)
+*.log

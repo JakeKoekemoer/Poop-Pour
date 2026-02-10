@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using PoopNPour.Application.Common.Interfaces;
 using PoopNPour.Application.Identity;
 using PoopNPour.Domain.Common.Identity;
 using PoopNPour.Infrastructure.Data;
@@ -11,7 +10,7 @@ namespace PoopNPour.Infrastructure.Identity;
 /// <summary>
 /// Implementation of IIdentityService using ASP.NET Core Identity
 /// </summary>
-public class IdentityService : IIdentityService, Application.Identity.IIdentityService
+public class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
@@ -30,7 +29,7 @@ public class IdentityService : IIdentityService, Application.Identity.IIdentityS
         _authorizationService = authorizationService;
     }
 
-    #region IIdentityService (Authorization) Implementation
+    #region Authorization (Used by AuthorizationBehavior)
 
     /// <summary>
     /// Checks if a user is in a specific role (by user ID)

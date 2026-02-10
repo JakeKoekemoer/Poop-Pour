@@ -21,8 +21,9 @@ public static class WebApplicationExtensions
 
         return app.MapGroup($"/api/{routeName}")
             .WithGroupName(groupName)
-            .WithTags(groupName)
-            .WithOpenApi();
+            .WithTags(groupName);
+        // Note: OpenAPI documentation is handled via Swashbuckle IOperationFilter
+        // See EndpointDocumentationFilter in SwaggerExtensions.cs
     }
 
     /// <summary>
