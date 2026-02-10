@@ -1,7 +1,9 @@
 using MediatR;
 using Microsoft.OpenApi.Models;
 using PoopNPour.Application.Authorization;
-using PoopNPour.Api.Endpoints;
+using PoopNPour.Application.Common.Behaviours;
+using PoopNPour.Api.Common;
+using PoopNPour.Api.Middleware;
 using PoopNPour.Infrastructure;
 using PoopNPour.Infrastructure.Data;
 
@@ -75,10 +77,14 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(PoopNPour.Application.Authentication.Commands.AuthenticateUserCommand).Assembly);
 });
 
-// Register authorization pipeline behavior
-builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));
+// Register MediatR pipeline behaviors (order matters!)
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));  // Logging
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));        // Authorization
 
 var app = builder.Build();
+
+// Global exception handling (must be first in pipeline)
+app.UseExceptionHandling();
 
 // Enable static files (for custom Swagger CSS/JS)
 app.UseStaticFiles();
@@ -111,8 +117,7 @@ using (var scope = app.Services.CreateScope())
     await seeder.SeedAsync();
 }
 
-// Map endpoints
-app.MapAuthenticationEndpoints();
-app.MapUsersEndpoints();
+// Map all endpoints automatically using reflection
+app.MapEndpointGroups();
 
 app.Run();

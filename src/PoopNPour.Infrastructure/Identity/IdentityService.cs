@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PoopNPour.Application.Common.Interfaces;
 using PoopNPour.Application.Identity;
 using PoopNPour.Domain.Common.Identity;
 using PoopNPour.Infrastructure.Data;
@@ -9,21 +11,79 @@ namespace PoopNPour.Infrastructure.Identity;
 /// <summary>
 /// Implementation of IIdentityService using ASP.NET Core Identity
 /// </summary>
-public class IdentityService : IIdentityService
+public class IdentityService : IIdentityService, Application.Identity.IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly ApplicationDbContext _context;
+    private readonly IAuthorizationService _authorizationService;
 
     public IdentityService(
         UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
-        ApplicationDbContext context)
+        ApplicationDbContext context,
+        IAuthorizationService authorizationService)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _context = context;
+        _authorizationService = authorizationService;
     }
+
+    #region IIdentityService (Authorization) Implementation
+
+    /// <summary>
+    /// Checks if a user is in a specific role (by user ID)
+    /// </summary>
+    public async Task<bool> IsInRoleAsync(string userId, string role)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+            return false;
+
+        return await _userManager.IsInRoleAsync(user, role);
+    }
+
+    /// <summary>
+    /// Checks if a user satisfies a specific policy
+    /// </summary>
+    public async Task<bool> AuthorizeAsync(string userId, string policyName)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+            return false;
+
+        // Create a ClaimsPrincipal from the user
+        var claims = await _userManager.GetClaimsAsync(user);
+        var roles = await _userManager.GetRolesAsync(user);
+        
+        var identity = new System.Security.Claims.ClaimsIdentity(claims, "Identity");
+        identity.AddClaim(new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, user.Id));
+        
+        foreach (var role in roles)
+        {
+            identity.AddClaim(new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Role, role));
+        }
+
+        var principal = new System.Security.Claims.ClaimsPrincipal(identity);
+        
+        var result = await _authorizationService.AuthorizeAsync(principal, policyName);
+        return result.Succeeded;
+    }
+
+    /// <summary>
+    /// Gets all roles for a user (by user ID)
+    /// </summary>
+    public async Task<IList<string>> GetUserRolesAsync(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+            return Array.Empty<string>();
+
+        return await _userManager.GetRolesAsync(user);
+    }
+
+    #endregion
 
     public async Task<ApplicationUser> CreateUserAsync(
         string userName,

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using PoopNPour.Application.Authorization;
+using PoopNPour.Application.Common.Interfaces;
 using PoopNPour.Application.Identity;
 using PoopNPour.Domain.Common.Auth;
 using PoopNPour.Domain.Common.Identity;
@@ -114,8 +115,14 @@ public static class DependencyInjection
         // Register authorization policy handler for custom policy requirements
         services.AddScoped<IAuthorizationHandler, PolicyRequirementHandler>();
 
-        // Register Identity Service
-        services.AddScoped<IIdentityService, IdentityService>();
+        // Register Current User (for authorization)
+        services.AddScoped<IUser, CurrentUser>();
+
+        // Register Identity Service (supports both interfaces)
+        services.AddScoped<Application.Identity.IIdentityService, IdentityService>();
+        services.AddScoped<IIdentityService>(sp => 
+            sp.GetRequiredService<Application.Identity.IIdentityService>() as IdentityService 
+            ?? throw new InvalidOperationException("IdentityService not registered"));
 
         // Register JWT Token Service
         services.AddScoped<IJwtTokenService, JwtTokenService>();

@@ -1,16 +1,17 @@
 using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http;
+using PoopNPour.Application.Authorization;
+using PoopNPour.Application.Common.Interfaces;
 using PoopNPour.Application.Identity;
 using PoopNPour.Application.Users.Exceptions;
 using PoopNPour.Application.Users.Models;
-using System.Security.Claims;
 
 namespace PoopNPour.Application.Users.Queries;
 
 /// <summary>
 /// Query to get current user's profile
 /// </summary>
+[Authorize]  // Requires authentication
 public record GetMyProfileQuery() 
     : IRequest<UserDto>;
 
@@ -20,33 +21,27 @@ public record GetMyProfileQuery()
 public class GetMyProfileQueryHandler : IRequestHandler<GetMyProfileQuery, UserDto>
 {
     private readonly IIdentityService _identityService;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IUser _user;
     private readonly IMapper _mapper;
 
     public GetMyProfileQueryHandler(
         IIdentityService identityService,
-        IHttpContextAccessor httpContextAccessor,
+        IUser user,
         IMapper mapper)
     {
         _identityService = identityService;
-        _httpContextAccessor = httpContextAccessor;
+        _user = user;
         _mapper = mapper;
     }
 
     public async Task<UserDto> Handle(GetMyProfileQuery request, CancellationToken cancellationToken)
     {
-        var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (string.IsNullOrEmpty(userId))
-        {
-            throw new UnauthorizedAccessException("User is not authenticated.");
-        }
-
-        var user = await _identityService.GetUserByIdAsync(userId, cancellationToken);
+        // Authorization behavior ensures user is authenticated and _user.Id is not null
+        var user = await _identityService.GetUserByIdAsync(_user.Id!, cancellationToken);
 
         if (user == null)
         {
-            throw new UserNotFoundException(userId);
+            throw new UserNotFoundException(_user.Id!);
         }
 
         var roles = await _identityService.GetUserRolesAsync(user, cancellationToken);

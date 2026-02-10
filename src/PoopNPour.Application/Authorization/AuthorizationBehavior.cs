@@ -1,27 +1,26 @@
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using PoopNPour.Application.Authorization;
-using PoopNPour.Domain.Common.Auth;
-using System.Security.Claims;
+using PoopNPour.Application.Common.Exceptions;
+using PoopNPour.Application.Common.Interfaces;
+using System.Reflection;
 
 namespace PoopNPour.Application.Authorization;
 
 /// <summary>
 /// MediatR pipeline behavior that enforces authorization based on AuthorizeAttribute
+/// Combines best practices from both Pipeline-X and Poop-Pour patterns
 /// </summary>
 public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
+    where TRequest : notnull
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IAuthorizationService _authorizationService;
+    private readonly IUser _user;
+    private readonly IIdentityService _identityService;
 
     public AuthorizationBehavior(
-        IHttpContextAccessor httpContextAccessor,
-        IAuthorizationService authorizationService)
+        IUser user,
+        IIdentityService identityService)
     {
-        _httpContextAccessor = httpContextAccessor;
-        _authorizationService = authorizationService;
+        _user = user;
+        _identityService = identityService;
     }
 
     public async Task<TResponse> Handle(
@@ -30,106 +29,116 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
         CancellationToken cancellationToken)
     {
         // Check if the request has an Authorize attribute
-        var authorizeAttribute = typeof(TRequest)
-            .GetCustomAttributes(typeof(AuthorizeAttribute), true)
-            .FirstOrDefault() as AuthorizeAttribute;
+        var authorizeAttributes = request.GetType()
+            .GetCustomAttributes<AuthorizeAttribute>()
+            .ToList();
 
-        if (authorizeAttribute == null)
+        if (!authorizeAttributes.Any())
         {
             // No authorization required, proceed
             return await next();
         }
 
-        var httpContext = _httpContextAccessor.HttpContext;
-        if (httpContext == null)
-        {
-            throw new UnauthorizedAccessException("HTTP context is not available.");
-        }
-
-        var user = httpContext.User;
-        if (user?.Identity?.IsAuthenticated != true)
+        // Must be authenticated user
+        if (!_user.IsAuthenticated || string.IsNullOrEmpty(_user.Id))
         {
             throw new UnauthorizedAccessException("User is not authenticated.");
         }
 
-        // Check roles
-        if (authorizeAttribute.Roles != null && authorizeAttribute.Roles.Length > 0)
+        // Process all authorize attributes
+        foreach (var authorizeAttribute in authorizeAttributes)
         {
-            var userRoles = user.Claims
-                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
-                .Select(c => c.Value)
-                .ToList();
-
-            var hasRequiredRoles = authorizeAttribute.RequireAllRoles
-                ? authorizeAttribute.Roles.All(role => userRoles.Contains(role))
-                : authorizeAttribute.Roles.Any(role => userRoles.Contains(role));
-
-            if (!hasRequiredRoles)
-            {
-                throw new UnauthorizedAccessException(
-                    $"User does not have required role(s): {string.Join(", ", authorizeAttribute.Roles)}");
-            }
+            await ValidateRolesAsync(authorizeAttribute);
+            await ValidatePoliciesAsync(authorizeAttribute);
         }
 
-        // Check policies
-        if (authorizeAttribute.Policies != null && authorizeAttribute.Policies.Length > 0)
-        {
-            var policyResults = new List<AuthorizationResult>();
-
-            foreach (var policyName in authorizeAttribute.Policies)
-            {
-                // Authorize using the configured policy name
-                var result = await _authorizationService.AuthorizeAsync(user, policyName);
-                policyResults.Add(result);
-            }
-
-            var hasRequiredPolicies = authorizeAttribute.RequireAllPolicies
-                ? policyResults.All(r => r.Succeeded)
-                : policyResults.Any(r => r.Succeeded);
-
-            if (!hasRequiredPolicies)
-            {
-                throw new UnauthorizedAccessException(
-                    $"User does not satisfy required policy/policies: {string.Join(", ", authorizeAttribute.Policies)}");
-            }
-        }
-
-        // Authorization passed, proceed
+        // User is authorized, proceed
         return await next();
     }
-}
 
-/// <summary>
-/// Policy requirement for custom policies
-/// </summary>
-public class PolicyRequirement : IAuthorizationRequirement
-{
-    public string PolicyName { get; }
-
-    public PolicyRequirement(string policyName)
+    private async Task ValidateRolesAsync(AuthorizeAttribute authorizeAttribute)
     {
-        PolicyName = policyName;
-    }
-}
+        var roles = authorizeAttribute.GetRoles();
+        if (!roles.Any())
+            return;
 
-/// <summary>
-/// Policy handler for custom policies
-/// </summary>
-public class PolicyRequirementHandler : AuthorizationHandler<PolicyRequirement>
-{
-    protected override Task HandleRequirementAsync(
-        AuthorizationHandlerContext context,
-        PolicyRequirement requirement)
-    {
-        // Check if user has a claim for this policy
-        var hasPolicy = context.User.HasClaim(Domain.Common.Auth.ClaimTypes.Policy, requirement.PolicyName) ||
-                       context.User.HasClaim(System.Security.Claims.ClaimTypes.Role, requirement.PolicyName);
+        var authorized = false;
 
-        if (hasPolicy)
+        if (authorizeAttribute.RequireAllRoles)
         {
-            context.Succeed(requirement);
+            // AND logic: user must have ALL roles
+            authorized = true;
+            foreach (var role in roles)
+            {
+                var isInRole = await _identityService.IsInRoleAsync(_user.Id!, role);
+                if (!isInRole)
+                {
+                    authorized = false;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            // OR logic: user must have AT LEAST ONE role
+            foreach (var role in roles)
+            {
+                var isInRole = await _identityService.IsInRoleAsync(_user.Id!, role);
+                if (isInRole)
+                {
+                    authorized = true;
+                    break;
+                }
+            }
         }
 
-        return Task.CompletedTask;
+        if (!authorized)
+        {
+            throw new ForbiddenAccessException(
+                $"User does not have required role(s): {string.Join(", ", roles)}");
+        }
+    }
+
+    private async Task ValidatePoliciesAsync(AuthorizeAttribute authorizeAttribute)
+    {
+        var policies = authorizeAttribute.GetPolicies();
+        if (!policies.Any())
+            return;
+
+        var authorized = false;
+
+        if (authorizeAttribute.RequireAllPolicies)
+        {
+            // AND logic: user must satisfy ALL policies
+            authorized = true;
+            foreach (var policy in policies)
+            {
+                var satisfiesPolicy = await _identityService.AuthorizeAsync(_user.Id!, policy);
+                if (!satisfiesPolicy)
+                {
+                    authorized = false;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            // OR logic: user must satisfy AT LEAST ONE policy
+            foreach (var policy in policies)
+            {
+                var satisfiesPolicy = await _identityService.AuthorizeAsync(_user.Id!, policy);
+                if (satisfiesPolicy)
+                {
+                    authorized = true;
+                    break;
+                }
+            }
+        }
+
+        if (!authorized)
+        {
+            throw new ForbiddenAccessException(
+                $"User does not satisfy required policy/policies: {string.Join(", ", policies)}");
+        }
     }
 }

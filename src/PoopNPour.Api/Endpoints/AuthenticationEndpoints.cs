@@ -1,73 +1,51 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using PoopNPour.Api.Common;
 using PoopNPour.Application.Authentication.Commands;
-using PoopNPour.Application.Authentication.Exceptions;
 using PoopNPour.Application.Authentication.Models;
 
 namespace PoopNPour.Api.Endpoints;
 
 /// <summary>
 /// Authentication endpoints
+/// Route: /api/authentication (auto-derived from class name)
 /// </summary>
-public static class AuthenticationEndpoints
+public class AuthenticationEndpoints : EndpointGroupBase
 {
-    public static void MapAuthenticationEndpoints(this WebApplication app)
+    public override void Map(WebApplication app)
     {
-        var group = app.MapGroup("api/auth").WithTags("Authentication");
-
-        group.MapPost("/login", LoginAsync)
-            .WithName("Login")
-            .WithSummary("Authenticate user and get JWT token")
-            .Accepts<LoginRequestDto>("application/json")
-            .Produces<LoginResponseDto>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status401Unauthorized);
-
-        group.MapPost("/register", RegisterAsync)
-            .WithName("Register")
-            .WithSummary("Register a new user")
-            .Accepts<RegisterRequestDto>("application/json")
-            .Produces<RegisterResponseDto>(StatusCodes.Status201Created)
-            .Produces(StatusCodes.Status400BadRequest);
+        app.MapGroup(this)
+            .MapPost(LoginAsync, "login", route => route
+                .WithSummary("Authenticate user and get JWT token")
+            )
+            .MapPost(RegisterAsync, "register", route => route
+                .WithSummary("Register a new user")
+            );
     }
 
-    private static async Task<IResult> LoginAsync(
+    public async Task<IResult> LoginAsync(
+        IMediator mediator,
         [FromBody] LoginRequestDto request,
-        [FromServices] IMediator mediator,
         CancellationToken cancellationToken)
     {
-        try
-        {
-            
-            var command = new AuthenticateUserCommand(request.Username, request.Password);
-            var result = await mediator.Send(command, cancellationToken);
-            return Results.Ok(result);
-        }
-        catch (InvalidCredentialsException)
-        {
-            return Results.Unauthorized();
-        }
+        var command = new AuthenticateUserCommand(request.Username, request.Password);
+        var result = await mediator.Send(command, cancellationToken);
+        return Results.Ok(result);
     }
 
-    private static async Task<IResult> RegisterAsync(
+    public async Task<IResult> RegisterAsync(
+        IMediator mediator,
         [FromBody] RegisterRequestDto request,
-        [FromServices] IMediator mediator,
         CancellationToken cancellationToken)
     {
-        try
-        {
-            var command = new RegisterUserCommand(
-                request.Email,
-                request.UserName,
-                request.Password,
-                request.FirstName,
-                request.LastName);
+        var command = new RegisterUserCommand(
+            request.Email,
+            request.UserName,
+            request.Password,
+            request.FirstName,
+            request.LastName);
 
-            var result = await mediator.Send(command, cancellationToken);
-            return Results.Created($"/api/users/{result.User.Id}", result);
-        }
-        catch (UserAlreadyExistsException ex)
-        {
-            return Results.BadRequest(new { error = ex.Message });
-        }
+        var result = await mediator.Send(command, cancellationToken);
+        return Results.Created($"/api/users/{result.User.Id}", result);
     }
 }

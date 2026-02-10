@@ -46,15 +46,10 @@
     <Message Text="========================================" Importance="high" />
     
     <!-- Restore dotnet tools first -->
-    <Exec Command="dotnet tool restore" 
-          ContinueOnError="true" 
-          WorkingDirectory="$(MSBuildProjectDirectory)\..\..\" />
+    <Exec Command="dotnet tool restore" ContinueOnError="true" WorkingDirectory="$(MSBuildProjectDirectory)\..\..\" />
     
     <!-- Generate swagger.json from the compiled assembly using dotnet swagger tool -->
-    <Exec Command="dotnet swagger tofile --output &quot;$(SwaggerOutputPath)&quot; &quot;$(ApiAssemblyPath)&quot; v1" 
-          ContinueOnError="true" 
-          WorkingDirectory="$(MSBuildProjectDirectory)"
-          IgnoreExitCode="true">
+    <Exec Command="dotnet swagger tofile --output &quot;$(SwaggerOutputPath)&quot; &quot;$(ApiAssemblyPath)&quot; v1" ContinueOnError="true" WorkingDirectory="$(MSBuildProjectDirectory)" IgnoreExitCode="true">
       <Output TaskParameter="ExitCode" PropertyName="SwaggerExitCode" />
     </Exec>
     
@@ -73,11 +68,7 @@
     <Message Text="========================================" Importance="high" />
     
     <!-- Generate TypeScript client from swagger.json -->
-    <Exec Command="dotnet &quot;$(NSwagToolPath)&quot; run &quot;$(NSwagConfigPath)&quot;" 
-          ContinueOnError="true" 
-          WorkingDirectory="$(MSBuildProjectDirectory)"
-          Condition="Exists('$(MSBuildProjectDirectory)\swagger.json')"
-          IgnoreExitCode="true">
+    <Exec Command="dotnet &quot;$(NSwagToolPath)&quot; run &quot;$(NSwagConfigPath)&quot;" ContinueOnError="true" WorkingDirectory="$(MSBuildProjectDirectory)" Condition="Exists('$(MSBuildProjectDirectory)\swagger.json')" IgnoreExitCode="true">
       <Output TaskParameter="ExitCode" PropertyName="NSwagExitCode" />
     </Exec>
     

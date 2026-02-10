@@ -1,59 +1,37 @@
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PoopNPour.Api.Common;
 using PoopNPour.Application.Users.Commands;
-using PoopNPour.Application.Users.Exceptions;
 using PoopNPour.Application.Users.Models;
 using PoopNPour.Application.Users.Queries;
-using PoopNPour.Domain.Common.Auth;
 
 namespace PoopNPour.Api.Endpoints;
 
 /// <summary>
 /// User management endpoints
+/// Route: /api/users (auto-derived from class name)
 /// </summary>
-public static class UsersEndpoints
+public class UsersEndpoints : EndpointGroupBase
 {
-    public static void MapUsersEndpoints(this WebApplication app)
+    public override void Map(WebApplication app)
     {
-        var group = app.MapGroup("api/users").WithTags("Users");
-
-        group.MapGet("/", GetUsersAsync)
-            .WithName("GetUsers")
-            .WithSummary("Get paginated list of users")
-            .RequireAuthorization(Policies.CanViewUsers)
-            .Produces<PaginatedResponseDto<UserDto>>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status403Forbidden);
-
-        group.MapGet("/{id}", GetUserByIdAsync)
-            .WithName("GetUserById")
-            .WithSummary("Get user by ID")
-            .RequireAuthorization(Policies.CanViewUsers)
-            .Produces<UserDto>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status404NotFound)
-            .Produces(StatusCodes.Status403Forbidden);
-
-        group.MapGet("/me", GetMyProfileAsync)
-            .WithName("GetMyProfile")
-            .WithSummary("Get current user's profile")
-            .RequireAuthorization()
-            .Produces<UserDto>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status404NotFound)
-            .Produces(StatusCodes.Status401Unauthorized);
-
-        group.MapPut("/me", UpdateMyProfileAsync)
-            .WithName("UpdateMyProfile")
-            .WithSummary("Update current user's profile")
-            .RequireAuthorization()
-            .Accepts<UpdateProfileRequestDto>("application/json")
-            .Produces<UserDto>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status400BadRequest)
-            .Produces(StatusCodes.Status404NotFound)
-            .Produces(StatusCodes.Status401Unauthorized);
+        app.MapGroup(this)
+            .MapGet(GetUsersAsync, "", route => route
+                .WithSummary("Get paginated list of users")
+            )
+            .MapGet(GetUserByIdAsync, "{id}", route => route
+                .WithSummary("Get user by ID")
+            )
+            .MapGet(GetMyProfileAsync, "me", route => route
+                .WithSummary("Get current user's profile")
+            )
+            .MapPut(UpdateMyProfileAsync, "me", route => route
+                .WithSummary("Update current user's profile")
+            );
     }
 
-    private static async Task<IResult> GetUsersAsync(
-        [FromServices] IMediator mediator,
+    public async Task<IResult> GetUsersAsync(
+        IMediator mediator,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 10,
         [FromQuery] string? searchTerm = null,
@@ -64,61 +42,36 @@ public static class UsersEndpoints
         return Results.Ok(result);
     }
 
-    private static async Task<IResult> GetUserByIdAsync(
+    public async Task<IResult> GetUserByIdAsync(
+        IMediator mediator,
         [FromRoute] string id,
-        [FromServices] IMediator mediator,
         CancellationToken cancellationToken)
     {
-        try
-        {
-            var query = new GetUserByIdQuery(id);
-            var result = await mediator.Send(query, cancellationToken);
-            return Results.Ok(result);
-        }
-        catch (UserNotFoundException)
-        {
-            return Results.NotFound();
-        }
+        var query = new GetUserByIdQuery(id);
+        var result = await mediator.Send(query, cancellationToken);
+        return Results.Ok(result);
     }
 
-    private static async Task<IResult> GetMyProfileAsync(
-        [FromServices] IMediator mediator,
+    public async Task<IResult> GetMyProfileAsync(
+        IMediator mediator,
         CancellationToken cancellationToken)
     {
-        try
-        {
-            var query = new GetMyProfileQuery();
-            var result = await mediator.Send(query, cancellationToken);
-            return Results.Ok(result);
-        }
-        catch (UserNotFoundException)
-        {
-            return Results.NotFound();
-        }
+        var query = new GetMyProfileQuery();
+        var result = await mediator.Send(query, cancellationToken);
+        return Results.Ok(result);
     }
 
-    private static async Task<IResult> UpdateMyProfileAsync(
+    public async Task<IResult> UpdateMyProfileAsync(
+        IMediator mediator,
         [FromBody] UpdateProfileRequestDto request,
-        [FromServices] IMediator mediator,
         CancellationToken cancellationToken)
     {
-        try
-        {
-            var command = new UpdateMyProfileCommand(
-                request.FirstName,
-                request.LastName,
-                request.Email);
+        var command = new UpdateMyProfileCommand(
+            request.FirstName,
+            request.LastName,
+            request.Email);
 
-            var result = await mediator.Send(command, cancellationToken);
-            return Results.Ok(result);
-        }
-        catch (UserNotFoundException)
-        {
-            return Results.NotFound();
-        }
-        catch (EmailAlreadyInUseException ex)
-        {
-            return Results.BadRequest(new { error = ex.Message });
-        }
+        var result = await mediator.Send(command, cancellationToken);
+        return Results.Ok(result);
     }
 }
