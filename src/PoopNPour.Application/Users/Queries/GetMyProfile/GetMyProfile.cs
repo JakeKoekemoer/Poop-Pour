@@ -5,13 +5,14 @@ using PoopNPour.Application.Common.Interfaces;
 using PoopNPour.Application.Identity;
 using PoopNPour.Application.Users.Exceptions;
 using PoopNPour.Application.Users.Models;
+using PoopNPour.Domain.Common.Auth;
 
 namespace PoopNPour.Application.Users.Queries;
 
 /// <summary>
 /// Query to get current user's profile
 /// </summary>
-[Authorize]  // Requires authentication
+[Authorize(Policy = Policies.Can_ManageOwnProfile)]
 public record GetMyProfileQuery() 
     : IRequest<UserDto>;
 

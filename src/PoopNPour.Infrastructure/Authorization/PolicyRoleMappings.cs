@@ -46,6 +46,14 @@ public static class PolicyRoleMappings
             ])
         );
 
+        options.AddPolicy(Policies.Can_ManageOwnProfile,
+            policy => policy.RequireRole([
+                Roles.Family_Head,
+                Roles.Family_Member,
+                Roles.Administrator
+            ])
+        );
+
         options.AddPolicy(Policies.CanViewUsers,
             policy => policy.RequireRole(Roles.Administrator));
 
