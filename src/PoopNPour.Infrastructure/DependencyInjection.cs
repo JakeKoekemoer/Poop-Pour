@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -15,6 +16,7 @@ using PoopNPour.Abstractions.User;
 using PoopNPour.Infrastructure.Authentication;
 using PoopNPour.Infrastructure.Authorization;
 using PoopNPour.Infrastructure.Data;
+using PoopNPour.Infrastructure.Data.Interceptors;
 using PoopNPour.Infrastructure.Identity;
 using PoopNPour.Infrastructure.Repositories.SettingsRepository;
 using PoopNPour.Infrastructure.Repositories.UserRepository;
@@ -40,8 +42,18 @@ public static class DependencyInjection
         var maxRetryCount = efSettings.GetValue<int?>("MaxRetryCount") ?? 3;
         var maxRetryDelay = efSettings.GetValue<TimeSpan?>("MaxRetryDelay") ?? TimeSpan.FromSeconds(30);
 
-        services.AddDbContext<ApplicationDbContext>(options =>
+        // Add EF Core interceptors to the service collection.
+        // For more information see https://learn.microsoft.com/en-us/ef/core/logging-events-diagnostics/interceptors
+        services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>(); // Sets the CreatedBy, CreatedOn, LastModifiedBy, and LastModifiedOn properties
+
+        // Configure TimeProvider for consistent time handling
+        services.AddSingleton(TimeProvider.System);
+
+        services.AddDbContext<ApplicationDbContext>((sp, options) =>
         {
+            // Map the interceptors to this context
+            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+
             options.UseSqlServer(connectionString, sqlOptions =>
             {
                 sqlOptions.CommandTimeout(commandTimeout);
