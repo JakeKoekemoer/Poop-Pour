@@ -41,7 +41,14 @@ public class DatabaseSeeder
         try
         {
             // Ensure database is created and migrations are applied
-            await _context.Database.MigrateAsync(cancellationToken);
+            if (_context.Database.IsRelational())
+            {
+                await _context.Database.MigrateAsync(cancellationToken);
+            }
+            else
+            {
+                await _context.Database.EnsureCreatedAsync(cancellationToken);
+            }
 
             // Seed default roles first (required before creating users)
             await SeedDefaultRolesAsync(cancellationToken);

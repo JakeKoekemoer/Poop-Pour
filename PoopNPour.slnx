@@ -6,6 +6,12 @@
     <Project Path="src/PoopNPour.Domain/PoopNPour.Domain.csproj" Id="bbde2401-70b4-446a-adb7-7038c8f91925" />
     <Project Path="src/PoopNPour.Infrastructure/PoopNPour.Infrastructure.csproj" Id="65409fe2-58f1-4693-ab35-c89b013e4cbc" />
   </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="tests/PoopNPour.Api.FunctionalTests/PoopNPour.Api.FunctionalTests.csproj" />
+    <Project Path="tests/PoopNPour.Application.UnitTests/PoopNPour.Application.UnitTests.csproj" />
+    <Project Path="tests/PoopNPour.Infrastructure.UnitTests/PoopNPour.Infrastructure.UnitTests.csproj" />
+    <Project Path="tests/PoopNPour.Domain.UnitTests/PoopNPour.Domain.UnitTests.csproj" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path="Directory.Packages.props" />
   </Folder>

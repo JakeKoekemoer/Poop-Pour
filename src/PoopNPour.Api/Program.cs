@@ -9,7 +9,7 @@ using PoopNPour.Infrastructure.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Load database configuration from separate file (not in version control)
-builder.Configuration.AddJsonFile("database.config.json", optional: false, reloadOnChange: true);
+builder.Configuration.AddJsonFile("database.config.json", optional: true, reloadOnChange: true);
 
 // Add Swagger/OpenAPI services
 builder.Services.AddEndpointsApiExplorer();
@@ -127,3 +127,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.Run();
+
+// Make Program class accessible for functional tests (WebApplicationFactory<Program>)
+public partial class Program { }
