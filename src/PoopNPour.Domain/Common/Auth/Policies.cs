@@ -21,4 +21,10 @@ public static class Policies
     public const string CanManageUsers = nameof(CanManageUsers);
 
     #endregion User Management Policies
+
+    #region Settings Policies
+
+    public const string CanManageSystemSettings = nameof(CanManageSystemSettings);
+
+    #endregion Settings Policies
 }

@@ -62,6 +62,13 @@ public static class PolicyRoleMappings
 
         #endregion User Management Policies
 
+        #region Settings Policies
+
+        options.AddPolicy(Policies.CanManageSystemSettings,
+            policy => policy.RequireRole(Roles.Administrator));
+
+        #endregion Settings Policies
+
         return options;
     }
 }
