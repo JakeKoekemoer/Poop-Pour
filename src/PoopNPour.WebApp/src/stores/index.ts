@@ -1,2 +1,2 @@
 // Export all stores from this file
-export * from './example'
+// Add your stores here as you create them
