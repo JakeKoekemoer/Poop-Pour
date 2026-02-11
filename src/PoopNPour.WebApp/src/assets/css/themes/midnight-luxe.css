@@ -1,0 +1,88 @@
+/* Midnight Luxe Theme - Dark by default */
+:root[data-theme="midnight-luxe"] {
+  /* Primary colors - Muted Emerald */
+  --primary: #3E7C59;
+  --primary-foreground: #F9FAFB;
+  
+  /* Secondary colors - Warm Gold */
+  --secondary: #EAB308;
+  --secondary-foreground: #111827;
+  
+  /* Accent colors - Charcoal Navy */
+  --accent: #1F2933;
+  --accent-foreground: #F9FAFB;
+  
+  /* Background colors - Near Black */
+  --background: #111827;
+  --foreground: #F9FAFB;
+  
+  /* Card/Surface colors - Soft Graphite */
+  --card: #24303F;
+  --card-foreground: #F9FAFB;
+  
+  /* Muted colors */
+  --muted: #1F2933;
+  --muted-foreground: #9CA3AF;
+  
+  /* Border and input */
+  --border: #374151;
+  --input: #374151;
+  --ring: #3E7C59;
+  
+  /* State colors */
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --success: #10B981;
+  --success-foreground: #111827;
+}
+
+/* Dark mode - slightly darker */
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="midnight-luxe"] {
+    --primary: #4E8C69;
+    --primary-foreground: #FFFFFF;
+    
+    --secondary: #FAC318;
+    --secondary-foreground: #111827;
+    
+    --accent: #2F3943;
+    --accent-foreground: #F9FAFB;
+    
+    --background: #0A0F14;
+    --foreground: #F9FAFB;
+    
+    --card: #1A2633;
+    --card-foreground: #F9FAFB;
+    
+    --muted: #1F2933;
+    --muted-foreground: #9CA3AF;
+    
+    --border: #2D3948;
+    --input: #2D3948;
+    --ring: #4E8C69;
+  }
+}
+
+.dark[data-theme="midnight-luxe"] {
+  --primary: #4E8C69;
+  --primary-foreground: #FFFFFF;
+  
+  --secondary: #FAC318;
+  --secondary-foreground: #111827;
+  
+  --accent: #2F3943;
+  --accent-foreground: #F9FAFB;
+  
+  --background: #0A0F14;
+  --foreground: #F9FAFB;
+  
+  --card: #1A2633;
+  --card-foreground: #F9FAFB;
+  
+  --muted: #1F2933;
+  --muted-foreground: #9CA3AF;
+  
+  --border: #2D3948;
+  --input: #2D3948;
+  --ring: #4E8C69;
+}

@@ -1,0 +1,88 @@
+/* Berry Soft Theme */
+:root[data-theme="berry-soft"] {
+  /* Primary colors - Muted Raspberry */
+  --primary: #C06C84;
+  --primary-foreground: #FFFFFF;
+  
+  /* Secondary colors - Peach */
+  --secondary: #F8B195;
+  --secondary-foreground: #2E2E2E;
+  
+  /* Accent colors - Slate Blue */
+  --accent: #355C7D;
+  --accent-foreground: #FFFFFF;
+  
+  /* Background colors - Blush White */
+  --background: #FFF6F8;
+  --foreground: #2E2E2E;
+  
+  /* Card/Surface colors - Soft Rose */
+  --card: #FDECEF;
+  --card-foreground: #2E2E2E;
+  
+  /* Muted colors */
+  --muted: #FBE0E5;
+  --muted-foreground: #5F5F5F;
+  
+  /* Border and input */
+  --border: #F5D5DC;
+  --input: #F5D5DC;
+  --ring: #C06C84;
+  
+  /* State colors */
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+  --success: #059669;
+  --success-foreground: #FFFFFF;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="berry-soft"] {
+    --primary: #D07C94;
+    --primary-foreground: #FFFFFF;
+    
+    --secondary: #C89B85;
+    --secondary-foreground: #1F2A27;
+    
+    --accent: #456C8D;
+    --accent-foreground: #FFFFFF;
+    
+    --background: #1F2A27;
+    --foreground: #E5E7EB;
+    
+    --card: #2C3A36;
+    --card-foreground: #E5E7EB;
+    
+    --muted: #374843;
+    --muted-foreground: #9CA3AF;
+    
+    --border: #374151;
+    --input: #374151;
+    --ring: #D07C94;
+  }
+}
+
+.dark[data-theme="berry-soft"] {
+  --primary: #D07C94;
+  --primary-foreground: #FFFFFF;
+  
+  --secondary: #C89B85;
+  --secondary-foreground: #1F2A27;
+  
+  --accent: #456C8D;
+  --accent-foreground: #FFFFFF;
+  
+  --background: #1F2A27;
+  --foreground: #E5E7EB;
+  
+  --card: #2C3A36;
+  --card-foreground: #E5E7EB;
+  
+  --muted: #374843;
+  --muted-foreground: #9CA3AF;
+  
+  --border: #374151;
+  --input: #374151;
+  --ring: #D07C94;
+}

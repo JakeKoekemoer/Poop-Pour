@@ -1,0 +1,88 @@
+/* Frosted Mint Theme */
+:root[data-theme="frosted-mint"] {
+  /* Primary colors - Cool Aqua */
+  --primary: #4CC9F0;
+  --primary-foreground: #0F172A;
+  
+  /* Secondary colors - Mint */
+  --secondary: #80ED99;
+  --secondary-foreground: #0F172A;
+  
+  /* Accent colors - Soft Yellow */
+  --accent: #FFD166;
+  --accent-foreground: #0F172A;
+  
+  /* Background colors - Cloud White */
+  --background: #F8FAFC;
+  --foreground: #0F172A;
+  
+  /* Card/Surface colors - Ice Blue */
+  --card: #E2F3F5;
+  --card-foreground: #0F172A;
+  
+  /* Muted colors */
+  --muted: #D1E7EA;
+  --muted-foreground: #475569;
+  
+  /* Border and input */
+  --border: #BED7DD;
+  --input: #BED7DD;
+  --ring: #4CC9F0;
+  
+  /* State colors */
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --success: #10B981;
+  --success-foreground: #FFFFFF;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="frosted-mint"] {
+    --primary: #5CD9FF;
+    --primary-foreground: #0F172A;
+    
+    --secondary: #90FDA9;
+    --secondary-foreground: #0F172A;
+    
+    --accent: #FFE176;
+    --accent-foreground: #0F172A;
+    
+    --background: #1F2A27;
+    --foreground: #E5E7EB;
+    
+    --card: #2C3A36;
+    --card-foreground: #E5E7EB;
+    
+    --muted: #374843;
+    --muted-foreground: #9CA3AF;
+    
+    --border: #374151;
+    --input: #374151;
+    --ring: #5CD9FF;
+  }
+}
+
+.dark[data-theme="frosted-mint"] {
+  --primary: #5CD9FF;
+  --primary-foreground: #0F172A;
+  
+  --secondary: #90FDA9;
+  --secondary-foreground: #0F172A;
+  
+  --accent: #FFE176;
+  --accent-foreground: #0F172A;
+  
+  --background: #1F2A27;
+  --foreground: #E5E7EB;
+  
+  --card: #2C3A36;
+  --card-foreground: #E5E7EB;
+  
+  --muted: #374843;
+  --muted-foreground: #9CA3AF;
+  
+  --border: #374151;
+  --input: #374151;
+  --ring: #5CD9FF;
+}

@@ -1,0 +1,88 @@
+/* Warm Modern Theme */
+:root[data-theme="warm-modern"] {
+  /* Primary colors - Eucalyptus Green */
+  --primary: #5E8B7E;
+  --primary-foreground: #FFFFFF;
+  
+  /* Secondary colors - Golden Honey */
+  --secondary: #E9B949;
+  --secondary-foreground: #3A3A3A;
+  
+  /* Accent colors - Dark Moss */
+  --accent: #3F5F56;
+  --accent-foreground: #FFFFFF;
+  
+  /* Background colors - Light Sand */
+  --background: #F5F1E8;
+  --foreground: #3A3A3A;
+  
+  /* Card/Surface colors */
+  --card: #FFFFFF;
+  --card-foreground: #3A3A3A;
+  
+  /* Muted colors */
+  --muted: #E8E3D6;
+  --muted-foreground: #6B6B6B;
+  
+  /* Border and input */
+  --border: #D9D1C1;
+  --input: #D9D1C1;
+  --ring: #5E8B7E;
+  
+  /* State colors */
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+  --success: #059669;
+  --success-foreground: #FFFFFF;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="warm-modern"] {
+    --primary: #6E9B8E;
+    --primary-foreground: #1F2A27;
+    
+    --secondary: #CBA43B;
+    --secondary-foreground: #1F2A27;
+    
+    --accent: #4F7566;
+    --accent-foreground: #E5E7EB;
+    
+    --background: #1F2A27;
+    --foreground: #E5E7EB;
+    
+    --card: #2C3A36;
+    --card-foreground: #E5E7EB;
+    
+    --muted: #374843;
+    --muted-foreground: #9CA3AF;
+    
+    --border: #374151;
+    --input: #374151;
+    --ring: #6E9B8E;
+  }
+}
+
+.dark[data-theme="warm-modern"] {
+  --primary: #6E9B8E;
+  --primary-foreground: #1F2A27;
+  
+  --secondary: #CBA43B;
+  --secondary-foreground: #1F2A27;
+  
+  --accent: #4F7566;
+  --accent-foreground: #E5E7EB;
+  
+  --background: #1F2A27;
+  --foreground: #E5E7EB;
+  
+  --card: #2C3A36;
+  --card-foreground: #E5E7EB;
+  
+  --muted: #374843;
+  --muted-foreground: #9CA3AF;
+  
+  --border: #374151;
+  --input: #374151;
+  --ring: #6E9B8E;
+}

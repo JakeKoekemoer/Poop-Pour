@@ -1,0 +1,88 @@
+/* Fresh & Cheerful Theme */
+:root[data-theme="fresh-cheerful"] {
+  /* Primary colors - Mint Green */
+  --primary: #8FD6B5;
+  --primary-foreground: #1F2937;
+  
+  /* Secondary colors - Sunflower Yellow */
+  --secondary: #FFD84D;
+  --secondary-foreground: #1F2937;
+  
+  /* Accent colors - Deep Forest Green */
+  --accent: #2F5D50;
+  --accent-foreground: #FFFFFF;
+  
+  /* Background colors - Off-White */
+  --background: #F9FAF7;
+  --foreground: #1F2937;
+  
+  /* Card/Surface colors */
+  --card: #FFFFFF;
+  --card-foreground: #1F2937;
+  
+  /* Muted colors */
+  --muted: #E5E7EB;
+  --muted-foreground: #6B7280;
+  
+  /* Border and input */
+  --border: #D1D5DB;
+  --input: #D1D5DB;
+  --ring: #8FD6B5;
+  
+  /* State colors */
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --success: #10B981;
+  --success-foreground: #FFFFFF;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="fresh-cheerful"] {
+    --primary: #9FE6C5;
+    --primary-foreground: #1F2A27;
+    
+    --secondary: #CDB540;
+    --secondary-foreground: #1F2A27;
+    
+    --accent: #3F7D68;
+    --accent-foreground: #E5E7EB;
+    
+    --background: #1F2A27;
+    --foreground: #E5E7EB;
+    
+    --card: #2C3A36;
+    --card-foreground: #E5E7EB;
+    
+    --muted: #374843;
+    --muted-foreground: #9CA3AF;
+    
+    --border: #374151;
+    --input: #374151;
+    --ring: #9FE6C5;
+  }
+}
+
+.dark[data-theme="fresh-cheerful"] {
+  --primary: #9FE6C5;
+  --primary-foreground: #1F2A27;
+  
+  --secondary: #CDB540;
+  --secondary-foreground: #1F2A27;
+  
+  --accent: #3F7D68;
+  --accent-foreground: #E5E7EB;
+  
+  --background: #1F2A27;
+  --foreground: #E5E7EB;
+  
+  --card: #2C3A36;
+  --card-foreground: #E5E7EB;
+  
+  --muted: #374843;
+  --muted-foreground: #9CA3AF;
+  
+  --border: #374151;
+  --input: #374151;
+  --ring: #9FE6C5;
+}

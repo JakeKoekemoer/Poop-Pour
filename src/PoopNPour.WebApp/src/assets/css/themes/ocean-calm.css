@@ -1,0 +1,88 @@
+/* Ocean Calm Theme */
+:root[data-theme="ocean-calm"] {
+  /* Primary colors - Deep Ocean Blue */
+  --primary: #3A6EA5;
+  --primary-foreground: #FFFFFF;
+  
+  /* Secondary colors - Seafoam */
+  --secondary: #7FC8A9;
+  --secondary-foreground: #1F2A44;
+  
+  /* Accent colors - Soft Gold */
+  --accent: #F4D35E;
+  --accent-foreground: #1F2A44;
+  
+  /* Background colors - Mist White */
+  --background: #F6F9FC;
+  --foreground: #1F2A44;
+  
+  /* Card/Surface colors - Pale Blue */
+  --card: #E6EFF7;
+  --card-foreground: #1F2A44;
+  
+  /* Muted colors */
+  --muted: #D5E3F0;
+  --muted-foreground: #4A5568;
+  
+  /* Border and input */
+  --border: #C2D7E9;
+  --input: #C2D7E9;
+  --ring: #3A6EA5;
+  
+  /* State colors */
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+  --success: #059669;
+  --success-foreground: #FFFFFF;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="ocean-calm"] {
+    --primary: #5A8EC5;
+    --primary-foreground: #FFFFFF;
+    
+    --secondary: #8FD8B9;
+    --secondary-foreground: #1F2A27;
+    
+    --accent: #F4D35E;
+    --accent-foreground: #1F2A27;
+    
+    --background: #1F2A27;
+    --foreground: #E5E7EB;
+    
+    --card: #2C3A36;
+    --card-foreground: #E5E7EB;
+    
+    --muted: #374843;
+    --muted-foreground: #9CA3AF;
+    
+    --border: #374151;
+    --input: #374151;
+    --ring: #5A8EC5;
+  }
+}
+
+.dark[data-theme="ocean-calm"] {
+  --primary: #5A8EC5;
+  --primary-foreground: #FFFFFF;
+  
+  --secondary: #8FD8B9;
+  --secondary-foreground: #1F2A27;
+  
+  --accent: #F4D35E;
+  --accent-foreground: #1F2A27;
+  
+  --background: #1F2A27;
+  --foreground: #E5E7EB;
+  
+  --card: #2C3A36;
+  --card-foreground: #E5E7EB;
+  
+  --muted: #374843;
+  --muted-foreground: #9CA3AF;
+  
+  --border: #374151;
+  --input: #374151;
+  --ring: #5A8EC5;
+}

@@ -1,0 +1,122 @@
+/* Soft Natural Theme - Calm + Modern */
+:root {
+  /* Primary colors - Sage Green */
+  --primary: #7FAF9A;
+  --primary-foreground: #FFFFFF;
+  
+  /* Secondary colors - Soft Butter Yellow */
+  --secondary: #F6E27A;
+  --secondary-foreground: #2E2E2E;
+  
+  /* Accent colors - Muted Olive */
+  --accent: #5F7C6C;
+  --accent-foreground: #FFFFFF;
+  
+  /* Background colors - Warm Cream */
+  --background: #FBF8EF;
+  --foreground: #2E2E2E;
+  
+  /* Card/Surface colors */
+  --card: #FFFFFF;
+  --card-foreground: #2E2E2E;
+  
+  /* Popover colors */
+  --popover: #FFFFFF;
+  --popover-foreground: #2E2E2E;
+  
+  /* Muted colors */
+  --muted: #E8E5DB;
+  --muted-foreground: #5F5F5F;
+  
+  /* Border and input */
+  --border: #D4CFBE;
+  --input: #D4CFBE;
+  --ring: #7FAF9A;
+  
+  /* State colors */
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+  --success: #059669;
+  --success-foreground: #FFFFFF;
+  
+  /* Chart colors */
+  --chart-1: #7FAF9A;
+  --chart-2: #F6E27A;
+  --chart-3: #5F7C6C;
+  --chart-4: #A8C5B7;
+  --chart-5: #D4CFBE;
+  
+  /* Sidebar colors */
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #2E2E2E;
+  --sidebar-primary: #7FAF9A;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #E8E5DB;
+  --sidebar-accent-foreground: #2E2E2E;
+  --sidebar-border: #D4CFBE;
+  --sidebar-ring: #7FAF9A;
+  
+  /* Border radius */
+  --radius: 0.5rem;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #8EC0AA;
+    --primary-foreground: #1F2A27;
+    
+    --secondary: #B8A856;
+    --secondary-foreground: #1F2A27;
+    
+    --accent: #7A9B8A;
+    --accent-foreground: #E5E7EB;
+    
+    --background: #1F2A27;
+    --foreground: #E5E7EB;
+    
+    --card: #2C3A36;
+    --card-foreground: #E5E7EB;
+    
+    --muted: #374843;
+    --muted-foreground: #9CA3AF;
+    
+    --border: #374151;
+    --input: #374151;
+    --ring: #8EC0AA;
+    
+    --destructive: #EF4444;
+    --destructive-foreground: #FFFFFF;
+    --success: #10B981;
+    --success-foreground: #1F2A27;
+  }
+}
+
+.dark {
+  --primary: #8EC0AA;
+  --primary-foreground: #1F2A27;
+  
+  --secondary: #B8A856;
+  --secondary-foreground: #1F2A27;
+  
+  --accent: #7A9B8A;
+  --accent-foreground: #E5E7EB;
+  
+  --background: #1F2A27;
+  --foreground: #E5E7EB;
+  
+  --card: #2C3A36;
+  --card-foreground: #E5E7EB;
+  
+  --muted: #374843;
+  --muted-foreground: #9CA3AF;
+  
+  --border: #374151;
+  --input: #374151;
+  --ring: #8EC0AA;
+  
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --success: #10B981;
+  --success-foreground: #1F2A27;
+}
