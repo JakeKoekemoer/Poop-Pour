@@ -1,1 +1,5 @@
+export { default } from './ThemeSwitcher.vue'
 export { default as ThemeSwitcher } from './ThemeSwitcher.vue'
+export { default as ThemeOption } from './ThemeOption.vue'
+export { default as ThemeInfo } from './ThemeInfo.vue'
+export { default as DarkModeOption } from './DarkModeOption.vue'
