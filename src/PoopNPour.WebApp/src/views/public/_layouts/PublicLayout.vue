@@ -56,7 +56,7 @@ const navLinks = computed(() => {
     </nav>
 
     <!-- Main Content -->
-    <main>
+    <main class="container mx-auto px-4 max-w-7xl">
       <RouterView />
     </main>
   </div>

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   class?: string
 }>()
 </script>
 
 <template>
-  <p :class="['text-xl md:text-2xl', props.class || 'text-foreground']">
+  <p :class="['text-muted-foreground text-lg', $attrs.class]">
     <slot />
   </p>
 </template>
