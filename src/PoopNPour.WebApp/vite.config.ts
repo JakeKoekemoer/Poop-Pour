@@ -1,9 +1,16 @@
+import path from 'node:path';
 import { defineConfig } from 'vite';
-import plugin from '@vitejs/plugin-vue';
+import tailwindcss from '@tailwindcss/vite';
+import vue from '@vitejs/plugin-vue';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [plugin()],
+    plugins: [vue(), tailwindcss()],
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, './src'),
+        },
+    },
     server: {
         port: 51500,
     }

@@ -14,11 +14,19 @@
     "lint:eslint": "eslint . --fix --cache"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-vue-next": "^0.563.0",
+    "pinia": "^3.0.4",
+    "reka-ui": "^2.8.0",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss": "^4.1.18",
     "vue": "^3.5.27"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.4",
-    "@types/node": "^24.10.9",
+    "@types/node": "^24.10.13",
     "@vitejs/plugin-vue": "^6.0.3",
     "@vue/eslint-config-typescript": "^14.6.0",
     "@vue/tsconfig": "^0.8.1",
