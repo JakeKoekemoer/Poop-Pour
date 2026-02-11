@@ -1,16 +1,16 @@
+using PoopNPour.Domain.Common;
+
 namespace PoopNPour.Domain.Entities;
 
-public class Setting
+public class Setting : BaseAuditableEntity
 {
     public Setting()
     {
-        CreatedOnUtc = DateTime.UtcNow;
-        ModifiedOnUtc = DateTime.UtcNow;
+        CreatedOn = DateTimeOffset.UtcNow;
+        LastModifiedOn = DateTimeOffset.UtcNow;
     }
 
     public int SettingId { get; set; }
-    public DateTime CreatedOnUtc { get; set; }
-    public DateTime ModifiedOnUtc { get; set; }
     public string Key { get; set; } = string.Empty;
     public string Value { get; set; } = string.Empty;
 }

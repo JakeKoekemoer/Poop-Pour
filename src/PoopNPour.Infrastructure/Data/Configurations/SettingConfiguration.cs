@@ -20,11 +20,5 @@ public class SettingConfiguration : IEntityTypeConfiguration<Setting>
 
         builder.Property(s => s.Value)
             .IsRequired();
-
-        builder.Property(s => s.CreatedOnUtc)
-            .IsRequired();
-
-        builder.Property(s => s.ModifiedOnUtc)
-            .IsRequired();
     }
 }

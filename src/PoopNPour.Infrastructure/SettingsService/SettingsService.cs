@@ -238,17 +238,20 @@ public class SettingsService : ISettingsService
             var setting = GetSettingByKey(key);
             if (setting == null) return;
             setting.Value = value;
-            setting.ModifiedOnUtc = DateTime.UtcNow;
+            setting.LastModifiedOn = DateTimeOffset.UtcNow;
             UpdateSetting(setting);
         }
         //Insert a new setting
         else
         {
-            InsertSetting(new Setting
+            var newSetting = new Setting
             {
                 Key = key,
                 Value = value
-            });
+            };
+            newSetting.CreatedOn = DateTimeOffset.UtcNow;
+            newSetting.LastModifiedOn = DateTimeOffset.UtcNow;
+            InsertSetting(newSetting);
         }
     }
 
@@ -268,17 +271,20 @@ public class SettingsService : ISettingsService
             var setting = GetSettingByKey(key);
             if (setting == null) return;
             setting.Value = saveValue;
-            setting.ModifiedOnUtc = DateTime.UtcNow;
+            setting.LastModifiedOn = DateTimeOffset.UtcNow;
             UpdateSetting(setting);
         }
         //Insert a new setting
         else
         {
-            InsertSetting(new Setting
+            var newSetting = new Setting
             {
                 Key = key,
                 Value = saveValue
-            });
+            };
+            newSetting.CreatedOn = DateTimeOffset.UtcNow;
+            newSetting.LastModifiedOn = DateTimeOffset.UtcNow;
+            InsertSetting(newSetting);
         }
     }
 
