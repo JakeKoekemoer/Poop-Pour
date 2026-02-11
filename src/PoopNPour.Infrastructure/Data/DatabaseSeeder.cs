@@ -2,6 +2,7 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PoopNPour.Abstractions.Authentication;
 using PoopNPour.Abstractions.Identity;
 using PoopNPour.Domain.Common.Auth;
 
@@ -14,17 +15,20 @@ public class DatabaseSeeder
 {
     private readonly ApplicationDbContext _context;
     private readonly IIdentityService _identityService;
+    private readonly IJwtTokenService _jwtTokenService;
     private readonly IConfiguration _configuration;
     private readonly ILogger<DatabaseSeeder> _logger;
 
     public DatabaseSeeder(
         ApplicationDbContext context,
         IIdentityService identityService,
+        IJwtTokenService jwtTokenService,
         IConfiguration configuration,
         ILogger<DatabaseSeeder> logger)
     {
         _context = context;
         _identityService = identityService;
+        _jwtTokenService = jwtTokenService;
         _configuration = configuration;
         _logger = logger;
     }
@@ -39,11 +43,14 @@ public class DatabaseSeeder
             // Ensure database is created and migrations are applied
             await _context.Database.MigrateAsync(cancellationToken);
 
+            // Seed default roles first (required before creating users)
+            await SeedDefaultRolesAsync(cancellationToken);
+
             // Seed default admin user
             await SeedDefaultAdminAsync(cancellationToken);
 
-            // Seed default roles
-            await SeedDefaultRolesAsync(cancellationToken);
+            // Seed API client users (Web API, Mobile API, etc.)
+            await SeedApiClientsAsync(cancellationToken);
 
             _logger.LogInformation("Database seeding completed successfully");
         }
@@ -119,5 +126,88 @@ public class DatabaseSeeder
         _logger.LogInformation("Successfully seeded {Count} roles: {Roles}", 
             roleFields.Count, 
             string.Join(", ", roleFields));
+    }
+
+    private async Task SeedApiClientsAsync(CancellationToken cancellationToken)
+    {
+        var apiClientsSection = _configuration.GetSection("ApiClients");
+        var apiClients = apiClientsSection.GetChildren();
+
+        if (!apiClients.Any())
+        {
+            _logger.LogInformation("No API clients configured. Skipping API client seeding.");
+            return;
+        }
+
+        foreach (var apiClientConfig in apiClients)
+        {
+            var userName = apiClientConfig["UserName"];
+            var email = apiClientConfig["Email"];
+            var password = apiClientConfig["Password"];
+            var role = apiClientConfig["Role"];
+            var firstName = apiClientConfig["FirstName"];
+            var lastName = apiClientConfig["LastName"];
+
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                _logger.LogWarning("API client UserName is required. Skipping this API client.");
+                continue;
+            }
+
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                _logger.LogWarning("API client Email is required for {UserName}. Skipping.", userName);
+                continue;
+            }
+
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                _logger.LogWarning("API client Password is required for {UserName}. Skipping.", userName);
+                continue;
+            }
+
+            if (string.IsNullOrWhiteSpace(role))
+            {
+                _logger.LogWarning("API client Role is required for {UserName}. Skipping.", userName);
+                continue;
+            }
+
+            // Check if API client user already exists
+            var existingUser = await _identityService.GetUserByUserNameAsync(userName, cancellationToken);
+            if (existingUser != null)
+            {
+                _logger.LogInformation("API client user {UserName} already exists. Skipping creation.", userName);
+                continue;
+            }
+
+            // Create API client user
+            _logger.LogInformation("Creating API client user: {UserName}", userName);
+            var apiClientUser = await _identityService.CreateUserAsync(
+                userName,
+                email,
+                password,
+                firstName ?? "API",
+                lastName ?? "Client",
+                cancellationToken);
+
+            // Add role to the user
+            await _identityService.AddUserToRoleAsync(apiClientUser, role, cancellationToken);
+
+            // Generate and store API token
+            _logger.LogInformation("Generating API token for {UserName} with role {Role}", userName, role);
+            var apiToken = _jwtTokenService.GenerateApiToken(apiClientUser.Id, new[] { role });
+            
+            await _identityService.SetAuthenticationTokenAsync(
+                apiClientUser,
+                "PoopNPour",
+                "ApiToken",
+                apiToken,
+                cancellationToken);
+
+            _logger.LogInformation("API client user {UserName} created successfully with API token", userName);
+            _logger.LogDebug("API Token for {UserName}: {Token}", userName, apiToken);
+        }
+
+        _logger.LogInformation("API client seeding completed");
     }
 }

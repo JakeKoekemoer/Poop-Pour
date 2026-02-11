@@ -137,4 +137,27 @@ public interface IIdentityService
     Task<bool> AuthorizeAsync(string userId, string policyName);
 
     #endregion
+
+    #region Authentication Tokens
+
+    /// <summary>
+    /// Sets an authentication token for a user (e.g., API token)
+    /// </summary>
+    Task SetAuthenticationTokenAsync(
+        ApplicationUser user,
+        string loginProvider,
+        string tokenName,
+        string tokenValue,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets an authentication token for a user
+    /// </summary>
+    Task<string?> GetAuthenticationTokenAsync(
+        ApplicationUser user,
+        string loginProvider,
+        string tokenName,
+        CancellationToken cancellationToken = default);
+
+    #endregion
 }

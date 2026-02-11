@@ -265,4 +265,29 @@ public class IdentityService : IIdentityService
 
         return user;
     }
+
+    public async Task SetAuthenticationTokenAsync(
+        ApplicationUser user,
+        string loginProvider,
+        string tokenName,
+        string tokenValue,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await _userManager.SetAuthenticationTokenAsync(user, loginProvider, tokenName, tokenValue);
+        
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => $"{e.Code}: {e.Description}"));
+            throw new InvalidOperationException($"Failed to set authentication token: {errors}");
+        }
+    }
+
+    public async Task<string?> GetAuthenticationTokenAsync(
+        ApplicationUser user,
+        string loginProvider,
+        string tokenName,
+        CancellationToken cancellationToken = default)
+    {
+        return await _userManager.GetAuthenticationTokenAsync(user, loginProvider, tokenName);
+    }
 }

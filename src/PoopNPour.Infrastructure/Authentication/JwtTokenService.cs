@@ -63,4 +63,44 @@ public class JwtTokenService : IJwtTokenService
 
         return Task.FromResult((tokenString, expiresAt));
     }
+
+    public string GenerateApiToken(string userId, IEnumerable<string> roles)
+    {
+        var jwtSettings = _configuration.GetSection("Jwt");
+        var secretKey = jwtSettings["SecretKey"]
+            ?? throw new InvalidOperationException("JWT SecretKey not found in configuration.");
+        var issuer = jwtSettings["Issuer"]
+            ?? throw new InvalidOperationException("JWT Issuer not found in configuration.");
+        var audience = jwtSettings["Audience"]
+            ?? throw new InvalidOperationException("JWT Audience not found in configuration.");
+        
+        // API tokens have a much longer expiration (10 years)
+        var apiTokenExpirationDays = jwtSettings.GetValue<int>("ApiTokenExpirationInDays", 3650);
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, userId),
+            new Claim("token_type", "api_token")
+        };
+
+        // Add role claims
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
+
+        var expiresAt = DateTime.UtcNow.AddDays(apiTokenExpirationDays);
+
+        var token = new JwtSecurityToken(
+            issuer: issuer,
+            audience: audience,
+            claims: claims,
+            expires: expiresAt,
+            signingCredentials: credentials);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
 }

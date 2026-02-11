@@ -18,4 +18,12 @@ public interface IJwtTokenService
         string email,
         string userName,
         IEnumerable<string> roles);
+
+    /// <summary>
+    /// Generates a long-lived API token for API clients (Web API, Mobile API, etc.)
+    /// </summary>
+    /// <param name="userId">The user ID</param>
+    /// <param name="roles">The roles assigned to the user</param>
+    /// <returns>The API token string</returns>
+    string GenerateApiToken(string userId, IEnumerable<string> roles);
 }
