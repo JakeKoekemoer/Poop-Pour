@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui_parts/Heading/Heading.vue'
-import Subheading from '@/components/ui_parts/Subheading/Subheading.vue'
-import Logo from '@/components/ui_parts/Logo/Logo.vue'
+import { Heading } from '@/components/ui_parts/Heading'
+import { Subheading } from '@/components/ui_parts/Subheading'
+import { Logo, LOGO_STYLES } from '@/components/ui_parts/Logo'
 </script>
 
 <template>
@@ -11,7 +11,7 @@ import Logo from '@/components/ui_parts/Logo/Logo.vue'
       <div class="text-center space-y-10">
         <!-- Decorative Logo at top -->
         <div class="flex items-center justify-center">
-          <Logo logoType="minimal" class="w-10 h-10 md:w-12 md:h-12" />
+          <Logo :logoType="LOGO_STYLES.MINIMAL" class="w-10 h-10 md:w-12 md:h-12" />
         </div>
 
         <!-- Heading -->
