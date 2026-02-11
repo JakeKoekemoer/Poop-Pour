@@ -1,0 +1,6 @@
+@PoopNPour.Api_HostAddress = http://localhost:5155
+
+GET {{PoopNPour.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

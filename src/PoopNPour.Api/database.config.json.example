@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=PoopNPourDb;User Id=sa;Password=your_password;TrustServerCertificate=true;"
+  }
+}

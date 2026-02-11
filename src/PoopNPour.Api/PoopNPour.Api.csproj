@@ -1,0 +1,79 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>81f2d64a-5795-4111-9331-0e0e7a4f2a63</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>.</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
+    <PackageReference Include="NSwag.MSBuild">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include=".\..\PoopNPour.Application\PoopNPour.Application.csproj" />
+    <ProjectReference Include=".\..\PoopNPour.Infrastructure\PoopNPour.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <GenerateTypeScript Condition="'$(GenerateTypeScript)' == ''">true</GenerateTypeScript>
+  </PropertyGroup>
+
+  <Target Name="GenerateOpenApiSpec" AfterTargets="Build" Condition="'$(GenerateTypeScript)' == 'true'">
+    <PropertyGroup>
+      <SwaggerOutputPath>$(MSBuildProjectDirectory)\swagger.json</SwaggerOutputPath>
+      <ApiAssemblyPath>$(MSBuildProjectDirectory)\$(OutputPath)$(AssemblyName).dll</ApiAssemblyPath>
+    </PropertyGroup>
+    
+    <Message Text="========================================" Importance="high" />
+    <Message Text="Step 1: Generating OpenAPI Specification..." Importance="high" />
+    <Message Text="========================================" Importance="high" />
+    
+    <!-- Restore dotnet tools first -->
+    <Exec Command="dotnet tool restore" ContinueOnError="true" WorkingDirectory="$(MSBuildProjectDirectory)\..\..\" />
+    
+    <!-- Generate swagger.json from the compiled assembly using dotnet swagger tool -->
+    <Exec Command="dotnet swagger tofile --output &quot;$(SwaggerOutputPath)&quot; &quot;$(ApiAssemblyPath)&quot; v1" ContinueOnError="true" WorkingDirectory="$(MSBuildProjectDirectory)" IgnoreExitCode="true">
+      <Output TaskParameter="ExitCode" PropertyName="SwaggerExitCode" />
+    </Exec>
+    
+    <Warning Text="OpenAPI spec generation failed." Condition="'$(SwaggerExitCode)' != '0'" />
+    <Message Text="OpenAPI spec generated: $(SwaggerOutputPath)" Importance="high" Condition="'$(SwaggerExitCode)' == '0'" />
+  </Target>
+
+  <Target Name="GenerateTypeScriptClient" AfterTargets="GenerateOpenApiSpec" Condition="'$(GenerateTypeScript)' == 'true'">
+    <PropertyGroup>
+      <NSwagConfigPath>$(MSBuildProjectDirectory)\nswag.json</NSwagConfigPath>
+      <NSwagToolPath>$(NuGetPackageRoot)nswag.msbuild\14.6.3\tools\Net80\dotnet-nswag.dll</NSwagToolPath>
+    </PropertyGroup>
+    
+    <Message Text="========================================" Importance="high" />
+    <Message Text="Step 2: Generating TypeScript API Client..." Importance="high" />
+    <Message Text="========================================" Importance="high" />
+    
+    <!-- Generate TypeScript client from swagger.json -->
+    <Exec Command="dotnet &quot;$(NSwagToolPath)&quot; run &quot;$(NSwagConfigPath)&quot;" ContinueOnError="true" WorkingDirectory="$(MSBuildProjectDirectory)" Condition="Exists('$(MSBuildProjectDirectory)\swagger.json')" IgnoreExitCode="true">
+      <Output TaskParameter="ExitCode" PropertyName="NSwagExitCode" />
+    </Exec>
+    
+    <Warning Text="TypeScript client generation failed." Condition="'$(NSwagExitCode)' != '0'" />
+    <Message Text="TypeScript API client generated successfully!" Importance="high" Condition="'$(NSwagExitCode)' == '0'" />
+  </Target>
+
+</Project>
