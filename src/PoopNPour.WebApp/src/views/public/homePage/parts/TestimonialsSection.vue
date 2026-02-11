@@ -24,9 +24,9 @@ const testimonials = [
 </script>
 
 <template>
-  <section class="py-16 md:py-24 lg:py-32">
-    <div class="container mx-auto px-4 max-w-7xl">
-      <div class="text-center mb-16 md:mb-20">
+  <section class="py-12 md:py-16 lg:py-20">
+    <div class="container mx-auto px-6 md:px-8 lg:px-12">
+      <div class="text-center mb-12 md:mb-16">
         <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
           Why Parents Love It
         </h2>

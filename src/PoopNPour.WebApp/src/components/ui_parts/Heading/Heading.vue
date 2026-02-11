@@ -10,7 +10,7 @@ const props = withDefaults(defineProps<{
 <template>
   <component
     :is="tag"
-    :class="['text-4xl md:text-5xl lg:text-6xl font-bold', props.class]"
+    :class="['text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight', props.class]"
   >
     <slot />
   </component>

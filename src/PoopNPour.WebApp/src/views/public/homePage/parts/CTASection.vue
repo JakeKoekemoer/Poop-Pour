@@ -6,11 +6,11 @@ import { Logo, LOGO_STYLES } from '@/components/ui_parts/Logo'
 </script>
 
 <template>
-  <section class="py-16 md:py-24 lg:py-32">
-    <div class="container mx-auto px-4 max-w-4xl">
-      <div class="text-center space-y-10">
-        <div class="flex items-center justify-center">
-          <Logo :logoType="LOGO_STYLES.MINIMAL" class="w-10 h-10 md:w-12 md:h-12" />
+  <section class="py-12 md:py-16 lg:py-20">
+    <div class="container mx-auto px-6 md:px-8 lg:px-12 max-w-4xl">
+      <div class="text-center space-y-8">
+        <div class="flex items-center justify-center text-5xl md:text-6xl">
+          🍼💩
         </div>
 
         <Heading>Ready to simplify parenting?</Heading>

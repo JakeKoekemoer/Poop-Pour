@@ -1,22 +1,20 @@
 <script setup lang="ts">
-import { Baby, Droplet, BarChart3 } from 'lucide-vue-next'
-
 const steps = [
   {
     number: '01',
-    icon: Baby,
+    emoji: '🍼',
     title: 'Log a Feed',
     description: 'Quick tap to record feeding time and amount. Takes less than 3 seconds.',
   },
   {
     number: '02',
-    icon: Droplet,
+    emoji: '💩',
     title: 'Log a Diaper',
     description: 'Simple buttons for wet, dirty, or both. No complicated forms.',
   },
   {
     number: '03',
-    icon: BarChart3,
+    emoji: '📊',
     title: 'See Patterns',
     description: 'Clear timeline and summaries help you understand your baby\'s routine.',
   },
@@ -24,9 +22,9 @@ const steps = [
 </script>
 
 <template>
-  <section id="how-it-works" class="py-16 md:py-24 lg:py-32 bg-muted/20">
-    <div class="container mx-auto px-4 max-w-7xl">
-      <div class="text-center mb-16 md:mb-20">
+  <section id="how-it-works" class="py-12 md:py-16 lg:py-20 bg-muted/20">
+    <div class="container mx-auto px-6 md:px-8 lg:px-12">
+      <div class="text-center mb-12 md:mb-16">
         <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
           How It Works
         </h2>
@@ -42,17 +40,17 @@ const steps = [
           class="flex flex-col items-center text-center space-y-6"
         >
           <!-- Step Number -->
-          <div class="text-7xl md:text-8xl font-bold text-muted-foreground/15 mb-4 leading-none">
+          <div class="text-6xl md:text-7xl font-bold text-muted-foreground/10 leading-none">
             {{ step.number }}
           </div>
 
-          <!-- Icon -->
-          <div class="p-5 rounded-3xl bg-primary/10 shadow-sm mb-4">
-            <component :is="step.icon" class="w-14 h-14 text-primary" />
+          <!-- Emoji Icon -->
+          <div class="text-6xl md:text-7xl">
+            {{ step.emoji }}
           </div>
 
           <!-- Title -->
-          <h3 class="text-2xl md:text-3xl font-semibold mb-2">
+          <h3 class="text-2xl md:text-3xl font-bold">
             {{ step.title }}
           </h3>
 

@@ -4,26 +4,25 @@ import { Button } from '@/components/ui/button'
 </script>
 
 <template>
-  <section class="py-12 md:py-16 lg:py-20">
-    <div class="container mx-auto px-4 max-w-7xl">
+  <section class="py-8 md:py-12 lg:py-16">
+    <div class="container mx-auto px-6 md:px-8 lg:px-12">
       <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
         <!-- Left Column: Content -->
-        <div class="space-y-6">
+        <div class="space-y-8">
           <!-- Trust Badge -->
           <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent border border-accent/20">
             <Sparkles class="w-4 h-4 text-accent-foreground" />
             <span class="text-sm font-medium text-accent-foreground">Trusted by 10,000+ parents</span>
           </div>
 
-          <!-- Main Headline with Icons -->
-          <div class="space-y-6">
-            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
-              Track feeds, <span class="text-primary">poops</span> & sleep
+          <!-- Main Headline with Emojis -->
+          <div class="space-y-2">
+            <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1]">
+              Track feeds,<br/><span class="text-primary">poops</span> & sleep
             </h1>
-            <!-- Decorative Icons inline with headline -->
-            <div class="flex items-center gap-3 -mt-2">
-              <Baby class="w-10 h-10 md:w-12 md:h-12 text-primary" />
-              <Droplet class="w-10 h-10 md:w-12 md:h-12 text-primary" />
+            <!-- Decorative Emojis inline with headline -->
+            <div class="flex items-center gap-3 text-4xl md:text-5xl">
+              🍼💩
             </div>
           </div>
 
