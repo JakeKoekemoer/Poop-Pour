@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { Palette, Sun, Moon, Monitor, Check } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { useTheme } from '@/composables/useTheme'
-import type { ThemeName, DarkMode } from '@/types/theme'
+import type { ThemeName, DarkMode } from '@/stores/theme/types'
 
 const { currentTheme, darkMode, themes, setTheme, setDarkMode } = useTheme()
 

@@ -1,13 +1,19 @@
-export type ThemeName = 
-  | 'soft-natural' 
-  | 'fresh-cheerful' 
-  | 'warm-modern'
-  | 'ocean-calm'
-  | 'midnight-luxe'
-  | 'berry-soft'
-  | 'frosted-mint'
-  | 'sunset-pop'
-  | 'cozy-earth'
+// Theme names as a const object for type-safe references
+export const THEMES = {
+  SOFT_NATURAL: 'soft-natural',
+  FRESH_CHEERFUL: 'fresh-cheerful',
+  WARM_MODERN: 'warm-modern',
+  OCEAN_CALM: 'ocean-calm',
+  MIDNIGHT_LUXE: 'midnight-luxe',
+  BERRY_SOFT: 'berry-soft',
+  FROSTED_MINT: 'frosted-mint',
+  SUNSET_POP: 'sunset-pop',
+  COZY_EARTH: 'cozy-earth',
+} as const
+
+// Derive ThemeName type from THEMES values
+export type ThemeName = typeof THEMES[keyof typeof THEMES]
+
 export type DarkMode = 'light' | 'dark' | 'auto'
 
 export interface ThemeColors {
@@ -28,8 +34,8 @@ export interface ThemeConfig {
 }
 
 export const THEME_CONFIGS: Record<ThemeName, ThemeConfig> = {
-  'soft-natural': {
-    name: 'soft-natural',
+  [THEMES.SOFT_NATURAL]: {
+    name: THEMES.SOFT_NATURAL,
     displayName: 'Soft Natural',
     description: 'Calm + Modern',
     emoji: '🌿',
@@ -42,8 +48,8 @@ export const THEME_CONFIGS: Record<ThemeName, ThemeConfig> = {
       text: '#2E2E2E',
     },
   },
-  'fresh-cheerful': {
-    name: 'fresh-cheerful',
+  [THEMES.FRESH_CHEERFUL]: {
+    name: THEMES.FRESH_CHEERFUL,
     displayName: 'Fresh & Cheerful',
     description: 'Brighter but Still Clean',
     emoji: '🌞',
@@ -56,8 +62,8 @@ export const THEME_CONFIGS: Record<ThemeName, ThemeConfig> = {
       text: '#1F2937',
     },
   },
-  'warm-modern': {
-    name: 'warm-modern',
+  [THEMES.WARM_MODERN]: {
+    name: THEMES.WARM_MODERN,
     displayName: 'Warm Modern',
     description: 'More Design-Forward',
     emoji: '🌼',
@@ -70,8 +76,8 @@ export const THEME_CONFIGS: Record<ThemeName, ThemeConfig> = {
       text: '#3A3A3A',
     },
   },
-  'ocean-calm': {
-    name: 'ocean-calm',
+  [THEMES.OCEAN_CALM]: {
+    name: THEMES.OCEAN_CALM,
     displayName: 'Ocean Calm',
     description: 'Cool • Trustworthy • Night-friendly',
     emoji: '🌊',
@@ -84,8 +90,8 @@ export const THEME_CONFIGS: Record<ThemeName, ThemeConfig> = {
       text: '#1F2A44',
     },
   },
-  'midnight-luxe': {
-    name: 'midnight-luxe',
+  [THEMES.MIDNIGHT_LUXE]: {
+    name: THEMES.MIDNIGHT_LUXE,
     displayName: 'Midnight Luxe',
     description: 'Premium • Calm • Modern',
     emoji: '🌙',
@@ -98,8 +104,8 @@ export const THEME_CONFIGS: Record<ThemeName, ThemeConfig> = {
       text: '#F9FAFB',
     },
   },
-  'berry-soft': {
-    name: 'berry-soft',
+  [THEMES.BERRY_SOFT]: {
+    name: THEMES.BERRY_SOFT,
     displayName: 'Berry Soft',
     description: 'Playful • Warm • Friendly',
     emoji: '🍓',
@@ -112,8 +118,8 @@ export const THEME_CONFIGS: Record<ThemeName, ThemeConfig> = {
       text: '#2E2E2E',
     },
   },
-  'frosted-mint': {
-    name: 'frosted-mint',
+  [THEMES.FROSTED_MINT]: {
+    name: THEMES.FROSTED_MINT,
     displayName: 'Frosted Mint',
     description: 'Clean • Minimal • App-store ready',
     emoji: '🧊',
@@ -126,8 +132,8 @@ export const THEME_CONFIGS: Record<ThemeName, ThemeConfig> = {
       text: '#0F172A',
     },
   },
-  'sunset-pop': {
-    name: 'sunset-pop',
+  [THEMES.SUNSET_POP]: {
+    name: THEMES.SUNSET_POP,
     displayName: 'Sunset Pop',
     description: 'Bold • Energetic',
     emoji: '🌅',
@@ -140,8 +146,8 @@ export const THEME_CONFIGS: Record<ThemeName, ThemeConfig> = {
       text: '#1C1917',
     },
   },
-  'cozy-earth': {
-    name: 'cozy-earth',
+  [THEMES.COZY_EARTH]: {
+    name: THEMES.COZY_EARTH,
     displayName: 'Cozy Earth',
     description: 'Natural • Gender-neutral • Calm',
     emoji: '🧸',

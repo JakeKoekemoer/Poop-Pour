@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import ThemeSwitcher from '@/components/ThemeSwitcher.vue'
+import ThemeSwitcher from '@/components/generic/ThemeSwitcher'
 import { useTheme } from '@/composables/useTheme'
 
 const { initializeTheme } = useTheme()

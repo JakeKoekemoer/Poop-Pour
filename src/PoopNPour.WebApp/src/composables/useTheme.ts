@@ -1,7 +1,7 @@
 import { storeToRefs } from 'pinia'
 import { useThemeStore } from '@/stores/theme'
-import { THEME_CONFIGS } from '@/types/theme'
-import type { ThemeName, DarkMode, ThemeConfig } from '@/types/theme'
+import { THEME_CONFIGS } from '@/stores/theme/types'
+import type { ThemeName, DarkMode, ThemeConfig } from '@/stores/theme/types'
 
 export function useTheme() {
   const themeStore = useThemeStore()
