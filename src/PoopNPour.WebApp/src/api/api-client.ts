@@ -63,12 +63,13 @@ export interface IClient {
     updateMyProfile(body: UpdateProfileRequestDto, signal?: AbortSignal): Promise<void>;
 }
 
-export class Client implements IClient {
+export class Client extends ApiBase implements IClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : window as any;
         this.baseUrl = baseUrl ?? "";
     }
@@ -92,7 +93,9 @@ export class Client implements IClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processLogin(_response);
         });
     }
@@ -135,7 +138,9 @@ export class Client implements IClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processRegister(_response);
         });
     }
@@ -174,7 +179,9 @@ export class Client implements IClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetSystemSettings(_response);
         });
     }
@@ -221,7 +228,9 @@ export class Client implements IClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processUpdateSystemSettings(_response);
         });
     }
@@ -283,7 +292,9 @@ export class Client implements IClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetUsers(_response);
         });
     }
@@ -329,7 +340,9 @@ export class Client implements IClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetUserById(_response);
         });
     }
@@ -376,7 +389,9 @@ export class Client implements IClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetMyProfile(_response);
         });
     }
@@ -423,7 +438,9 @@ export class Client implements IClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processUpdateMyProfile(_response);
         });
     }
@@ -510,4 +527,71 @@ function throwException(message: string, status: number, response: string, heade
         throw new ApiException(message, status, response, headers, null);
 }
 
+/**
+ * Base class for all generated API clients.
+ * Provides authentication token injection via transformOptions method.
+ * 
+ * This class is referenced by nswag.json configuration and will be extended
+ * by all generated client classes (e.g., Client extends ApiBase).
+ */
+export class ApiBase {
+  private authToken = '';
+
+  protected constructor() {}
+
+  /**
+   * Sets the authentication token to be injected into all API requests.
+   * Call this method after user login to ensure all subsequent API calls include the token.
+   * 
+   * @param token - The JWT bearer token
+   * @example
+   * ```typescript
+   * const client = new Client('https://api.example.com');
+   * client.setAuthToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...');
+   * ```
+   */
+  setAuthToken(token: string): void {
+    this.authToken = token;
+  }
+
+  /**
+   * Clears the authentication token.
+   * Call this method on user logout.
+   */
+  clearAuthToken(): void {
+    this.authToken = '';
+  }
+
+  /**
+   * Gets the current authentication token.
+   * @returns The current JWT bearer token or empty string if not set
+   */
+  getAuthToken(): string {
+    return this.authToken;
+  }
+
+  /**
+   * Transforms fetch options before each request is sent.
+   * This method is automatically called by generated client methods.
+   * Injects the Authorization header with the current bearer token.
+   * 
+   * @param options - The fetch RequestInit options
+   * @returns Promise resolving to the transformed options
+   */
+  protected transformOptions(options: RequestInit): Promise<RequestInit> {
+    // Convert headers to Headers object if needed
+    const headers = options.headers instanceof Headers 
+      ? options.headers 
+      : new Headers(options.headers as HeadersInit);
+
+    // Add Authorization header if token is set
+    if (this.authToken) {
+      headers.set('Authorization', `Bearer ${this.authToken}`);
+    }
+
+    // Return transformed options
+    options.headers = headers;
+    return Promise.resolve(options);
+  }
+}
 }
