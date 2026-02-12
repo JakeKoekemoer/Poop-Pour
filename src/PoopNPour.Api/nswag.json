@@ -69,7 +69,7 @@
       "templateDirectory": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "../../generated/api-client.ts",
+      "output": "../../src/PoopNPour.WebApp/src/api",
       "newLineBehavior": "Auto"
     }
   }
