@@ -16,7 +16,9 @@
     <Project Path="tests/PoopNPour.Domain.UnitTests/PoopNPour.Domain.UnitTests.csproj" />
     <Project Path="tests/PoopNPour.Infrastructure.UnitTests/PoopNPour.Infrastructure.UnitTests.csproj" />
   </Folder>
-  <Folder Name="/Orchestration/" />
+  <Folder Name="/Orchestration/">
+    <Project Path="Orchestration/PoopNPour.AppHost/PoopNPour.AppHost.csproj" Id="97893126-d3e2-4ea2-9356-fa43b369d09f" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path="Directory.Packages.props" />
   </Folder>

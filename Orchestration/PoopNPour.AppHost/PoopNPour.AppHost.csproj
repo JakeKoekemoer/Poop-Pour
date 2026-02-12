@@ -8,4 +8,12 @@
     <UserSecretsId>e02cd83f-eda7-43a7-af3b-d5ab79853507</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.JavaScript" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\PoopNPour.Api\PoopNPour.Api.csproj" />
+  </ItemGroup>
+
 </Project>

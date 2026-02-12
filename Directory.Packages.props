@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- CQRS -->
+    <PackageVersion Include="Aspire.Hosting.JavaScript" Version="13.1.1" />
     <PackageVersion Include="MediatR" Version="14.0.0" />
     <!-- Entity Framework Core -->
     <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.2" />
