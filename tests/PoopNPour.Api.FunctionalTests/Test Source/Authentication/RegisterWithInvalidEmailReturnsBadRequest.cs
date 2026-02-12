@@ -15,10 +15,9 @@ public class RegisterWithInvalidEmailReturnsBadRequest : AuthenticatedTestBase
     }
 
     [Fact]
-    public async Task Register_WithInvalidEmail_ReturnsInternalServerError()
+    public async Task Register_WithInvalidEmail_ReturnsBadRequest()
     {
-        // Arrange - Email validation happens at Identity layer, which throws exceptions
-        // that may not be properly caught as validation errors
+        // Arrange - Email validation happens via FluentValidation in the pipeline
         var client = CreateWebApiClient();
         var request = new RegisterRequestDto
         {
@@ -32,8 +31,7 @@ public class RegisterWithInvalidEmailReturnsBadRequest : AuthenticatedTestBase
         // Act
         var response = await client.PostAsJsonAsync("/api/authentication/register", request);
 
-        // Assert - Currently returns 500, but ideally should be 400
-        // This test documents current behavior; validation improvements can be made later
-        response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+        // Assert - FluentValidation returns 400 Bad Request for invalid email
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 }
