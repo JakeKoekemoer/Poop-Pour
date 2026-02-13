@@ -7,7 +7,6 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-namespace PoopNPourApi {
 export class ApiBase {
   /**
    * NB: THIS COMMENT CANNOT LIVE ABOVE THE API BASE CLASS DECLARATION
@@ -171,7 +170,61 @@ export class ApiBase {
   }
 }
 
-export class Client extends ApiBase {
+export interface IClient {
+
+    /**
+     * Log in
+     * @return OK
+     */
+    login(body: LoginRequestDto, signal?: AbortSignal): Promise<SwaggerResponse<LoginResponseDto>>;
+
+    /**
+     * Register
+     * @return Created
+     */
+    register(body: RegisterRequestDto, signal?: AbortSignal): Promise<SwaggerResponse<RegisterResponseDto>>;
+
+    /**
+     * Get system settings
+     * @return OK
+     */
+    getSystemSettings(signal?: AbortSignal): Promise<SwaggerResponse<SystemSettingsDto>>;
+
+    /**
+     * Update system settings
+     * @return OK
+     */
+    updateSystemSettings(body: UpdateSystemSettingsCommand, signal?: AbortSignal): Promise<SwaggerResponse<void>>;
+
+    /**
+     * List users
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param searchTerm (optional) 
+     * @return OK
+     */
+    getUsers(page?: number | undefined, pageSize?: number | undefined, searchTerm?: string | undefined, signal?: AbortSignal): Promise<SwaggerResponse<UserDtoPaginatedResponseDto>>;
+
+    /**
+     * Get user
+     * @return OK
+     */
+    getUserById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>>;
+
+    /**
+     * My profile
+     * @return OK
+     */
+    getMyProfile(signal?: AbortSignal): Promise<SwaggerResponse<UserDto>>;
+
+    /**
+     * Update my profile
+     * @return OK
+     */
+    updateMyProfile(body: UpdateProfileRequestDto, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>>;
+}
+
+export class Client extends ApiBase implements IClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -386,7 +439,7 @@ export class Client extends ApiBase {
      * @param searchTerm (optional) 
      * @return OK
      */
-    getUsers(page: number | undefined, pageSize: number | undefined, searchTerm: string | undefined, signal?: AbortSignal): Promise<SwaggerResponse<UserDtoPaginatedResponseDto>> {
+    getUsers(page?: number | undefined, pageSize?: number | undefined, searchTerm?: string | undefined, signal?: AbortSignal): Promise<SwaggerResponse<UserDtoPaginatedResponseDto>> {
         let url_ = this.baseUrl + "/api/users?";
         if (page === null)
             throw new globalThis.Error("The parameter 'page' cannot be null.");
@@ -702,6 +755,4 @@ function throwException(message: string, status: number, response: string, heade
         throw result;
     else
         throw new ApiException(message, status, response, headers, null);
-}
-
 }
