@@ -66,6 +66,7 @@
     <Message Text="========================================" Importance="high" />
     <Message Text="Step 2: Generating TypeScript API Client..." Importance="high" />
     <Message Text="========================================" Importance="high" />
+    <Message Text="dotnet &quot;$(NSwagToolPath)&quot; run &quot;$(NSwagConfigPath)&quot;" Importance="high" />
     
     <!-- Generate TypeScript client from swagger.json -->
     <Exec Command="dotnet &quot;$(NSwagToolPath)&quot; run &quot;$(NSwagConfigPath)&quot;" ContinueOnError="true" WorkingDirectory="$(MSBuildProjectDirectory)" Condition="Exists('$(MSBuildProjectDirectory)\swagger.json')" IgnoreExitCode="true">

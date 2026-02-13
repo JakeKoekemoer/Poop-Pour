@@ -1,11 +1,15 @@
-/**
- * Base class for all generated API clients.
- * Provides authentication token injection via transformOptions method.
- * 
- * This class is referenced by nswag.json configuration and will be extended
- * by all generated client classes (e.g., Client extends ApiBase).
- */
 export class ApiBase {
+  /**
+   * NB: THIS COMMENT CANNOT LIVE ABOVE THE API BASE CLASS DECLARATION
+   * https://stackoverflow.com/questions/61600278/nswag-extension-code-how-to-ensure-its-placed-at-the-start-of-the-file#comment140981214_61735295
+   * 
+   * Base class for all generated API clients.
+   * Provides authentication token injection via transformOptions method.
+   * 
+   * This class is referenced by nswag.json configuration and will be extended
+   * by all generated client classes (e.g., Client extends ApiBase).
+   */
+
   private authToken = '';
   private onTokenExpired?: () => void;
 
@@ -76,7 +80,7 @@ export class ApiBase {
       }
 
       // Get the payload (second part)
-      const base64Url = parts[1];
+      const base64Url = parts[1]!; // Safe due to length check above
       
       // Convert base64url to base64 (JWT uses base64url encoding)
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');

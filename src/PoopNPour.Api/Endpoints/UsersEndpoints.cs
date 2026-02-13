@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using PoopNPour.Abstractions.User;
 using PoopNPour.Api.Common;
 using PoopNPour.Application.Users.Commands;
 using PoopNPour.Application.Users.Models;
@@ -17,14 +18,17 @@ public class UsersEndpoints : EndpointGroupBase
     {
         app.MapGroup(this)
             .MapGet(GetUsersAsync, "", route => route
-                .WithDocumentation("List users", "Paginated list with optional search"))
+                .WithDocumentation("List users", "Paginated list with optional search")
+                .WithResponse<PaginatedResponseDto<UserDto>>())
             .MapGet(GetUserByIdAsync, "{id}", route => route
-                .WithDocumentation("Get user", "Fetch a user by ID"))
+                .WithDocumentation("Get user", "Fetch a user by ID")
+                .WithResponse<UserDto>())
             .MapGet(GetMyProfileAsync, "me", route => route
-                .WithDocumentation("My profile", "Get the current user's profile"))
+                .WithDocumentation("My profile", "Get the current user's profile")
+                .WithResponse<UserDto>())
             .MapPut(UpdateMyProfileAsync, "me", route => route
                 .WithDocumentation("Update my profile", "Update the current user's profile")
-                .Accepts<UpdateProfileRequestDto>("application/json"));
+                .WithRequestResponse<UpdateProfileRequestDto, UserDto>());
     }
 
     public async Task<IResult> GetUsersAsync(

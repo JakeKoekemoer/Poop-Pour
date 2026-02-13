@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PoopNPour.Api.Common;
 using PoopNPour.Application.Authentication.Commands;
@@ -17,10 +18,10 @@ public class AuthenticationEndpoints : EndpointGroupBase
         app.MapGroup(this)
             .MapPost(LoginAsync, "login", route => route
                 .WithDocumentation("Log in", "Returns a JWT token for authenticated requests")
-                .Accepts<LoginRequestDto>("application/json"))
+                .WithRequestResponse<LoginRequestDto, LoginResponseDto>())
             .MapPost(RegisterAsync, "register", route => route
                 .WithDocumentation("Register", "Create a new user account")
-                .Accepts<RegisterRequestDto>("application/json"));
+                .WithRequestResponse<RegisterRequestDto, RegisterResponseDto>(StatusCodes.Status201Created));
     }
 
     public async Task<IResult> LoginAsync(

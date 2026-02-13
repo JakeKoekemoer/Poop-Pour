@@ -70,4 +70,53 @@ public static class SwaggerExtensions
     {
         return builder.WithDocumentation(summary);
     }
+
+    /// <summary>
+    /// Configures request and response types for an endpoint that accepts and produces JSON
+    /// </summary>
+    /// <typeparam name="TRequest">The request DTO type</typeparam>
+    /// <typeparam name="TResponse">The response DTO type</typeparam>
+    /// <param name="builder">The route handler builder</param>
+    /// <param name="statusCode">The success status code (default: 200 OK)</param>
+    /// <returns>The route handler builder for method chaining</returns>
+    public static RouteHandlerBuilder WithRequestResponse<TRequest, TResponse>(
+        this RouteHandlerBuilder builder,
+        int statusCode = StatusCodes.Status200OK)
+        where TRequest : notnull
+    {
+        return builder
+            .Accepts<TRequest>("application/json")
+            .Produces<TResponse>(statusCode);
+    }
+
+    /// <summary>
+    /// Configures request type for an endpoint that accepts JSON but returns no content
+    /// </summary>
+    /// <typeparam name="TRequest">The request DTO type</typeparam>
+    /// <param name="builder">The route handler builder</param>
+    /// <param name="statusCode">The success status code (default: 200 OK)</param>
+    /// <returns>The route handler builder for method chaining</returns>
+    public static RouteHandlerBuilder WithRequest<TRequest>(
+        this RouteHandlerBuilder builder,
+        int statusCode = StatusCodes.Status200OK)
+        where TRequest : notnull
+    {
+        return builder
+            .Accepts<TRequest>("application/json")
+            .Produces(statusCode);
+    }
+
+    /// <summary>
+    /// Configures response type for an endpoint that produces JSON
+    /// </summary>
+    /// <typeparam name="TResponse">The response DTO type</typeparam>
+    /// <param name="builder">The route handler builder</param>
+    /// <param name="statusCode">The success status code (default: 200 OK)</param>
+    /// <returns>The route handler builder for method chaining</returns>
+    public static RouteHandlerBuilder WithResponse<TResponse>(
+        this RouteHandlerBuilder builder,
+        int statusCode = StatusCodes.Status200OK)
+    {
+        return builder.Produces<TResponse>(statusCode);
+    }
 }

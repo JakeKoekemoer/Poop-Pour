@@ -8,534 +8,20 @@
 // ReSharper disable InconsistentNaming
 
 namespace PoopNPourApi {
-
-export interface IClient {
-
-    /**
-     * Log in
-     * @return OK
-     */
-    login(body: LoginRequestDto, signal?: AbortSignal): Promise<void>;
-
-    /**
-     * Register
-     * @return OK
-     */
-    register(body: RegisterRequestDto, signal?: AbortSignal): Promise<void>;
-
-    /**
-     * Get system settings
-     * @return OK
-     */
-    getSystemSettings(signal?: AbortSignal): Promise<void>;
-
-    /**
-     * Update system settings
-     * @return OK
-     */
-    updateSystemSettings(body: UpdateSystemSettingsCommand, signal?: AbortSignal): Promise<void>;
-
-    /**
-     * List users
-     * @param page (optional) 
-     * @param pageSize (optional) 
-     * @param searchTerm (optional) 
-     * @return OK
-     */
-    getUsers(page?: number | undefined, pageSize?: number | undefined, searchTerm?: string | undefined, signal?: AbortSignal): Promise<void>;
-
-    /**
-     * Get user
-     * @return OK
-     */
-    getUserById(id: string, signal?: AbortSignal): Promise<void>;
-
-    /**
-     * My profile
-     * @return OK
-     */
-    getMyProfile(signal?: AbortSignal): Promise<void>;
-
-    /**
-     * Update my profile
-     * @return OK
-     */
-    updateMyProfile(body: UpdateProfileRequestDto, signal?: AbortSignal): Promise<void>;
-}
-
-export class Client extends ApiBase implements IClient {
-    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        super();
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl ?? "";
-    }
-
-    /**
-     * Log in
-     * @return OK
-     */
-    login(body: LoginRequestDto, signal?: AbortSignal): Promise<void> {
-        let url_ = this.baseUrl + "/api/authentication/login";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "POST",
-            signal,
-            headers: {
-                "Content-Type": "application/json",
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.processLogin(_response);
-        });
-    }
-
-    protected processLogin(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            return throwException("Bad Request", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * Register
-     * @return OK
-     */
-    register(body: RegisterRequestDto, signal?: AbortSignal): Promise<void> {
-        let url_ = this.baseUrl + "/api/authentication/register";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "POST",
-            signal,
-            headers: {
-                "Content-Type": "application/json",
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.processRegister(_response);
-        });
-    }
-
-    protected processRegister(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            return throwException("Bad Request", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * Get system settings
-     * @return OK
-     */
-    getSystemSettings(signal?: AbortSignal): Promise<void> {
-        let url_ = this.baseUrl + "/api/settings/system";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            signal,
-            headers: {
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.processGetSystemSettings(_response);
-        });
-    }
-
-    protected processGetSystemSettings(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * Update system settings
-     * @return OK
-     */
-    updateSystemSettings(body: UpdateSystemSettingsCommand, signal?: AbortSignal): Promise<void> {
-        let url_ = this.baseUrl + "/api/settings/system";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "POST",
-            signal,
-            headers: {
-                "Content-Type": "application/json",
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.processUpdateSystemSettings(_response);
-        });
-    }
-
-    protected processUpdateSystemSettings(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            return throwException("Bad Request", status, _responseText, _headers);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * List users
-     * @param page (optional) 
-     * @param pageSize (optional) 
-     * @param searchTerm (optional) 
-     * @return OK
-     */
-    getUsers(page?: number | undefined, pageSize?: number | undefined, searchTerm?: string | undefined, signal?: AbortSignal): Promise<void> {
-        let url_ = this.baseUrl + "/api/users?";
-        if (page === null)
-            throw new globalThis.Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined)
-            url_ += "page=" + encodeURIComponent("" + page) + "&";
-        if (pageSize === null)
-            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (searchTerm === null)
-            throw new globalThis.Error("The parameter 'searchTerm' cannot be null.");
-        else if (searchTerm !== undefined)
-            url_ += "searchTerm=" + encodeURIComponent("" + searchTerm) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            signal,
-            headers: {
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.processGetUsers(_response);
-        });
-    }
-
-    protected processGetUsers(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * Get user
-     * @return OK
-     */
-    getUserById(id: string, signal?: AbortSignal): Promise<void> {
-        let url_ = this.baseUrl + "/api/users/{id}";
-        if (id === undefined || id === null)
-            throw new globalThis.Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            signal,
-            headers: {
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.processGetUserById(_response);
-        });
-    }
-
-    protected processGetUserById(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status === 404) {
-            return response.text().then((_responseText) => {
-            return throwException("Not Found", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * My profile
-     * @return OK
-     */
-    getMyProfile(signal?: AbortSignal): Promise<void> {
-        let url_ = this.baseUrl + "/api/users/me";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            signal,
-            headers: {
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.processGetMyProfile(_response);
-        });
-    }
-
-    protected processGetMyProfile(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * Update my profile
-     * @return OK
-     */
-    updateMyProfile(body: UpdateProfileRequestDto, signal?: AbortSignal): Promise<void> {
-        let url_ = this.baseUrl + "/api/users/me";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "PUT",
-            signal,
-            headers: {
-                "Content-Type": "application/json",
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.processUpdateMyProfile(_response);
-        });
-    }
-
-    protected processUpdateMyProfile(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            return throwException("Bad Request", status, _responseText, _headers);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-}
-
-export interface LoginRequestDto {
-    username?: string | undefined;
-    password?: string | undefined;
-}
-
-export interface RegisterRequestDto {
-    email?: string | undefined;
-    userName?: string | undefined;
-    password?: string | undefined;
-    firstName?: string | undefined;
-    lastName?: string | undefined;
-}
-
-export interface UpdateProfileRequestDto {
-    firstName?: string | undefined;
-    lastName?: string | undefined;
-    email?: string | undefined;
-}
-
-export interface UpdateSystemSettingsCommand {
-    setupCompleted?: boolean | undefined;
-}
-
-export class ApiException extends Error {
-    override message: string;
-    status: number;
-    response: string;
-    headers: { [key: string]: any; };
-    result: any;
-
-    constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
-        super();
-
-        this.message = message;
-        this.status = status;
-        this.response = response;
-        this.headers = headers;
-        this.result = result;
-    }
-
-    protected isApiException = true;
-
-    static isApiException(obj: any): obj is ApiException {
-        return obj.isApiException === true;
-    }
-}
-
-function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): any {
-    if (result !== null && result !== undefined)
-        throw result;
-    else
-        throw new ApiException(message, status, response, headers, null);
-}
-
-/**
- * Base class for all generated API clients.
- * Provides authentication token injection via transformOptions method.
- * 
- * This class is referenced by nswag.json configuration and will be extended
- * by all generated client classes (e.g., Client extends ApiBase).
- */
 export class ApiBase {
+  /**
+   * NB: THIS COMMENT CANNOT LIVE ABOVE THE API BASE CLASS DECLARATION
+   * https://stackoverflow.com/questions/61600278/nswag-extension-code-how-to-ensure-its-placed-at-the-start-of-the-file#comment140981214_61735295
+   * 
+   * Base class for all generated API clients.
+   * Provides authentication token injection via transformOptions method.
+   * 
+   * This class is referenced by nswag.json configuration and will be extended
+   * by all generated client classes (e.g., Client extends ApiBase).
+   */
+
   private authToken = '';
+  private onTokenExpired?: () => void;
 
   protected constructor() {}
 
@@ -571,14 +57,104 @@ export class ApiBase {
   }
 
   /**
+   * Sets a callback to be invoked when the token is expired.
+   * This is typically used to redirect the user to the login page.
+   * 
+   * @param callback - Function to call when token is expired
+   * @example
+   * ```typescript
+   * const client = new Client('https://api.example.com');
+   * client.setOnTokenExpired(() => {
+   *   window.location.href = '/login';
+   * });
+   * ```
+   */
+  setOnTokenExpired(callback: () => void): void {
+    this.onTokenExpired = callback;
+  }
+
+  /**
+   * Decodes a JWT token payload.
+   * Uses proper base64url decoding with Unicode support.
+   * Based on: https://stackoverflow.com/questions/38552003/how-to-decode-jwt-token-without-using-a-library
+   * 
+   * @param token - The JWT bearer token
+   * @returns Decoded payload object or null if decoding fails
+   */
+  private decodeJwtPayload(token: string): any {
+    try {
+      // JWT structure: header.payload.signature
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        return null; // Invalid token format
+      }
+
+      // Get the payload (second part)
+      const base64Url = parts[1]!; // Safe due to length check above
+      
+      // Convert base64url to base64 (JWT uses base64url encoding)
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      
+      // Decode base64 with proper Unicode handling
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      console.error('Failed to decode JWT token:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Checks if a JWT token is expired.
+   * @param token - The JWT bearer token
+   * @returns true if token is expired, false otherwise
+   */
+  private isTokenExpired(token: string): boolean {
+    const payload = this.decodeJwtPayload(token);
+    
+    if (!payload) {
+      return true; // Invalid token, treat as expired
+    }
+
+    // Check expiration (exp claim is in seconds)
+    if (!payload.exp) {
+      return false; // No expiration claim, treat as valid
+    }
+
+    const currentTime = Math.floor(Date.now() / 1000);
+    return payload.exp < currentTime;
+  }
+
+  /**
    * Transforms fetch options before each request is sent.
    * This method is automatically called by generated client methods.
    * Injects the Authorization header with the current bearer token.
+   * Checks token expiration and redirects to login if expired.
    * 
    * @param options - The fetch RequestInit options
    * @returns Promise resolving to the transformed options
    */
   protected transformOptions(options: RequestInit): Promise<RequestInit> {
+    // Check if token is expired before making the request
+    if (this.authToken && this.isTokenExpired(this.authToken)) {
+      // Clear the expired token
+      this.clearAuthToken();
+      
+      // Call the expired token callback if set
+      if (this.onTokenExpired) {
+        this.onTokenExpired();
+      }
+      
+      // Reject the request to prevent it from being sent
+      return Promise.reject(new Error('Authentication token has expired. Please log in again.'));
+    }
+
     // Convert headers to Headers object if needed
     const headers = options.headers instanceof Headers 
       ? options.headers 
@@ -594,4 +170,538 @@ export class ApiBase {
     return Promise.resolve(options);
   }
 }
+
+export class Client extends ApiBase {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * Log in
+     * @return OK
+     */
+    login(body: LoginRequestDto, signal?: AbortSignal): Promise<SwaggerResponse<LoginResponseDto>> {
+        let url_ = this.baseUrl + "/api/authentication/login";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processLogin(_response);
+        });
+    }
+
+    protected processLogin(response: Response): Promise<SwaggerResponse<LoginResponseDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as LoginResponseDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<LoginResponseDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Register
+     * @return Created
+     */
+    register(body: RegisterRequestDto, signal?: AbortSignal): Promise<SwaggerResponse<RegisterResponseDto>> {
+        let url_ = this.baseUrl + "/api/authentication/register";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processRegister(_response);
+        });
+    }
+
+    protected processRegister(response: Response): Promise<SwaggerResponse<RegisterResponseDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 201) {
+            return response.text().then((_responseText) => {
+            let result201: any = null;
+            result201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as RegisterResponseDto;
+            return new SwaggerResponse(status, _headers, result201);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<RegisterResponseDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Get system settings
+     * @return OK
+     */
+    getSystemSettings(signal?: AbortSignal): Promise<SwaggerResponse<SystemSettingsDto>> {
+        let url_ = this.baseUrl + "/api/settings/system";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetSystemSettings(_response);
+        });
+    }
+
+    protected processGetSystemSettings(response: Response): Promise<SwaggerResponse<SystemSettingsDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as SystemSettingsDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<SystemSettingsDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Update system settings
+     * @return OK
+     */
+    updateSystemSettings(body: UpdateSystemSettingsCommand, signal?: AbortSignal): Promise<SwaggerResponse<void>> {
+        let url_ = this.baseUrl + "/api/settings/system";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processUpdateSystemSettings(_response);
+        });
+    }
+
+    protected processUpdateSystemSettings(response: Response): Promise<SwaggerResponse<void>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return new SwaggerResponse(status, _headers, null as any);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<void>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * List users
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param searchTerm (optional) 
+     * @return OK
+     */
+    getUsers(page: number | undefined, pageSize: number | undefined, searchTerm: string | undefined, signal?: AbortSignal): Promise<SwaggerResponse<UserDtoPaginatedResponseDto>> {
+        let url_ = this.baseUrl + "/api/users?";
+        if (page === null)
+            throw new globalThis.Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (searchTerm === null)
+            throw new globalThis.Error("The parameter 'searchTerm' cannot be null.");
+        else if (searchTerm !== undefined)
+            url_ += "searchTerm=" + encodeURIComponent("" + searchTerm) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetUsers(_response);
+        });
+    }
+
+    protected processGetUsers(response: Response): Promise<SwaggerResponse<UserDtoPaginatedResponseDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserDtoPaginatedResponseDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<UserDtoPaginatedResponseDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Get user
+     * @return OK
+     */
+    getUserById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>> {
+        let url_ = this.baseUrl + "/api/users/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetUserById(_response);
+        });
+    }
+
+    protected processGetUserById(response: Response): Promise<SwaggerResponse<UserDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            return throwException("Not Found", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<UserDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * My profile
+     * @return OK
+     */
+    getMyProfile(signal?: AbortSignal): Promise<SwaggerResponse<UserDto>> {
+        let url_ = this.baseUrl + "/api/users/me";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetMyProfile(_response);
+        });
+    }
+
+    protected processGetMyProfile(response: Response): Promise<SwaggerResponse<UserDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<UserDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Update my profile
+     * @return OK
+     */
+    updateMyProfile(body: UpdateProfileRequestDto, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>> {
+        let url_ = this.baseUrl + "/api/users/me";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processUpdateMyProfile(_response);
+        });
+    }
+
+    protected processUpdateMyProfile(response: Response): Promise<SwaggerResponse<UserDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<UserDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+}
+
+export interface LoginRequestDto {
+    username?: string | undefined;
+    password?: string | undefined;
+}
+
+export interface LoginResponseDto {
+    token?: string | undefined;
+    expiresAt?: Date;
+    user?: UserDto;
+}
+
+export interface RegisterRequestDto {
+    email?: string | undefined;
+    userName?: string | undefined;
+    password?: string | undefined;
+    firstName?: string | undefined;
+    lastName?: string | undefined;
+}
+
+export interface RegisterResponseDto {
+    user?: UserDto;
+    token?: string | undefined;
+    expiresAt?: Date;
+}
+
+export interface SystemSettingsDto {
+    setupCompleted?: boolean;
+}
+
+export interface UpdateProfileRequestDto {
+    firstName?: string | undefined;
+    lastName?: string | undefined;
+    email?: string | undefined;
+}
+
+export interface UpdateSystemSettingsCommand {
+    setupCompleted?: boolean | undefined;
+}
+
+export interface UserDto {
+    id?: string | undefined;
+    email?: string | undefined;
+    userName?: string | undefined;
+    firstName?: string | undefined;
+    lastName?: string | undefined;
+    createdAt?: Date;
+    updatedAt?: Date | undefined;
+    roles?: string[] | undefined;
+}
+
+export interface UserDtoPaginatedResponseDto {
+    items?: UserDto[] | undefined;
+    pageNumber?: number;
+    pageSize?: number;
+    totalCount?: number;
+    readonly totalPages?: number;
+}
+
+export class SwaggerResponse<TResult> {
+    status: number;
+    headers: { [key: string]: any; };
+    result: TResult;
+
+    constructor(status: number, headers: { [key: string]: any; }, result: TResult)
+    {
+        this.status = status;
+        this.headers = headers;
+        this.result = result;
+    }
+}
+
+export class ApiException extends Error {
+    override message: string;
+    status: number;
+    response: string;
+    headers: { [key: string]: any; };
+    result: any;
+
+    constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
+        super();
+
+        this.message = message;
+        this.status = status;
+        this.response = response;
+        this.headers = headers;
+        this.result = result;
+    }
+
+    protected isApiException = true;
+
+    static isApiException(obj: any): obj is ApiException {
+        return obj.isApiException === true;
+    }
+}
+
+function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): any {
+    if (result !== null && result !== undefined)
+        throw result;
+    else
+        throw new ApiException(message, status, response, headers, null);
+}
+
 }
