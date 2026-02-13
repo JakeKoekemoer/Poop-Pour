@@ -656,27 +656,27 @@ export class Client extends ApiBase implements IClient {
 }
 
 export interface LoginRequestDto {
-    username?: string | undefined;
-    password?: string | undefined;
+    username?: string | null;
+    password?: string | null;
 }
 
 export interface LoginResponseDto {
-    token?: string | undefined;
+    token?: string | null;
     expiresAt?: Date;
     user?: UserDto;
 }
 
 export interface RegisterRequestDto {
-    email?: string | undefined;
-    userName?: string | undefined;
-    password?: string | undefined;
-    firstName?: string | undefined;
-    lastName?: string | undefined;
+    email?: string | null;
+    userName?: string | null;
+    password?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
 }
 
 export interface RegisterResponseDto {
     user?: UserDto;
-    token?: string | undefined;
+    token?: string | null;
     expiresAt?: Date;
 }
 
@@ -685,28 +685,28 @@ export interface SystemSettingsDto {
 }
 
 export interface UpdateProfileRequestDto {
-    firstName?: string | undefined;
-    lastName?: string | undefined;
-    email?: string | undefined;
+    firstName?: string | null;
+    lastName?: string | null;
+    email?: string | null;
 }
 
 export interface UpdateSystemSettingsCommand {
-    setupCompleted?: boolean | undefined;
+    setupCompleted?: boolean | null;
 }
 
 export interface UserDto {
-    id?: string | undefined;
-    email?: string | undefined;
-    userName?: string | undefined;
-    firstName?: string | undefined;
-    lastName?: string | undefined;
+    id?: string | null;
+    email?: string | null;
+    userName?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
     createdAt?: Date;
-    updatedAt?: Date | undefined;
-    roles?: string[] | undefined;
+    updatedAt?: Date | null;
+    roles?: string[] | null;
 }
 
 export interface UserDtoPaginatedResponseDto {
-    items?: UserDto[] | undefined;
+    items?: UserDto[] | null;
     pageNumber?: number;
     pageSize?: number;
     totalCount?: number;
