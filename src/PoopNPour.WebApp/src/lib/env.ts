@@ -52,4 +52,11 @@ export class EnvConfig {
   static get launchDate(): Date {
     return this.getDate('VITE_LAUNCH_DATE', '2026-03-01T00:00:00')
   }
+
+  /**
+   * API base URL for backend requests
+   */
+  static get apiUrl(): string {
+    return this.getString('VITE_API_URL', '')
+  }
 }
