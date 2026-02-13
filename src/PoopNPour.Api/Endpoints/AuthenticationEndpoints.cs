@@ -16,6 +16,7 @@ public class AuthenticationEndpoints : EndpointGroupBase
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
+            .RequireAuthorization()
             .MapPost(LoginAsync, "login", route => route
                 .WithDocumentation("Log in", "Returns a JWT token for authenticated requests")
                 .WithRequestResponse<LoginRequestDto, LoginResponseDto>())

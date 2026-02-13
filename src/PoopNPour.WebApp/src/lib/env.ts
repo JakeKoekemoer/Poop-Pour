@@ -30,6 +30,10 @@ export class EnvConfig {
   }
 
   static get apiUrl(): string {
-    return this.getString('VITE_API_URL', '')
+    return this.getString('VITE_API_URL', '').replace(/\/+$/, '')
+  }
+
+  static get apiKey(): string {
+    return this.getString('VITE_API_KEY', '')
   }
 }
