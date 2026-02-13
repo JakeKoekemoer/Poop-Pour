@@ -154,6 +154,12 @@ export class ApiBase {
     // Add Authorization header if token is set
     if (this.authToken) {
       headers.set("Authorization", `Bearer ${this.authToken}`);
+    } else {
+      // Fallback to API key if no auth token is available
+      const apiKey = EnvConfig.apiKey;
+      if (apiKey) {
+        headers.set("Authorization", `Bearer ${apiKey}`);
+      }
     }
 
     // Return transformed options

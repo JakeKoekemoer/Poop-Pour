@@ -146,6 +146,9 @@ public class DatabaseSeeder
             return;
         }
 
+        // Read the regeneration flag from configuration
+        var regenerateTokens = _configuration.GetValue<bool>("RegenerateApiTokensOnStartup");
+
         foreach (var apiClientConfig in apiClients)
         {
             var userName = apiClientConfig["UserName"];
@@ -181,38 +184,60 @@ public class DatabaseSeeder
 
             // Check if API client user already exists
             var existingUser = await _identityService.GetUserByUserNameAsync(userName, cancellationToken);
-            if (existingUser != null)
-            {
-                _logger.LogInformation("API client user {UserName} already exists. Skipping creation.", userName);
-                continue;
-            }
-
-            // Create API client user
-            _logger.LogInformation("Creating API client user: {UserName}", userName);
-            var apiClientUser = await _identityService.CreateUserAsync(
-                userName,
-                email,
-                password,
-                firstName ?? "API",
-                lastName ?? "Client",
-                cancellationToken);
-
-            // Add role to the user
-            await _identityService.AddUserToRoleAsync(apiClientUser, role, cancellationToken);
-
-            // Generate and store API token
-            _logger.LogInformation("Generating API token for {UserName} with role {Role}", userName, role);
-            var apiToken = _jwtTokenService.GenerateApiToken(apiClientUser.Id, new[] { role });
             
-            await _identityService.SetAuthenticationTokenAsync(
-                apiClientUser,
-                "PoopNPour",
-                "ApiToken",
-                apiToken,
-                cancellationToken);
+            if (existingUser == null)
+            {
+                // Create API client user
+                _logger.LogInformation("Creating API client user: {UserName}", userName);
+                existingUser = await _identityService.CreateUserAsync(
+                    userName,
+                    email,
+                    password,
+                    firstName ?? "API",
+                    lastName ?? "Client",
+                    cancellationToken);
 
-            _logger.LogInformation("API client user {UserName} created successfully with API token", userName);
-            _logger.LogDebug("API Token for {UserName}: {Token}", userName, apiToken);
+                // Add role to the user
+                await _identityService.AddUserToRoleAsync(existingUser, role, cancellationToken);
+                
+                _logger.LogInformation("API client user {UserName} created successfully", userName);
+                
+                // Always generate token for new users
+                _logger.LogInformation("Generating API token for {UserName} with role {Role}", userName, role);
+                var apiToken = _jwtTokenService.GenerateApiToken(existingUser.Id, new[] { role });
+                
+                await _identityService.SetAuthenticationTokenAsync(
+                    existingUser,
+                    "PoopNPour",
+                    "ApiToken",
+                    apiToken,
+                    cancellationToken);
+
+                _logger.LogInformation("API Token for {UserName}: {Token}", userName, apiToken);
+            }
+            else
+            {
+                // User already exists - check if we should regenerate the token
+                if (!regenerateTokens)
+                {
+                    _logger.LogInformation("API client user {UserName} already exists. Skipping token regeneration (RegenerateApiTokensOnStartup=false)", userName);
+                    continue;
+                }
+                
+                // Regenerate token for existing user
+                _logger.LogInformation("API client user {UserName} already exists. Refreshing API token.", userName);
+                _logger.LogInformation("Generating API token for {UserName} with role {Role}", userName, role);
+                var apiToken = _jwtTokenService.GenerateApiToken(existingUser.Id, new[] { role });
+                
+                await _identityService.SetAuthenticationTokenAsync(
+                    existingUser,
+                    "PoopNPour",
+                    "ApiToken",
+                    apiToken,
+                    cancellationToken);
+
+                _logger.LogInformation("API Token for {UserName}: {Token}", userName, apiToken);
+            }
         }
 
         _logger.LogInformation("API client seeding completed");

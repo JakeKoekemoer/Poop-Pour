@@ -7,7 +7,6 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-import { EnvConfig } from "@/lib/env";
 export class ApiBase {
   /**
    * NB: THIS COMMENT CANNOT LIVE ABOVE THE API BASE CLASS DECLARATION
@@ -134,9 +133,7 @@ export class ApiBase {
   /**
    * Transforms fetch options before each request is sent.
    * This method is automatically called by generated client methods.
-   * Injects the Authorization header with either:
-   * 1. Bearer token (if user is authenticated)
-   * 2. API key from environment (if no auth token is available)
+   * Injects the Authorization header with the current bearer token.
    * Checks token expiration and redirects to login if expired.
    *
    * @param options - The fetch RequestInit options
@@ -181,744 +178,588 @@ export class ApiBase {
 }
 
 export interface IClient {
-  /**
-   * Log in
-   * @return OK
-   */
-  login(body: LoginRequestDto, signal?: AbortSignal): Promise<SwaggerResponse<LoginResponseDto>>;
 
-  /**
-   * Register
-   * @return Created
-   */
-  register(
-    body: RegisterRequestDto,
-    signal?: AbortSignal,
-  ): Promise<SwaggerResponse<RegisterResponseDto>>;
+    /**
+     * Log in
+     * @return OK
+     */
+    login(body: LoginRequestDto, signal?: AbortSignal): Promise<SwaggerResponse<LoginResponseDto>>;
 
-  /**
-   * Get system settings
-   * @return OK
-   */
-  getSystemSettings(signal?: AbortSignal): Promise<SwaggerResponse<SystemSettingsDto>>;
+    /**
+     * Register
+     * @return Created
+     */
+    register(body: RegisterRequestDto, signal?: AbortSignal): Promise<SwaggerResponse<RegisterResponseDto>>;
 
-  /**
-   * Update system settings
-   * @return OK
-   */
-  updateSystemSettings(
-    body: UpdateSystemSettingsCommand,
-    signal?: AbortSignal,
-  ): Promise<SwaggerResponse<void>>;
+    /**
+     * Get system settings
+     * @return OK
+     */
+    getSystemSettings(signal?: AbortSignal): Promise<SwaggerResponse<SystemSettingsDto>>;
 
-  /**
-   * List users
-   * @param page (optional)
-   * @param pageSize (optional)
-   * @param searchTerm (optional)
-   * @return OK
-   */
-  getUsers(
-    page?: number | undefined,
-    pageSize?: number | undefined,
-    searchTerm?: string | undefined,
-    signal?: AbortSignal,
-  ): Promise<SwaggerResponse<UserDtoPaginatedResponseDto>>;
+    /**
+     * Update system settings
+     * @return OK
+     */
+    updateSystemSettings(body: UpdateSystemSettingsCommand, signal?: AbortSignal): Promise<SwaggerResponse<void>>;
 
-  /**
-   * Get user
-   * @return OK
-   */
-  getUserById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>>;
+    /**
+     * List users
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param searchTerm (optional) 
+     * @return OK
+     */
+    getUsers(page?: number | undefined, pageSize?: number | undefined, searchTerm?: string | undefined, signal?: AbortSignal): Promise<SwaggerResponse<UserDtoPaginatedResponseDto>>;
 
-  /**
-   * My profile
-   * @return OK
-   */
-  getMyProfile(signal?: AbortSignal): Promise<SwaggerResponse<UserDto>>;
+    /**
+     * Get user
+     * @return OK
+     */
+    getUserById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>>;
 
-  /**
-   * Update my profile
-   * @return OK
-   */
-  updateMyProfile(
-    body: UpdateProfileRequestDto,
-    signal?: AbortSignal,
-  ): Promise<SwaggerResponse<UserDto>>;
+    /**
+     * My profile
+     * @return OK
+     */
+    getMyProfile(signal?: AbortSignal): Promise<SwaggerResponse<UserDto>>;
+
+    /**
+     * Update my profile
+     * @return OK
+     */
+    updateMyProfile(body: UpdateProfileRequestDto, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>>;
 }
 
 export class Client extends ApiBase implements IClient {
-  private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-  private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
-  ) {
-    super();
-    this.http = http ? http : (window as any);
-    this.baseUrl = baseUrl ?? "";
-  }
-
-  /**
-   * Log in
-   * @return OK
-   */
-  login(body: LoginRequestDto, signal?: AbortSignal): Promise<SwaggerResponse<LoginResponseDto>> {
-    let url_ = this.baseUrl + "/api/authentication/login";
-    url_ = url_.replace(/[?&]$/, "");
-
-    const content_ = JSON.stringify(body);
-
-    let options_: RequestInit = {
-      body: content_,
-      method: "POST",
-      signal,
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
-    return this.transformOptions(options_)
-      .then((transformedOptions_) => {
-        return this.http.fetch(url_, transformedOptions_);
-      })
-      .then((_response: Response) => {
-        return this.processLogin(_response);
-      });
-  }
-
-  protected processLogin(response: Response): Promise<SwaggerResponse<LoginResponseDto>> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl ?? "";
     }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as LoginResponseDto);
-        return new SwaggerResponse(status, _headers, result200);
-      });
-    } else if (status === 400) {
-      return response.text().then((_responseText) => {
-        return throwException("Bad Request", status, _responseText, _headers);
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers,
-        );
-      });
+
+    /**
+     * Log in
+     * @return OK
+     */
+    login(body: LoginRequestDto, signal?: AbortSignal): Promise<SwaggerResponse<LoginResponseDto>> {
+        let url_ = this.baseUrl + "/api/authentication/login";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processLogin(_response);
+        });
     }
-    return Promise.resolve<SwaggerResponse<LoginResponseDto>>(
-      new SwaggerResponse(status, _headers, null as any),
-    );
-  }
 
-  /**
-   * Register
-   * @return Created
-   */
-  register(
-    body: RegisterRequestDto,
-    signal?: AbortSignal,
-  ): Promise<SwaggerResponse<RegisterResponseDto>> {
-    let url_ = this.baseUrl + "/api/authentication/register";
-    url_ = url_.replace(/[?&]$/, "");
-
-    const content_ = JSON.stringify(body);
-
-    let options_: RequestInit = {
-      body: content_,
-      method: "POST",
-      signal,
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
-    return this.transformOptions(options_)
-      .then((transformedOptions_) => {
-        return this.http.fetch(url_, transformedOptions_);
-      })
-      .then((_response: Response) => {
-        return this.processRegister(_response);
-      });
-  }
-
-  protected processRegister(response: Response): Promise<SwaggerResponse<RegisterResponseDto>> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    protected processLogin(response: Response): Promise<SwaggerResponse<LoginResponseDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as LoginResponseDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<LoginResponseDto>>(new SwaggerResponse(status, _headers, null as any));
     }
-    if (status === 201) {
-      return response.text().then((_responseText) => {
-        let result201: any = null;
-        result201 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as RegisterResponseDto);
-        return new SwaggerResponse(status, _headers, result201);
-      });
-    } else if (status === 400) {
-      return response.text().then((_responseText) => {
-        return throwException("Bad Request", status, _responseText, _headers);
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers,
-        );
-      });
+
+    /**
+     * Register
+     * @return Created
+     */
+    register(body: RegisterRequestDto, signal?: AbortSignal): Promise<SwaggerResponse<RegisterResponseDto>> {
+        let url_ = this.baseUrl + "/api/authentication/register";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processRegister(_response);
+        });
     }
-    return Promise.resolve<SwaggerResponse<RegisterResponseDto>>(
-      new SwaggerResponse(status, _headers, null as any),
-    );
-  }
 
-  /**
-   * Get system settings
-   * @return OK
-   */
-  getSystemSettings(signal?: AbortSignal): Promise<SwaggerResponse<SystemSettingsDto>> {
-    let url_ = this.baseUrl + "/api/settings/system";
-    url_ = url_.replace(/[?&]$/, "");
-
-    let options_: RequestInit = {
-      method: "GET",
-      signal,
-      headers: {
-        Accept: "application/json",
-      },
-    };
-
-    return this.transformOptions(options_)
-      .then((transformedOptions_) => {
-        return this.http.fetch(url_, transformedOptions_);
-      })
-      .then((_response: Response) => {
-        return this.processGetSystemSettings(_response);
-      });
-  }
-
-  protected processGetSystemSettings(
-    response: Response,
-  ): Promise<SwaggerResponse<SystemSettingsDto>> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    protected processRegister(response: Response): Promise<SwaggerResponse<RegisterResponseDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 201) {
+            return response.text().then((_responseText) => {
+            let result201: any = null;
+            result201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as RegisterResponseDto;
+            return new SwaggerResponse(status, _headers, result201);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<RegisterResponseDto>>(new SwaggerResponse(status, _headers, null as any));
     }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as SystemSettingsDto);
-        return new SwaggerResponse(status, _headers, result200);
-      });
-    } else if (status === 401) {
-      return response.text().then((_responseText) => {
-        return throwException("Unauthorized", status, _responseText, _headers);
-      });
-    } else if (status === 403) {
-      return response.text().then((_responseText) => {
-        return throwException("Forbidden", status, _responseText, _headers);
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers,
-        );
-      });
+
+    /**
+     * Get system settings
+     * @return OK
+     */
+    getSystemSettings(signal?: AbortSignal): Promise<SwaggerResponse<SystemSettingsDto>> {
+        let url_ = this.baseUrl + "/api/settings/system";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetSystemSettings(_response);
+        });
     }
-    return Promise.resolve<SwaggerResponse<SystemSettingsDto>>(
-      new SwaggerResponse(status, _headers, null as any),
-    );
-  }
 
-  /**
-   * Update system settings
-   * @return OK
-   */
-  updateSystemSettings(
-    body: UpdateSystemSettingsCommand,
-    signal?: AbortSignal,
-  ): Promise<SwaggerResponse<void>> {
-    let url_ = this.baseUrl + "/api/settings/system";
-    url_ = url_.replace(/[?&]$/, "");
-
-    const content_ = JSON.stringify(body);
-
-    let options_: RequestInit = {
-      body: content_,
-      method: "POST",
-      signal,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    return this.transformOptions(options_)
-      .then((transformedOptions_) => {
-        return this.http.fetch(url_, transformedOptions_);
-      })
-      .then((_response: Response) => {
-        return this.processUpdateSystemSettings(_response);
-      });
-  }
-
-  protected processUpdateSystemSettings(response: Response): Promise<SwaggerResponse<void>> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    protected processGetSystemSettings(response: Response): Promise<SwaggerResponse<SystemSettingsDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as SystemSettingsDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<SystemSettingsDto>>(new SwaggerResponse(status, _headers, null as any));
     }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        return new SwaggerResponse(status, _headers, null as any);
-      });
-    } else if (status === 400) {
-      return response.text().then((_responseText) => {
-        return throwException("Bad Request", status, _responseText, _headers);
-      });
-    } else if (status === 401) {
-      return response.text().then((_responseText) => {
-        return throwException("Unauthorized", status, _responseText, _headers);
-      });
-    } else if (status === 403) {
-      return response.text().then((_responseText) => {
-        return throwException("Forbidden", status, _responseText, _headers);
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers,
-        );
-      });
+
+    /**
+     * Update system settings
+     * @return OK
+     */
+    updateSystemSettings(body: UpdateSystemSettingsCommand, signal?: AbortSignal): Promise<SwaggerResponse<void>> {
+        let url_ = this.baseUrl + "/api/settings/system";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processUpdateSystemSettings(_response);
+        });
     }
-    return Promise.resolve<SwaggerResponse<void>>(
-      new SwaggerResponse(status, _headers, null as any),
-    );
-  }
 
-  /**
-   * List users
-   * @param page (optional)
-   * @param pageSize (optional)
-   * @param searchTerm (optional)
-   * @return OK
-   */
-  getUsers(
-    page?: number | undefined,
-    pageSize?: number | undefined,
-    searchTerm?: string | undefined,
-    signal?: AbortSignal,
-  ): Promise<SwaggerResponse<UserDtoPaginatedResponseDto>> {
-    let url_ = this.baseUrl + "/api/users?";
-    if (page === null) throw new globalThis.Error("The parameter 'page' cannot be null.");
-    else if (page !== undefined) url_ += "page=" + encodeURIComponent("" + page) + "&";
-    if (pageSize === null) throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
-    else if (pageSize !== undefined) url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
-    if (searchTerm === null)
-      throw new globalThis.Error("The parameter 'searchTerm' cannot be null.");
-    else if (searchTerm !== undefined)
-      url_ += "searchTerm=" + encodeURIComponent("" + searchTerm) + "&";
-    url_ = url_.replace(/[?&]$/, "");
-
-    let options_: RequestInit = {
-      method: "GET",
-      signal,
-      headers: {
-        Accept: "application/json",
-      },
-    };
-
-    return this.transformOptions(options_)
-      .then((transformedOptions_) => {
-        return this.http.fetch(url_, transformedOptions_);
-      })
-      .then((_response: Response) => {
-        return this.processGetUsers(_response);
-      });
-  }
-
-  protected processGetUsers(
-    response: Response,
-  ): Promise<SwaggerResponse<UserDtoPaginatedResponseDto>> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    protected processUpdateSystemSettings(response: Response): Promise<SwaggerResponse<void>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return new SwaggerResponse(status, _headers, null as any);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<void>>(new SwaggerResponse(status, _headers, null as any));
     }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as UserDtoPaginatedResponseDto);
-        return new SwaggerResponse(status, _headers, result200);
-      });
-    } else if (status === 401) {
-      return response.text().then((_responseText) => {
-        return throwException("Unauthorized", status, _responseText, _headers);
-      });
-    } else if (status === 403) {
-      return response.text().then((_responseText) => {
-        return throwException("Forbidden", status, _responseText, _headers);
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers,
-        );
-      });
+
+    /**
+     * List users
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param searchTerm (optional) 
+     * @return OK
+     */
+    getUsers(page?: number | undefined, pageSize?: number | undefined, searchTerm?: string | undefined, signal?: AbortSignal): Promise<SwaggerResponse<UserDtoPaginatedResponseDto>> {
+        let url_ = this.baseUrl + "/api/users?";
+        if (page === null)
+            throw new globalThis.Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (searchTerm === null)
+            throw new globalThis.Error("The parameter 'searchTerm' cannot be null.");
+        else if (searchTerm !== undefined)
+            url_ += "searchTerm=" + encodeURIComponent("" + searchTerm) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetUsers(_response);
+        });
     }
-    return Promise.resolve<SwaggerResponse<UserDtoPaginatedResponseDto>>(
-      new SwaggerResponse(status, _headers, null as any),
-    );
-  }
 
-  /**
-   * Get user
-   * @return OK
-   */
-  getUserById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>> {
-    let url_ = this.baseUrl + "/api/users/{id}";
-    if (id === undefined || id === null)
-      throw new globalThis.Error("The parameter 'id' must be defined.");
-    url_ = url_.replace("{id}", encodeURIComponent("" + id));
-    url_ = url_.replace(/[?&]$/, "");
-
-    let options_: RequestInit = {
-      method: "GET",
-      signal,
-      headers: {
-        Accept: "application/json",
-      },
-    };
-
-    return this.transformOptions(options_)
-      .then((transformedOptions_) => {
-        return this.http.fetch(url_, transformedOptions_);
-      })
-      .then((_response: Response) => {
-        return this.processGetUserById(_response);
-      });
-  }
-
-  protected processGetUserById(response: Response): Promise<SwaggerResponse<UserDto>> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    protected processGetUsers(response: Response): Promise<SwaggerResponse<UserDtoPaginatedResponseDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserDtoPaginatedResponseDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<UserDtoPaginatedResponseDto>>(new SwaggerResponse(status, _headers, null as any));
     }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as UserDto);
-        return new SwaggerResponse(status, _headers, result200);
-      });
-    } else if (status === 401) {
-      return response.text().then((_responseText) => {
-        return throwException("Unauthorized", status, _responseText, _headers);
-      });
-    } else if (status === 403) {
-      return response.text().then((_responseText) => {
-        return throwException("Forbidden", status, _responseText, _headers);
-      });
-    } else if (status === 404) {
-      return response.text().then((_responseText) => {
-        return throwException("Not Found", status, _responseText, _headers);
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers,
-        );
-      });
+
+    /**
+     * Get user
+     * @return OK
+     */
+    getUserById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>> {
+        let url_ = this.baseUrl + "/api/users/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetUserById(_response);
+        });
     }
-    return Promise.resolve<SwaggerResponse<UserDto>>(
-      new SwaggerResponse(status, _headers, null as any),
-    );
-  }
 
-  /**
-   * My profile
-   * @return OK
-   */
-  getMyProfile(signal?: AbortSignal): Promise<SwaggerResponse<UserDto>> {
-    let url_ = this.baseUrl + "/api/users/me";
-    url_ = url_.replace(/[?&]$/, "");
-
-    let options_: RequestInit = {
-      method: "GET",
-      signal,
-      headers: {
-        Accept: "application/json",
-      },
-    };
-
-    return this.transformOptions(options_)
-      .then((transformedOptions_) => {
-        return this.http.fetch(url_, transformedOptions_);
-      })
-      .then((_response: Response) => {
-        return this.processGetMyProfile(_response);
-      });
-  }
-
-  protected processGetMyProfile(response: Response): Promise<SwaggerResponse<UserDto>> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    protected processGetUserById(response: Response): Promise<SwaggerResponse<UserDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            return throwException("Not Found", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<UserDto>>(new SwaggerResponse(status, _headers, null as any));
     }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as UserDto);
-        return new SwaggerResponse(status, _headers, result200);
-      });
-    } else if (status === 401) {
-      return response.text().then((_responseText) => {
-        return throwException("Unauthorized", status, _responseText, _headers);
-      });
-    } else if (status === 403) {
-      return response.text().then((_responseText) => {
-        return throwException("Forbidden", status, _responseText, _headers);
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers,
-        );
-      });
+
+    /**
+     * My profile
+     * @return OK
+     */
+    getMyProfile(signal?: AbortSignal): Promise<SwaggerResponse<UserDto>> {
+        let url_ = this.baseUrl + "/api/users/me";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetMyProfile(_response);
+        });
     }
-    return Promise.resolve<SwaggerResponse<UserDto>>(
-      new SwaggerResponse(status, _headers, null as any),
-    );
-  }
 
-  /**
-   * Update my profile
-   * @return OK
-   */
-  updateMyProfile(
-    body: UpdateProfileRequestDto,
-    signal?: AbortSignal,
-  ): Promise<SwaggerResponse<UserDto>> {
-    let url_ = this.baseUrl + "/api/users/me";
-    url_ = url_.replace(/[?&]$/, "");
-
-    const content_ = JSON.stringify(body);
-
-    let options_: RequestInit = {
-      body: content_,
-      method: "PUT",
-      signal,
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
-    return this.transformOptions(options_)
-      .then((transformedOptions_) => {
-        return this.http.fetch(url_, transformedOptions_);
-      })
-      .then((_response: Response) => {
-        return this.processUpdateMyProfile(_response);
-      });
-  }
-
-  protected processUpdateMyProfile(response: Response): Promise<SwaggerResponse<UserDto>> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    protected processGetMyProfile(response: Response): Promise<SwaggerResponse<UserDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<UserDto>>(new SwaggerResponse(status, _headers, null as any));
     }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as UserDto);
-        return new SwaggerResponse(status, _headers, result200);
-      });
-    } else if (status === 400) {
-      return response.text().then((_responseText) => {
-        return throwException("Bad Request", status, _responseText, _headers);
-      });
-    } else if (status === 401) {
-      return response.text().then((_responseText) => {
-        return throwException("Unauthorized", status, _responseText, _headers);
-      });
-    } else if (status === 403) {
-      return response.text().then((_responseText) => {
-        return throwException("Forbidden", status, _responseText, _headers);
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers,
-        );
-      });
+
+    /**
+     * Update my profile
+     * @return OK
+     */
+    updateMyProfile(body: UpdateProfileRequestDto, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>> {
+        let url_ = this.baseUrl + "/api/users/me";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processUpdateMyProfile(_response);
+        });
     }
-    return Promise.resolve<SwaggerResponse<UserDto>>(
-      new SwaggerResponse(status, _headers, null as any),
-    );
-  }
+
+    protected processUpdateMyProfile(response: Response): Promise<SwaggerResponse<UserDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<UserDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
 }
 
 export interface LoginRequestDto {
-  username?: string | null;
-  password?: string | null;
+    username?: string | null;
+    password?: string | null;
 }
 
 export interface LoginResponseDto {
-  token?: string | null;
-  expiresAt?: Date;
-  user?: UserDto;
+    token?: string | null;
+    expiresAt?: Date;
+    user?: UserDto;
 }
 
 export interface RegisterRequestDto {
-  email?: string | null;
-  userName?: string | null;
-  password?: string | null;
-  firstName?: string | null;
-  lastName?: string | null;
+    email?: string | null;
+    userName?: string | null;
+    password?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
 }
 
 export interface RegisterResponseDto {
-  user?: UserDto;
-  token?: string | null;
-  expiresAt?: Date;
+    user?: UserDto;
+    token?: string | null;
+    expiresAt?: Date;
 }
 
 export interface SystemSettingsDto {
-  setupCompleted?: boolean;
+    setupCompleted?: boolean;
 }
 
 export interface UpdateProfileRequestDto {
-  firstName?: string | null;
-  lastName?: string | null;
-  email?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    email?: string | null;
 }
 
 export interface UpdateSystemSettingsCommand {
-  setupCompleted?: boolean | null;
+    setupCompleted?: boolean | null;
 }
 
 export interface UserDto {
-  id?: string | null;
-  email?: string | null;
-  userName?: string | null;
-  firstName?: string | null;
-  lastName?: string | null;
-  createdAt?: Date;
-  updatedAt?: Date | null;
-  roles?: string[] | null;
+    id?: string | null;
+    email?: string | null;
+    userName?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    createdAt?: Date;
+    updatedAt?: Date | null;
+    roles?: string[] | null;
 }
 
 export interface UserDtoPaginatedResponseDto {
-  items?: UserDto[] | null;
-  pageNumber?: number;
-  pageSize?: number;
-  totalCount?: number;
-  readonly totalPages?: number;
+    items?: UserDto[] | null;
+    pageNumber?: number;
+    pageSize?: number;
+    totalCount?: number;
+    readonly totalPages?: number;
 }
 
 export class SwaggerResponse<TResult> {
-  status: number;
-  headers: { [key: string]: any };
-  result: TResult;
+    status: number;
+    headers: { [key: string]: any; };
+    result: TResult;
 
-  constructor(status: number, headers: { [key: string]: any }, result: TResult) {
-    this.status = status;
-    this.headers = headers;
-    this.result = result;
-  }
+    constructor(status: number, headers: { [key: string]: any; }, result: TResult)
+    {
+        this.status = status;
+        this.headers = headers;
+        this.result = result;
+    }
 }
 
 export class ApiException extends Error {
-  override message: string;
-  status: number;
-  response: string;
-  headers: { [key: string]: any };
-  result: any;
+    override message: string;
+    status: number;
+    response: string;
+    headers: { [key: string]: any; };
+    result: any;
 
-  constructor(
-    message: string,
-    status: number,
-    response: string,
-    headers: { [key: string]: any },
-    result: any,
-  ) {
-    super();
+    constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
+        super();
 
-    this.message = message;
-    this.status = status;
-    this.response = response;
-    this.headers = headers;
-    this.result = result;
-  }
+        this.message = message;
+        this.status = status;
+        this.response = response;
+        this.headers = headers;
+        this.result = result;
+    }
 
-  protected isApiException = true;
+    protected isApiException = true;
 
-  static isApiException(obj: any): obj is ApiException {
-    return obj.isApiException === true;
-  }
+    static isApiException(obj: any): obj is ApiException {
+        return obj.isApiException === true;
+    }
 }
 
-function throwException(
-  message: string,
-  status: number,
-  response: string,
-  headers: { [key: string]: any },
-  result?: any,
-): any {
-  if (result !== null && result !== undefined) throw result;
-  else throw new ApiException(message, status, response, headers, null);
+function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): any {
+    if (result !== null && result !== undefined)
+        throw result;
+    else
+        throw new ApiException(message, status, response, headers, null);
 }
