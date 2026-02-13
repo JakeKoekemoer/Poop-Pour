@@ -4,6 +4,8 @@ import type { LoginRequestDto, RegisterRequestDto } from '@/api/api-client';
 import { useUserStore, type UserProfile } from '@/stores';
 import { toUserProfile } from '@/stores/user/types';
 import router from '@/routes';
+import { RouteHelper } from '@/routes/helpers/RouteHelper';
+import { PUBLIC_ROUTES } from '@/routes/constants';
 
 /**
  * Authentication service for login, registration, and logout operations
@@ -110,7 +112,7 @@ class AuthService extends BaseService {
     const userStore = useUserStore();
     userStore.clearAuth();
 
-    router.push({ name: 'public.login' }).catch(err => {
+    router.push({ name: RouteHelper.GetPublicRouteName(PUBLIC_ROUTES.LOGIN) }).catch(err => {
       console.error('Failed to redirect to login:', err);
     });
   }

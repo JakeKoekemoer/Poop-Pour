@@ -1,6 +1,8 @@
 import { Client } from '@/api/api-client';
 import router from '@/routes';
 import { EnvConfig } from '@/lib/env';
+import { RouteHelper } from '@/routes/helpers/RouteHelper';
+import { PUBLIC_ROUTES } from '@/routes/constants';
 
 /**
  * Singleton instance of the API client.
@@ -33,7 +35,7 @@ export function getApiClient(): Client {
       // The store clearAuth method will be called from the router
       
       // Redirect to login page
-      router.push({ name: 'public.login' }).catch(err => {
+      router.push({ name: RouteHelper.GetPublicRouteName(PUBLIC_ROUTES.LOGIN) }).catch(err => {
         console.error('Failed to redirect to login:', err);
       });
     });
