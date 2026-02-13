@@ -89,7 +89,6 @@ onUnmounted(() => {
     <Separator />
 
     <CardContent class="pt-6">
-      <!-- Countdown Display -->
       <div class="grid grid-cols-4 gap-4">
         <CountdownUnit :value="timeRemaining.days" label="Days" />
         <CountdownUnit :value="timeRemaining.hours" label="Hours" />
@@ -97,7 +96,6 @@ onUnmounted(() => {
         <CountdownUnit :value="timeRemaining.seconds" label="Seconds" />
       </div>
 
-      <!-- Countdown Complete Message -->
       <div v-if="isCountdownComplete" class="mt-6 text-center">
         <Separator class="mb-4" />
         <slot name="complete">

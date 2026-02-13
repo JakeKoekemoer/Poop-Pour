@@ -1,3 +1,5 @@
+using FluentValidation.Results;
+
 namespace PoopNPour.Application.Common.Exceptions;
 
 /// <summary>
@@ -26,5 +28,13 @@ public class ValidationException : Exception
         {
             { propertyName, new[] { errorMessage } }
         };
+    }
+
+    public ValidationException(IEnumerable<ValidationFailure> failures)
+        : base("One or more validation failures have occurred.")
+    {
+        Errors = failures
+            .GroupBy(e => e.PropertyName, e => e.ErrorMessage)
+            .ToDictionary(failureGroup => failureGroup.Key, failureGroup => failureGroup.ToArray());
     }
 }

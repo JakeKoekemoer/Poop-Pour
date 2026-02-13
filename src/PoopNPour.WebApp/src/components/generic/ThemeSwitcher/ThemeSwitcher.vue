@@ -27,7 +27,6 @@ const darkModeOptions = [
 <template>
   <div class="fixed bottom-6 right-6 z-50">
     <Popover>
-      <!-- Trigger Button -->
       <PopoverTrigger as-child>
         <Button
           size="icon-lg"
@@ -39,7 +38,6 @@ const darkModeOptions = [
         </Button>
       </PopoverTrigger>
 
-      <!-- Popover Content -->
       <PopoverContent
         class="w-80 max-h-[calc(100vh-10rem)] overflow-y-auto p-0"
         align="end"
@@ -51,7 +49,6 @@ const darkModeOptions = [
           </CardHeader>
 
           <CardContent class="space-y-6 pb-4">
-            <!-- Color Themes Section -->
             <div class="space-y-3">
               <Label class="text-sm font-medium">Color Theme</Label>
               <RadioGroup
@@ -72,7 +69,6 @@ const darkModeOptions = [
 
             <Separator />
 
-            <!-- Dark Mode Section -->
             <div class="space-y-3">
               <Label class="text-sm font-medium">Appearance</Label>
               <RadioGroup
@@ -95,7 +91,6 @@ const darkModeOptions = [
 
             <Separator />
 
-            <!-- Footer Note -->
             <p class="text-xs text-muted-foreground text-center">
               Perfect for tired parents at 3AM 🌙
             </p>

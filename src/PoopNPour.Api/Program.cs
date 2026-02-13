@@ -76,6 +76,9 @@ builder.Services.AddCors(options =>
 // Add Infrastructure (Database, Repositories, Identity)
 builder.Services.AddInfrastructure(builder.Configuration);
 
+// Add Application Services (FluentValidation, etc.)
+builder.Services.AddApplicationServices();
+
 // Add MediatR with pipeline behaviors
 builder.Services.AddMediatR(cfg =>
 {
@@ -85,6 +88,7 @@ builder.Services.AddMediatR(cfg =>
 // Register MediatR pipeline behaviors (order matters!)
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));  // Logging
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));        // Authorization
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));          // Validation
 
 var app = builder.Build();
 

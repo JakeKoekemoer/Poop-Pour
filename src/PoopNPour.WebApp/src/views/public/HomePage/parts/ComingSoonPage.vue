@@ -1,16 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Sparkles } from 'lucide-vue-next'
-import { useTheme } from '@/composables/useTheme'
 import { CountdownTimer } from '@/components/generic/CountdownTimer'
 import { EnvConfig } from '@/lib/env'
 
-const { currentThemeConfig } = useTheme()
-
-// Launch date from environment variable
 const launchDate = EnvConfig.launchDate
 
-// Format the subtitle from the launch date
 const launchDateSubtitle = computed(() => {
   return launchDate.toLocaleDateString('en-US', {
     month: 'long',
@@ -23,7 +18,6 @@ const launchDateSubtitle = computed(() => {
 <template>
   <div class="min-h-screen flex items-center justify-center p-4">
     <div class="max-w-4xl mx-auto w-full space-y-8 md:space-y-12">
-      <!-- Hero Section -->
       <div class="text-center space-y-6">
         <div class="flex justify-center">
           <div class="relative">
@@ -39,7 +33,6 @@ const launchDateSubtitle = computed(() => {
         </p>
       </div>
 
-      <!-- Countdown Timer -->
       <CountdownTimer
         :target-date="launchDate"
         title="Launching Soon"

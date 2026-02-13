@@ -1,10 +1,26 @@
 <script setup lang="ts">
-import { LogIn } from 'lucide-vue-next'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
-import { Separator } from '@/components/ui/separator'
+import { LogIn } from "lucide-vue-next";
+import { useRouter } from "vue-router";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { RouteHelper } from "@/routes/helpers/RouteHelper";
+import { PUBLIC_ROUTES } from "@/routes/constants";
+
+const router = useRouter();
+
+const goToRegister = () => {
+  router.push({ name: RouteHelper.GetPublicRouteName(PUBLIC_ROUTES.REGISTER) });
+};
 </script>
 
 <template>
@@ -15,47 +31,29 @@ import { Separator } from '@/components/ui/separator'
           <LogIn class="w-12 h-12 text-primary" />
         </div>
         <CardTitle class="text-3xl font-bold text-center">Login</CardTitle>
-        <CardDescription class="text-center">
-          Sign in to your account to continue
-        </CardDescription>
+        <CardDescription class="text-center"> Sign in to your account to continue </CardDescription>
       </CardHeader>
       <CardContent class="space-y-4">
         <div class="space-y-2">
           <Label for="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="name@example.com"
-            disabled
-          />
+          <Input id="email" type="email" placeholder="name@example.com" disabled />
         </div>
         <div class="space-y-2">
           <Label for="password">Password</Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="••••••••"
-            disabled
-          />
+          <Input id="password" type="password" placeholder="••••••••" disabled />
         </div>
-        
+
         <Separator />
-        
+
         <div class="text-center">
-          <p class="text-sm text-muted-foreground">
-            Authentication functionality coming soon...
-          </p>
+          <p class="text-sm text-muted-foreground">Authentication functionality coming soon...</p>
         </div>
       </CardContent>
       <CardFooter class="flex flex-col gap-4">
-        <Button class="w-full" disabled>
-          Sign In
-        </Button>
+        <Button class="w-full" disabled> Sign In </Button>
         <div class="text-sm text-center text-muted-foreground">
           Don't have an account?
-          <Button variant="link" class="px-1" disabled>
-            Sign up
-          </Button>
+          <Button variant="link" class="px-1" @click="goToRegister"> Sign up </Button>
         </div>
       </CardFooter>
     </Card>

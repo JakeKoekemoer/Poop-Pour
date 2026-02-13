@@ -23,30 +23,21 @@ public record RegisterUserCommand(
 /// <summary>
 /// Handler for RegisterUserCommand
 /// </summary>
-public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, RegisterResponseDto>
+public class RegisterUserCommandHandler(
+    IUserService userService,
+    IJwtTokenService jwtTokenService) : IRequestHandler<RegisterUserCommand, RegisterResponseDto>
 {
-    private readonly IUserService _userService;
-    private readonly IJwtTokenService _jwtTokenService;
-
-    public RegisterUserCommandHandler(
-        IUserService userService,
-        IJwtTokenService jwtTokenService)
-    {
-        _userService = userService;
-        _jwtTokenService = jwtTokenService;
-    }
-
     public async Task<RegisterResponseDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var existingUserByEmail = await _userService.GetUserByEmailAsync(request.Email, cancellationToken);
-        var existingUserByUserName = await _userService.GetUserByUserNameAsync(request.UserName, cancellationToken);
+        var existingUserByEmail = await userService.GetUserByEmailAsync(request.Email, cancellationToken);
+        var existingUserByUserName = await userService.GetUserByUserNameAsync(request.UserName, cancellationToken);
 
         if (existingUserByEmail != null || existingUserByUserName != null)
         {
             throw new UserAlreadyExistsException(request.Email);
         }
 
-        var user = await _userService.CreateUserAsync(
+        var user = await userService.CreateUserAsync(
             request.UserName,
             request.Email,
             request.Password,
@@ -54,7 +45,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
             request.LastName,
             cancellationToken);
 
-        (string token, DateTime expiresAt) = await _jwtTokenService.GenerateTokenAsync(
+        (string token, DateTime expiresAt) = await jwtTokenService.GenerateTokenAsync(
             user.Id,
             user.Email,
             user.UserName,

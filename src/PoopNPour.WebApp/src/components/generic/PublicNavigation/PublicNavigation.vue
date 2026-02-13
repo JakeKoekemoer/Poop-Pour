@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Menu, X } from 'lucide-vue-next'
+import { Menu } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { RouteHelper } from '@/routes/helpers/RouteHelper'
@@ -10,14 +10,13 @@ const isOpen = ref(false)
 
 const navigationLinks = [
   { name: 'Home', route: RouteHelper.GetPublicRouteName(PUBLIC_ROUTES.HOME) },
-  { name: 'About', route: RouteHelper.GetPublicRouteName(PUBLIC_ROUTES.HOME) }, // TODO: Update when About page exists
+  { name: 'About', route: RouteHelper.GetPublicRouteName(PUBLIC_ROUTES.HOME) },
 ]
 </script>
 
 <template>
   <nav class="fixed top-0 left-0 right-0 z-50 bg-card shadow-md transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-      <!-- Logo -->
       <RouterLink 
         :to="{ name: RouteHelper.GetPublicRouteName(PUBLIC_ROUTES.HOME) }" 
         class="flex items-center gap-2 hover:opacity-80 transition-opacity"
@@ -27,7 +26,6 @@ const navigationLinks = [
         <span class="text-xl sm:text-2xl font-bold text-foreground">Poop & Pour</span>
       </RouterLink>
 
-      <!-- Desktop Navigation -->
       <div class="hidden md:flex items-center gap-8">
         <RouterLink
           v-for="link in navigationLinks"
@@ -45,7 +43,6 @@ const navigationLinks = [
         </Button>
       </div>
 
-      <!-- Mobile Menu -->
       <Sheet v-model:open="isOpen">
         <SheetTrigger as-child>
           <Button variant="outline" size="icon" class="md:hidden">

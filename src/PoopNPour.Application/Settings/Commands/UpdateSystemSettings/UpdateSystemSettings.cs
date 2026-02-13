@@ -1,7 +1,6 @@
 using MediatR;
 using PoopNPour.Abstractions.Settings;
 using PoopNPour.Application.Authorization;
-using PoopNPour.Application.Common.Exceptions;
 using PoopNPour.Domain.Common.Auth;
 using PoopNPour.Domain.Models.Settings;
 
@@ -17,11 +16,6 @@ public class UpdateSystemSettingsCommandHandler(
 {
     public async Task Handle(UpdateSystemSettingsCommand request, CancellationToken cancellationToken)
     {
-        if (!request.SetupCompleted.HasValue)
-        {
-            throw new ValidationException("SetupCompleted", "SetupCompleted is required.");
-        }
-
         var systemSettings = settingsRepository.LoadSetting<SystemSettings>();
 
         settingsRepository.UpdateBooleanSetting(

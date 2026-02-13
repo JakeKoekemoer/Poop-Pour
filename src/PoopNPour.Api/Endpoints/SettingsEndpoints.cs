@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PoopNPour.Api.Common;
 using PoopNPour.Application.Settings.Commands.UpdateSystemSettings;
+using PoopNPour.Application.Settings.Models;
 using PoopNPour.Application.Settings.Queries.GetSystemSettings;
 
 namespace PoopNPour.Api.Endpoints;
@@ -17,10 +18,11 @@ public class SettingsEndpoints : EndpointGroupBase
         app.MapGroup(this)
             .RequireAuthorization()
             .MapGet(GetSystemSettings, "system", route => route
-                .WithDocumentation("Get system settings", "Retrieve current system settings"))
+                .WithDocumentation("Get system settings", "Retrieve current system settings")
+                .WithResponse<SystemSettingsDto>())
             .MapPost(UpdateSystemSettings, "system", route => route
                 .WithDocumentation("Update system settings", "Update system settings")
-                .Accepts<UpdateSystemSettingsCommand>("application/json"));
+                .WithRequest<UpdateSystemSettingsCommand>());
     }
 
     public async Task<IResult> GetSystemSettings(

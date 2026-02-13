@@ -14,21 +14,17 @@ const scrollToSection = () => {
 
 <template>
   <section class="relative min-h-screen flex items-center overflow-hidden">
-    <!-- Gradient Background -->
     <div class="absolute inset-0 bg-gradient-to-br from-background via-card to-background/50"></div>
     <div class="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-transparent"></div>
     
-    <!-- Decorative Elements -->
     <div class="absolute top-20 right-20 w-32 h-32 bg-primary/20 rounded-full blur-3xl"></div>
     <div class="absolute bottom-40 left-20 w-40 h-40 bg-secondary/20 rounded-full blur-3xl"></div>
     <div class="absolute top-1/3 right-1/4 w-3 h-3 bg-primary rounded-full"></div>
     <div class="absolute top-1/2 right-1/3 w-2 h-2 bg-accent rounded-full"></div>
     <div class="absolute bottom-1/3 left-1/4 w-2 h-2 bg-secondary rounded-full"></div>
 
-    <!-- Content -->
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 lg:py-32 w-full">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-        <!-- Left Column - Text Content -->
         <div class="space-y-6 lg:space-y-8">
           <Badge variant="secondary" class="inline-block px-4 py-2">
             <span class="text-sm font-medium">✨ Trusted by 10,000+ parents</span>
@@ -61,10 +57,8 @@ const scrollToSection = () => {
           </div>
         </div>
 
-        <!-- Right Column - Hero Image/Mockup -->
         <div class="relative lg:order-last">
           <div class="relative aspect-[3/4] max-w-md mx-auto">
-            <!-- Placeholder for phone mockup - gradient background -->
             <div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl shadow-2xl flex items-center justify-center">
               <div class="text-center space-y-4 p-8">
                 <span class="text-6xl">📱</span>
@@ -72,7 +66,6 @@ const scrollToSection = () => {
               </div>
             </div>
             
-            <!-- Decorative Elements around mockup -->
             <div class="absolute -top-8 -left-8 w-16 h-16 bg-card rounded-2xl shadow-lg flex items-center justify-center text-3xl">
               🍼
             </div>
