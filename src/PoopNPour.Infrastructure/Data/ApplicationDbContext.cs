@@ -12,7 +12,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
     }
 
-    public DbSet<Setting> Settings { get; set; }
+    public DbSet<Setting> Settings { get; set; } = null!;
+    public DbSet<Family> Families { get; set; } = null!;
+    public DbSet<FamilyUser> FamilyUsers { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

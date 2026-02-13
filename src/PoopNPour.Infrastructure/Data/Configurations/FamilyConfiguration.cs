@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PoopNPour.Domain.Entities;
 
@@ -25,5 +25,8 @@ public class FamilyConfiguration : IEntityTypeConfiguration<Family>
         builder.Property(f => f.FamilyLastName)
             .IsRequired()
             .HasMaxLength(100);
+
+        // Note: Navigation property 'Users' is configured via FamilyUserConfiguration
+        // This creates a many-to-many relationship through the FamilyUser junction table
     }
 }
