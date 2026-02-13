@@ -1,6 +1,6 @@
 import { BaseService } from '../BaseService';
 import type { ApiResponse } from '../types';
-import type { PoopNPourApi } from '@/api/api-client';
+import type { UpdateProfileRequestDto } from '@/api/api-client';
 import { useUserStore, type UserProfile } from '@/stores';
 import { toUserProfile } from '@/stores/user/types';
 
@@ -44,7 +44,7 @@ class UserService extends BaseService {
     lastName?: string,
     email?: string
   ): Promise<ApiResponse<UserProfile>> {
-    const dto: PoopNPourApi.UpdateProfileRequestDto = {
+    const dto: UpdateProfileRequestDto = {
       firstName,
       lastName,
       email,

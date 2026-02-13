@@ -12,7 +12,7 @@ export default defineConfig({
         },
     },
     server: {
-        port: process.env.PORT ? parseInt(process.env.PORT) : 51500,
+        port: process.env['PORT'] ? parseInt(process.env['PORT']) : 51500,
         strictPort: false,
         host: true,
     }

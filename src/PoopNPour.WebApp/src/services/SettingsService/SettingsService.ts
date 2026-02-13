@@ -1,6 +1,6 @@
 import { BaseService } from '../BaseService';
 import type { ApiResponse } from '../types';
-import type { PoopNPourApi } from '@/api/api-client';
+import type { UpdateSystemSettingsCommand } from '@/api/api-client';
 
 /**
  * Settings service for system settings management
@@ -36,7 +36,7 @@ class SettingsService extends BaseService {
   async updateSystemSettings(
     setupCompleted: boolean
   ): Promise<ApiResponse<void>> {
-    const dto: PoopNPourApi.UpdateSystemSettingsCommand = {
+    const dto: UpdateSystemSettingsCommand = {
       setupCompleted,
     };
 

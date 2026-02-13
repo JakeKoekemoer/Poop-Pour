@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { Users, Search, UserPlus, MoreHorizontal } from 'lucide-vue-next'
+import { Users, Search, UserPlus } from 'lucide-vue-next'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'

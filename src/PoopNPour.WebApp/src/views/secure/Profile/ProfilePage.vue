@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { User, Mail, Phone, Calendar } from 'lucide-vue-next'
+import { User, Mail, Phone } from 'lucide-vue-next'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'

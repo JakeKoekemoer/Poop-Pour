@@ -1,6 +1,6 @@
 import { BaseService } from '../BaseService';
 import type { ApiResponse } from '../types';
-import type { PoopNPourApi } from '@/api/api-client';
+import type { LoginRequestDto, RegisterRequestDto } from '@/api/api-client';
 import { useUserStore, type UserProfile } from '@/stores';
 import { toUserProfile } from '@/stores/user/types';
 import router from '@/routes';
@@ -20,7 +20,7 @@ class AuthService extends BaseService {
     username: string,
     password: string
   ): Promise<ApiResponse<{ token: string; expiresAt: Date; user: UserProfile }>> {
-    const dto: PoopNPourApi.LoginRequestDto = {
+    const dto: LoginRequestDto = {
       username,
       password,
     };
@@ -68,7 +68,7 @@ class AuthService extends BaseService {
     firstName?: string,
     lastName?: string
   ): Promise<ApiResponse<{ token: string; expiresAt: Date; user: UserProfile }>> {
-    const dto: PoopNPourApi.RegisterRequestDto = {
+    const dto: RegisterRequestDto = {
       email,
       userName,
       password,

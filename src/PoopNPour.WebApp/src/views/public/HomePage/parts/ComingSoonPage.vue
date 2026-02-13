@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Sparkles } from 'lucide-vue-next'
-import { useTheme } from '@/composables/useTheme'
 import { CountdownTimer } from '@/components/generic/CountdownTimer'
 import { EnvConfig } from '@/lib/env'
-
-const { currentThemeConfig } = useTheme()
 
 const launchDate = EnvConfig.launchDate
 

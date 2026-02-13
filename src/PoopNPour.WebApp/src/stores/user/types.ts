@@ -1,4 +1,4 @@
-import type { PoopNPourApi } from '@/api/api-client';
+import type { UserDto } from '@/api/api-client';
 
 /**
  * User authentication state
@@ -29,15 +29,15 @@ export interface UserProfile {
 /**
  * Converts API UserDto to UserProfile
  */
-export function toUserProfile(dto: PoopNPourApi.UserDto): UserProfile {
+export function toUserProfile(dto: UserDto): UserProfile {
   return {
     id: dto.id || '',
     email: dto.email || '',
     userName: dto.userName || '',
-    firstName: dto.firstName,
-    lastName: dto.lastName,
+    firstName: dto.firstName ?? undefined,
+    lastName: dto.lastName ?? undefined,
     roles: dto.roles || [],
     createdAt: dto.createdAt || new Date(),
-    updatedAt: dto.updatedAt,
+    updatedAt: dto.updatedAt ?? undefined,
   };
 }

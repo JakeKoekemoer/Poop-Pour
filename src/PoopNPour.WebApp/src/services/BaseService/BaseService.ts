@@ -1,36 +1,36 @@
 import { getApiClient } from '../api';
 import type { ApiResponse, ApiError } from '../types';
-import { PoopNPourApi } from '@/api/api-client';
+import { Client, SwaggerResponse, ApiException } from '@/api/api-client';
 
 export abstract class BaseService {
-  protected get client(): PoopNPourApi.Client {
+  protected get client(): Client {
     return getApiClient();
   }
 
   protected async execute<T>(
-    apiCall: () => Promise<PoopNPourApi.SwaggerResponse<T>>
+    apiCall: () => Promise<SwaggerResponse<T>>
   ): Promise<ApiResponse<T>> {
     try {
       const response = await apiCall();
       return { success: true, data: response.result };
-    } catch (error) {
+    } catch (error: unknown) {
       return { success: false, error: this.handleError(error) };
     }
   }
 
   protected async executeVoid(
-    apiCall: () => Promise<PoopNPourApi.SwaggerResponse<void>>
+    apiCall: () => Promise<SwaggerResponse<void>>
   ): Promise<ApiResponse<void>> {
     try {
       await apiCall();
       return { success: true, data: undefined };
-    } catch (error) {
+    } catch (error: unknown) {
       return { success: false, error: this.handleError(error) };
     }
   }
 
   private handleError(error: unknown): ApiError {
-    if (error instanceof PoopNPourApi.ApiException) {
+    if (error instanceof ApiException) {
       return {
         message: this.getErrorMessage(error),
         statusCode: error.status,
@@ -66,7 +66,7 @@ export abstract class BaseService {
     };
   }
 
-  private getErrorMessage(exception: PoopNPourApi.ApiException): string {
+  private getErrorMessage(exception: ApiException): string {
     try {
       const parsed = JSON.parse(exception.response);
       

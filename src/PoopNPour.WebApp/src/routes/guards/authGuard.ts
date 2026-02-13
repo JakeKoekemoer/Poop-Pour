@@ -5,7 +5,7 @@ import { useUserStore } from '@/stores'
 
 export const authGuard = (
   to: RouteLocationNormalized,
-  from: RouteLocationNormalized,
+  _from: RouteLocationNormalized,
   next: NavigationGuardNext
 ) => {
   const routeName = to.name as string

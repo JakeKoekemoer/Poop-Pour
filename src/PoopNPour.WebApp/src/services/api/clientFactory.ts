@@ -1,11 +1,12 @@
-import { PoopNPourApi } from '@/api/api-client';
+import { Client } from '@/api/api-client';
 import router from '@/routes';
+import { EnvConfig } from '@/lib/env';
 
 /**
  * Singleton instance of the API client.
  * Initialized once with base URL and configured with onTokenExpired callback.
  */
-let clientInstance: PoopNPourApi.Client | null = null;
+let clientInstance: Client | null = null;
 
 /**
  * Gets or creates the singleton API client instance.
@@ -13,13 +14,13 @@ let clientInstance: PoopNPourApi.Client | null = null;
  * 
  * @returns The singleton API client instance
  */
-export function getApiClient(): PoopNPourApi.Client {
+export function getApiClient(): Client {
   if (!clientInstance) {
     // Get base URL from environment or use default
-    const baseUrl = import.meta.env.VITE_API_URL || '';
+    const baseUrl = EnvConfig.apiUrl;
     
     // Create the client instance
-    clientInstance = new PoopNPourApi.Client(baseUrl);
+    clientInstance = new Client(baseUrl);
     
     // Configure single point for token expiration handling
     clientInstance.setOnTokenExpired(() => {
