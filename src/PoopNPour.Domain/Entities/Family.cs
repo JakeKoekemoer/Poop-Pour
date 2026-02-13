@@ -13,4 +13,5 @@ public class Family : BaseAuditableEntity
 
     // Navigation properties
     public ICollection<FamilyUser> Users { get; set; } = [];
+    public ICollection<Dependent> Dependents { get; set; } = [];
 }

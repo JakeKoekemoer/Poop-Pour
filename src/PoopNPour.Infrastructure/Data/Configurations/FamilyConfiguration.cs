@@ -26,6 +26,12 @@ public class FamilyConfiguration : IEntityTypeConfiguration<Family>
             .IsRequired()
             .HasMaxLength(100);
 
+        // Navigation Properties
+        builder.HasMany(f => f.Dependents)
+            .WithOne(d => d.Family)
+            .HasForeignKey(d => d.FamilyId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         // Note: Navigation property 'Users' is configured via FamilyUserConfiguration
         // This creates a many-to-many relationship through the FamilyUser junction table
     }
