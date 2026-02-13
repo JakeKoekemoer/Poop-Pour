@@ -35,7 +35,6 @@ const socialLinks = [
   <footer class="bg-accent text-accent-foreground py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
-        <!-- Brand Column -->
         <div class="sm:col-span-2 lg:col-span-1">
           <div class="flex items-center gap-2 mb-4">
             <span class="text-3xl">🍼</span>
@@ -59,7 +58,6 @@ const socialLinks = [
           </div>
         </div>
 
-        <!-- Product Column -->
         <div>
           <h3 class="font-bold text-lg mb-4">Product</h3>
           <ul class="space-y-3">
@@ -74,7 +72,6 @@ const socialLinks = [
           </ul>
         </div>
 
-        <!-- Company Column -->
         <div>
           <h3 class="font-bold text-lg mb-4">Company</h3>
           <ul class="space-y-3">
@@ -89,7 +86,6 @@ const socialLinks = [
           </ul>
         </div>
 
-        <!-- Legal Column -->
         <div>
           <h3 class="font-bold text-lg mb-4">Legal</h3>
           <ul class="space-y-3">
@@ -105,7 +101,6 @@ const socialLinks = [
         </div>
       </div>
 
-      <!-- Copyright -->
       <div class="pt-8 border-t border-accent-foreground/20 text-center text-accent-foreground/70">
         <p>&copy; {{ currentYear }} Poop & Pour. All rights reserved.</p>
       </div>

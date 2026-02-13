@@ -25,7 +25,6 @@ const smallFeatures = [
   <section class="py-16 md:py-24 bg-gradient-to-b from-card to-background/50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Large Feature Card - Built for 3AM -->
         <Card class="md:row-span-2 bg-gradient-to-br from-accent to-primary relative overflow-hidden">
           <CardContent class="p-8 lg:p-12 text-accent-foreground relative z-10 h-full flex flex-col justify-center">
             <div class="max-w-xl">
@@ -35,14 +34,12 @@ const smallFeatures = [
               </p>
             </div>
             
-            <!-- Decorative phone mockup placeholder -->
             <div class="absolute bottom-0 right-0 w-64 h-64 opacity-20">
               <div class="text-9xl">📱</div>
             </div>
           </CardContent>
         </Card>
 
-        <!-- Small Feature Cards -->
         <Card
           v-for="feature in smallFeatures"
           :key="feature.title"

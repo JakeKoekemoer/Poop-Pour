@@ -26,12 +26,10 @@ const testimonials = [
 <template>
   <section class="py-16 md:py-24 bg-card">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
-      <!-- Section Header -->
       <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-accent mb-12 lg:mb-16">
         Why Parents Love It
       </h2>
 
-      <!-- Testimonials Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
         <TestimonialCard
           v-for="(testimonial, index) in testimonials"
