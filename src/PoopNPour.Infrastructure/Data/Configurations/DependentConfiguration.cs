@@ -39,5 +39,10 @@ public class DependentConfiguration : IEntityTypeConfiguration<Dependent>
             .WithOne(fl => fl.Dependent)
             .HasForeignKey(fl => fl.DependentId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(d => d.DiperLogs)
+            .WithOne(dl => dl.Dependent)
+            .HasForeignKey(dl => dl.DependentId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -1,32 +1,32 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PoopNPour.Domain.Entities;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace PoopNPour.Infrastructure.Data.Configurations;
 
-public class FeedLogConfiguration : IEntityTypeConfiguration<FeedLog>
+public class DiperLogConfiguration : IEntityTypeConfiguration<DiperLog>
 {
-    public void Configure(EntityTypeBuilder<FeedLog> builder)
+    public void Configure(EntityTypeBuilder<DiperLog> builder)
     {
         // Table name
-        builder.ToTable("FeedLogs");
+        builder.ToTable("DiperLogs");
 
         // PK
-        builder.HasKey(fl => fl.FeedLogId);
-        builder.Property(fl => fl.FeedLogId)
+        builder.HasKey(d => d.DiperLogId);
+        builder.Property(d => d.DiperLogId)
             .ValueGeneratedOnAdd();
 
         // Properties
-        builder.Property(fl => fl.DependentId)
+        builder.Property(d => d.DependentId)
             .IsRequired();
-        builder.Property(fl => fl.FeedType)
+        builder.Property(d => d.DiperDate)
             .IsRequired();
-        builder.Property(fl => fl.TimeFed)
+        builder.Property(d => d.FecalDischargeColour)
             .IsRequired();
-        builder.Property(fl => fl.MililitersFed)
-            .HasColumnType("decimal(18,2)");
-        builder.Property(fl => fl.Notes)
+        builder.Property(d => d.UrinaryDischargeColour)
+            .IsRequired();
+        builder.Property(d => d.Notes)
             .HasConversion(
                 v => string.Join("||", v),
                 v => v.Split("||", StringSplitOptions.RemoveEmptyEntries).ToList()
@@ -40,9 +40,9 @@ public class FeedLogConfiguration : IEntityTypeConfiguration<FeedLog>
             );
 
         // Navigation
-        builder.HasOne(fl => fl.Dependent)
-            .WithMany(d => d.FeedLogs)
-            .HasForeignKey(fl => fl.DependentId)
+        builder.HasOne(d => d.Dependent)
+            .WithMany(dep => dep.DiperLogs)
+            .HasForeignKey(d => d.DependentId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -35,4 +35,5 @@ public class Dependent : BaseAuditableEntity
     // Navigation properties
     public Family Family { get; set; } = null!;
     public ICollection<FeedLog> FeedLogs { get; set; } = [];
+    public ICollection<DiperLog> DiperLogs { get; set; } = [];
 }
