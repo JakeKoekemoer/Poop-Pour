@@ -15,7 +15,7 @@ public class DiperLog : BaseAuditableEntity
     public DateTimeOffset DiperDate { get; set; }
     public FecalDischargeColour FecalDischargeColour { get; set; }
     public UrinalDischargeColour UrinaryDischargeColour { get; set; }
-    public ICollection<string> Notes { get; set; } = [];
+    public ICollection<string>? Notes { get; set; } = [];
 
     // Navigation properties
     public Dependent Dependent { get; set; } = null!;

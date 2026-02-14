@@ -15,7 +15,7 @@ public class FeedLog : BaseAuditableEntity
     public FeedLogType FeedType { get; set; }
     public DateTimeOffset TimeFed { get; set; }
     public decimal? MililitersFed { get; set; }
-    public ICollection<string> Notes { get; set; } = [];
+    public ICollection<string>? Notes { get; set; } = [];
 
     // Navigation properties
     public Dependent? Dependent { get; set; }
