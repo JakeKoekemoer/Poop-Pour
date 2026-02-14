@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PoopNPour.Domain.Entities;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using PoopNPour.Infrastructure.Data.Extensions;
 
 namespace PoopNPour.Infrastructure.Data.Configurations;
 
@@ -27,17 +28,7 @@ public class DiperLogConfiguration : IEntityTypeConfiguration<DiperLog>
         builder.Property(d => d.UrinaryDischargeColour)
             .IsRequired();
         builder.Property(d => d.Notes)
-            .HasConversion(
-                v => string.Join("||", v),
-                v => v.Split("||", StringSplitOptions.RemoveEmptyEntries).ToList()
-            )
-            .Metadata.SetValueComparer(
-                new ValueComparer<ICollection<string>>(
-                    (c1, c2) => c1!.SequenceEqual(c2!),
-                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-                    c => c.ToList()
-                )
-            );
+            .HasStringCollectionConversion();
 
         // Navigation
         builder.HasOne(d => d.Dependent)
