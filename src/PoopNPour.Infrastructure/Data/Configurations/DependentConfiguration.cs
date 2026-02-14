@@ -28,5 +28,16 @@ public class DependentConfiguration : IEntityTypeConfiguration<Dependent>
 
         // Ignore Age as it's calculated
         builder.Ignore(d => d.Age);
+
+        // Navigation properties
+        builder.HasOne(d => d.Family)
+            .WithMany(f => f.Dependents)
+            .HasForeignKey(d => d.FamilyId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(d => d.FeedLogs)
+            .WithOne(fl => fl.Dependent)
+            .HasForeignKey(fl => fl.DependentId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
