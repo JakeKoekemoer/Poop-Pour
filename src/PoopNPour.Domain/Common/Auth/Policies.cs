@@ -27,4 +27,25 @@ public static class Policies
     public const string CanManageSystemSettings = nameof(CanManageSystemSettings);
 
     #endregion Settings Policies
+
+    #region Family Policies
+
+    public const string CanManageFamilies = nameof(CanManageFamilies);
+    public const string CanViewFamilies = nameof(CanViewFamilies);
+
+    #endregion Family Policies
+
+    #region Dependent Policies
+
+    public const string CanManageDependents = nameof(CanManageDependents);
+    public const string CanViewDependents = nameof(CanViewDependents);
+
+    #endregion Dependent Policies
+
+    #region Log Policies
+
+    public const string CanManageLogs = nameof(CanManageLogs);
+    public const string CanViewLogs = nameof(CanViewLogs);
+
+    #endregion Log Policies
 }
