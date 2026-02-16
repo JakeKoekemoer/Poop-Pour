@@ -20,7 +20,6 @@ public class MedicineLogService(ApplicationDbContext context) : IMedicineLogServ
     {
         var medicineLog = new Domain.Entities.MedicineLog
         {
-            MedicineLogId = Guid.NewGuid(),
             DependentId = dependentId,
             MedicineName = medicineName,
             Dosage = dosage,

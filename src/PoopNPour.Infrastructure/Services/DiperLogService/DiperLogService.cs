@@ -21,7 +21,6 @@ public class DiperLogService(ApplicationDbContext context) : IDiperLogService
     {
         var diperLog = new Domain.Entities.DiperLog
         {
-            DiperLogId = Guid.NewGuid(),
             DependentId = dependentId,
             DiperDate = diperDate,
             FecalDischargeColour = fecalDischargeColour,

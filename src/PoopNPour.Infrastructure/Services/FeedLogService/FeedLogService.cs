@@ -21,7 +21,6 @@ public class FeedLogService(ApplicationDbContext context) : IFeedLogService
     {
         var feedLog = new Domain.Entities.FeedLog
         {
-            FeedLogId = Guid.NewGuid(),
             DependentId = dependentId,
             FeedType = feedType,
             TimeFed = timeFed,

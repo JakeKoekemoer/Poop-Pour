@@ -19,7 +19,6 @@ public class DependentService(ApplicationDbContext context) : IDependentService
     {
         var dependent = new Domain.Entities.Dependent
         {
-            DependentId = Guid.NewGuid(),
             FamilyId = familyId,
             DependentName = dependentName,
             DependentSurname = dependentSurname,

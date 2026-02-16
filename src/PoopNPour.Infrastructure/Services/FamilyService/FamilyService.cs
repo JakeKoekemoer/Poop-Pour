@@ -16,7 +16,6 @@ public class FamilyService(ApplicationDbContext context) : IFamilyService
     {
         var family = new Domain.Entities.Family
         {
-            FamilyId = Guid.NewGuid(),
             FamilyName = familyName,
             FamilyLastName = familyLastName
         };
