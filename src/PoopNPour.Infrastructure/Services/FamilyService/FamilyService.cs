@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using PoopNPour.Abstractions.Family;
-using PoopNPour.Application.Families.Models;
 using PoopNPour.Infrastructure.Data;
 
 namespace PoopNPour.Infrastructure.Services.FamilyService;
@@ -82,15 +81,14 @@ public class FamilyService(ApplicationDbContext context) : IFamilyService
 
         var totalCount = await query.CountAsync(cancellationToken);
 
-        var families = await query
+        var entities = await query
             .OrderBy(f => f.FamilyLastName)
             .ThenBy(f => f.FamilyName)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .Select(f => MapToDto(f))
             .ToListAsync(cancellationToken);
 
-        return (families, totalCount);
+        return (entities.Select(MapToDto), totalCount);
     }
 
     private static FamilyDto MapToDto(Domain.Entities.Family family)

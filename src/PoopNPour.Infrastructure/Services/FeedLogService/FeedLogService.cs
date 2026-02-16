@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using PoopNPour.Abstractions.FeedLog;
-using PoopNPour.Application.FeedLogs.Models;
 using PoopNPour.Domain.Enums.FeedLog;
 using PoopNPour.Infrastructure.Data;
 
@@ -108,14 +107,13 @@ public class FeedLogService(ApplicationDbContext context) : IFeedLogService
 
         var totalCount = await query.CountAsync(cancellationToken);
 
-        var feedLogs = await query
+        var entities = await query
             .OrderByDescending(f => f.TimeFed)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .Select(f => MapToDto(f))
             .ToListAsync(cancellationToken);
 
-        return (feedLogs, totalCount);
+        return (entities.Select(MapToDto), totalCount);
     }
 
     private static FeedLogDto MapToDto(Domain.Entities.FeedLog feedLog)

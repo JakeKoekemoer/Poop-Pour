@@ -2,7 +2,6 @@ using MediatR;
 using PoopNPour.Abstractions.Dependent;
 using PoopNPour.Application.Authorization;
 using PoopNPour.Application.Dependents.Exceptions;
-using PoopNPour.Application.Dependents.Models;
 using PoopNPour.Domain.Common.Auth;
 
 namespace PoopNPour.Application.Dependents.Queries.GetDependentById;

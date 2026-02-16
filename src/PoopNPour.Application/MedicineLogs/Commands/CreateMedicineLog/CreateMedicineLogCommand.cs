@@ -2,7 +2,6 @@ using FluentValidation;
 using MediatR;
 using PoopNPour.Abstractions.MedicineLog;
 using PoopNPour.Application.Authorization;
-using PoopNPour.Application.MedicineLogs.Models;
 using PoopNPour.Domain.Common.Auth;
 
 namespace PoopNPour.Application.MedicineLogs.Commands.CreateMedicineLog;

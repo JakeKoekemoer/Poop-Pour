@@ -1,4 +1,3 @@
-using PoopNPour.Application.DiperLogs.Models;
 using PoopNPour.Domain.Enums.DiperLog;
 
 namespace PoopNPour.Abstractions.DiperLog;

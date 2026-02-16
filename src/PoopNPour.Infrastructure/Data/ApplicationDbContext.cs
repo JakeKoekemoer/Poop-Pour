@@ -15,6 +15,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Setting> Settings { get; set; } = null!;
     public DbSet<Family> Families { get; set; } = null!;
     public DbSet<FamilyUser> FamilyUsers { get; set; } = null!;
+    public DbSet<Dependent> Dependents { get; set; } = null!;
+    public DbSet<FeedLog> FeedLogs { get; set; } = null!;
+    public DbSet<DiperLog> DiperLogs { get; set; } = null!;
+    public DbSet<MedicineLog> MedicineLogs { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

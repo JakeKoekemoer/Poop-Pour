@@ -2,7 +2,6 @@ using MediatR;
 using PoopNPour.Abstractions.Family;
 using PoopNPour.Application.Authorization;
 using PoopNPour.Application.Common.Models;
-using PoopNPour.Application.Families.Models;
 using PoopNPour.Domain.Common.Auth;
 
 namespace PoopNPour.Application.Families.Queries.GetFamilyList;

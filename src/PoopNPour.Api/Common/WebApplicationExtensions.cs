@@ -71,7 +71,7 @@ public static class WebApplicationExtensions
 
     /// <summary>
     /// Converts a class name to a display-friendly tag name for Swagger.
-    /// Examples: "AuthenticationEndpoints" -> "Authentication", "UsersEndpoints" -> "Users"
+    /// Examples: "AuthenticationEndpoints" -> "Authentication", "UsersEndpoints" -> "Users", "FeedLogsEndpoints" -> "Feed Logs"
     /// </summary>
     private static string ToDisplayName(string className)
     {
@@ -79,7 +79,10 @@ public static class WebApplicationExtensions
         {
             className = className.Substring(0, className.Length - "Endpoints".Length);
         }
-        return char.ToUpperInvariant(className[0]) + className[1..].ToLowerInvariant();
+        
+        // Insert spaces before capital letters (PascalCase to Title Case)
+        var result = System.Text.RegularExpressions.Regex.Replace(className, "([A-Z])", " $1").Trim();
+        return result;
     }
 
     /// <summary>

@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using PoopNPour.Abstractions.DiperLog;
-using PoopNPour.Application.DiperLogs.Models;
 using PoopNPour.Domain.Enums.DiperLog;
 using PoopNPour.Infrastructure.Data;
 
@@ -108,14 +107,13 @@ public class DiperLogService(ApplicationDbContext context) : IDiperLogService
 
         var totalCount = await query.CountAsync(cancellationToken);
 
-        var diperLogs = await query
+        var entities = await query
             .OrderByDescending(d => d.DiperDate)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .Select(d => MapToDto(d))
             .ToListAsync(cancellationToken);
 
-        return (diperLogs, totalCount);
+        return (entities.Select(MapToDto), totalCount);
     }
 
     private static DiperLogDto MapToDto(Domain.Entities.DiperLog diperLog)

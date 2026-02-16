@@ -1,6 +1,6 @@
 using PoopNPour.Domain.Enums.DiperLog;
 
-namespace PoopNPour.Application.DiperLogs.Models;
+namespace PoopNPour.Abstractions.DiperLog;
 
 /// <summary>
 /// Data transfer object for DiperLog

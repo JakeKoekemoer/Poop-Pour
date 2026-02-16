@@ -1,4 +1,4 @@
-namespace PoopNPour.Application.Families.Models;
+namespace PoopNPour.Abstractions.Family;
 
 /// <summary>
 /// Data transfer object for Family

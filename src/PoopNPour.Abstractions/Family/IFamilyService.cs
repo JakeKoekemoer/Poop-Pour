@@ -1,5 +1,3 @@
-using PoopNPour.Application.Families.Models;
-
 namespace PoopNPour.Abstractions.Family;
 
 /// <summary>

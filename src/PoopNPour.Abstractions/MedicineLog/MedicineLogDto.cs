@@ -1,4 +1,4 @@
-namespace PoopNPour.Application.MedicineLogs.Models;
+namespace PoopNPour.Abstractions.MedicineLog;
 
 /// <summary>
 /// Data transfer object for MedicineLog

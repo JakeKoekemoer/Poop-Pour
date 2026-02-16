@@ -1,4 +1,3 @@
-using PoopNPour.Application.FeedLogs.Models;
 using PoopNPour.Domain.Enums.FeedLog;
 
 namespace PoopNPour.Abstractions.FeedLog;

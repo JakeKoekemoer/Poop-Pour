@@ -1,7 +1,7 @@
 using MediatR;
 using PoopNPour.Abstractions.User;
 using PoopNPour.Application.Authorization;
-using PoopNPour.Application.Users.Models;
+using PoopNPour.Application.Common.Models;
 using PoopNPour.Domain.Common.Auth;
 
 namespace PoopNPour.Application.Users.Queries;

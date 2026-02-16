@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using PoopNPour.Abstractions.Dependent;
-using PoopNPour.Application.Dependents.Models;
 using PoopNPour.Infrastructure.Data;
 
 namespace PoopNPour.Infrastructure.Services.DependentService;
@@ -97,15 +96,14 @@ public class DependentService(ApplicationDbContext context) : IDependentService
 
         var totalCount = await query.CountAsync(cancellationToken);
 
-        var dependents = await query
+        var entities = await query
             .OrderBy(d => d.DependentSurname)
             .ThenBy(d => d.DependentName)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .Select(d => MapToDto(d))
             .ToListAsync(cancellationToken);
 
-        return (dependents, totalCount);
+        return (entities.Select(MapToDto), totalCount);
     }
 
     private static DependentDto MapToDto(Domain.Entities.Dependent dependent)

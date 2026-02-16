@@ -2,7 +2,6 @@ using FluentValidation;
 using MediatR;
 using PoopNPour.Abstractions.FeedLog;
 using PoopNPour.Application.Authorization;
-using PoopNPour.Application.FeedLogs.Models;
 using PoopNPour.Domain.Common.Auth;
 using PoopNPour.Domain.Enums.FeedLog;
 

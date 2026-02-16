@@ -1,5 +1,3 @@
-using PoopNPour.Application.Dependents.Models;
-
 namespace PoopNPour.Abstractions.Dependent;
 
 /// <summary>

@@ -1,4 +1,4 @@
-namespace PoopNPour.Application.FamilyUsers.Models;
+namespace PoopNPour.Abstractions.FamilyUser;
 
 /// <summary>
 /// Data transfer object for FamilyUser

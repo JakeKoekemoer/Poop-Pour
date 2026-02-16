@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PoopNPour.Abstractions.FamilyUser;
 using PoopNPour.Application.FamilyUsers.Exceptions;
-using PoopNPour.Application.FamilyUsers.Models;
 using PoopNPour.Infrastructure.Data;
 
 namespace PoopNPour.Infrastructure.Services.FamilyUserService;
@@ -90,15 +89,14 @@ public class FamilyUserService(ApplicationDbContext context) : IFamilyUserServic
 
         var totalCount = await query.CountAsync(cancellationToken);
 
-        var familyUsers = await query
+        var entities = await query
             .OrderBy(fu => fu.FamilyId)
             .ThenBy(fu => fu.UserId)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .Select(fu => MapToDto(fu))
             .ToListAsync(cancellationToken);
 
-        return (familyUsers, totalCount);
+        return (entities.Select(MapToDto), totalCount);
     }
 
     private static FamilyUserDto MapToDto(Domain.Entities.FamilyUser familyUser)

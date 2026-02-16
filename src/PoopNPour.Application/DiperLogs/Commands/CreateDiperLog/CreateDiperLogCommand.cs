@@ -2,7 +2,6 @@ using FluentValidation;
 using MediatR;
 using PoopNPour.Abstractions.DiperLog;
 using PoopNPour.Application.Authorization;
-using PoopNPour.Application.DiperLogs.Models;
 using PoopNPour.Domain.Common.Auth;
 using PoopNPour.Domain.Enums.DiperLog;
 

@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using PoopNPour.Abstractions.MedicineLog;
-using PoopNPour.Application.MedicineLogs.Models;
 using PoopNPour.Infrastructure.Data;
 
 namespace PoopNPour.Infrastructure.Services.MedicineLogService;
@@ -113,14 +112,13 @@ public class MedicineLogService(ApplicationDbContext context) : IMedicineLogServ
 
         var totalCount = await query.CountAsync(cancellationToken);
 
-        var medicineLogs = await query
+        var entities = await query
             .OrderByDescending(m => m.TimeAdministered)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .Select(m => MapToDto(m))
             .ToListAsync(cancellationToken);
 
-        return (medicineLogs, totalCount);
+        return (entities.Select(MapToDto), totalCount);
     }
 
     private static MedicineLogDto MapToDto(Domain.Entities.MedicineLog medicineLog)

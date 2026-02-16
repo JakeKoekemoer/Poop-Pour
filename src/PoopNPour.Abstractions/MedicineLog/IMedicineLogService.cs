@@ -1,5 +1,3 @@
-using PoopNPour.Application.MedicineLogs.Models;
-
 namespace PoopNPour.Abstractions.MedicineLog;
 
 /// <summary>

@@ -1,6 +1,6 @@
 using PoopNPour.Domain.Enums.FeedLog;
 
-namespace PoopNPour.Application.FeedLogs.Models;
+namespace PoopNPour.Abstractions.FeedLog;
 
 /// <summary>
 /// Data transfer object for FeedLog

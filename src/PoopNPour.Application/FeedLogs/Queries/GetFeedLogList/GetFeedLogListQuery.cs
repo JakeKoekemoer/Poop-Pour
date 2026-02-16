@@ -2,7 +2,6 @@ using MediatR;
 using PoopNPour.Abstractions.FeedLog;
 using PoopNPour.Application.Authorization;
 using PoopNPour.Application.Common.Models;
-using PoopNPour.Application.FeedLogs.Models;
 using PoopNPour.Domain.Common.Auth;
 
 namespace PoopNPour.Application.FeedLogs.Queries.GetFeedLogList;
