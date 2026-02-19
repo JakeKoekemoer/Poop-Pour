@@ -1,4 +1,4 @@
-namespace PoopNPour.Application.Users.Models;
+namespace PoopNPour.Application.Common.Models;
 
 /// <summary>
 /// Generic paginated response data transfer object

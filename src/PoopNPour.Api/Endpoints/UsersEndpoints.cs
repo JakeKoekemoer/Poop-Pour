@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PoopNPour.Abstractions.User;
 using PoopNPour.Api.Common;
+using PoopNPour.Application.Common.Models;
 using PoopNPour.Application.Users.Commands;
 using PoopNPour.Application.Users.Models;
 using PoopNPour.Application.Users.Queries;

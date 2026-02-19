@@ -1,6 +1,12 @@
 using PoopNPour.Application.Common.Exceptions;
 using PoopNPour.Application.Users.Exceptions;
 using PoopNPour.Application.Authentication.Exceptions;
+using PoopNPour.Application.Families.Exceptions;
+using PoopNPour.Application.FamilyUsers.Exceptions;
+using PoopNPour.Application.Dependents.Exceptions;
+using PoopNPour.Application.DiperLogs.Exceptions;
+using PoopNPour.Application.FeedLogs.Exceptions;
+using PoopNPour.Application.MedicineLogs.Exceptions;
 using System.Net;
 using System.Text.Json;
 
@@ -55,15 +61,16 @@ public class ExceptionHandlingMiddleware
                 Detail = exception.Message
             },
 
-            // User exceptions (from Application layer)
-            UserNotFoundException => new ErrorResponse
+            // All NotFoundException derived exceptions (base catch-all)
+            NotFoundException => new ErrorResponse
             {
                 StatusCode = (int)HttpStatusCode.NotFound,
                 Message = "Not Found",
                 Detail = exception.Message
             },
 
-            EmailAlreadyInUseException => new ErrorResponse
+            // All DuplicateException derived exceptions (base catch-all for conflicts/duplicates)
+            DuplicateException => new ErrorResponse
             {
                 StatusCode = (int)HttpStatusCode.BadRequest,
                 Message = "Bad Request",
@@ -75,13 +82,6 @@ public class ExceptionHandlingMiddleware
             {
                 StatusCode = (int)HttpStatusCode.Unauthorized,
                 Message = "Unauthorized",
-                Detail = exception.Message
-            },
-
-            UserAlreadyExistsException => new ErrorResponse
-            {
-                StatusCode = (int)HttpStatusCode.BadRequest,
-                Message = "Bad Request",
                 Detail = exception.Message
             },
 

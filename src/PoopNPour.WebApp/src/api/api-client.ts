@@ -192,6 +192,177 @@ export interface IClient {
     register(body: RegisterRequestDto, signal?: AbortSignal): Promise<SwaggerResponse<RegisterResponseDto>>;
 
     /**
+     * Create dependent
+     * @return OK
+     */
+    createDependent(body: CreateDependentCommand, signal?: AbortSignal): Promise<SwaggerResponse<DependentDto>>;
+
+    /**
+     * List dependents
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param familyId (optional) 
+     * @param searchTerm (optional) 
+     * @return OK
+     */
+    getDependents(page?: number | undefined, pageSize?: number | undefined, familyId?: string | undefined, searchTerm?: string | undefined, signal?: AbortSignal): Promise<SwaggerResponse<DependentDtoPaginatedResponseDto>>;
+
+    /**
+     * Update dependent
+     * @return OK
+     */
+    updateDependent(id: string, body: UpdateDependentCommand, signal?: AbortSignal): Promise<SwaggerResponse<DependentDto>>;
+
+    /**
+     * Get dependent
+     * @return OK
+     */
+    getDependentById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<DependentDto>>;
+
+    /**
+     * Create diaper log
+     * @return OK
+     */
+    createDiperLog(body: CreateDiperLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<DiperLogDto>>;
+
+    /**
+     * List diaper logs
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param dependentId (optional) 
+     * @param startDate (optional) 
+     * @param endDate (optional) 
+     * @return OK
+     */
+    getDiperLogs(page?: number | undefined, pageSize?: number | undefined, dependentId?: string | undefined, startDate?: Date | undefined, endDate?: Date | undefined, signal?: AbortSignal): Promise<SwaggerResponse<DiperLogDtoPaginatedResponseDto>>;
+
+    /**
+     * Update diaper log
+     * @return OK
+     */
+    updateDiperLog(id: string, body: UpdateDiperLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<DiperLogDto>>;
+
+    /**
+     * Get diaper log
+     * @return OK
+     */
+    getDiperLogById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<DiperLogDto>>;
+
+    /**
+     * Create family
+     * @return OK
+     */
+    createFamily(body: CreateFamilyCommand, signal?: AbortSignal): Promise<SwaggerResponse<FamilyDto>>;
+
+    /**
+     * List families
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param searchTerm (optional) 
+     * @return OK
+     */
+    getFamilies(page?: number | undefined, pageSize?: number | undefined, searchTerm?: string | undefined, signal?: AbortSignal): Promise<SwaggerResponse<FamilyDtoPaginatedResponseDto>>;
+
+    /**
+     * Update family
+     * @return OK
+     */
+    updateFamily(id: string, body: UpdateFamilyCommand, signal?: AbortSignal): Promise<SwaggerResponse<FamilyDto>>;
+
+    /**
+     * Get family
+     * @return OK
+     */
+    getFamilyById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<FamilyDto>>;
+
+    /**
+     * Add user to family
+     * @return OK
+     */
+    addUserToFamily(body: AddUserToFamilyCommand, signal?: AbortSignal): Promise<SwaggerResponse<FamilyUserDto>>;
+
+    /**
+     * List family users
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param familyId (optional) 
+     * @param userId (optional) 
+     * @return OK
+     */
+    getFamilyUsers(page?: number | undefined, pageSize?: number | undefined, familyId?: string | undefined, userId?: string | undefined, signal?: AbortSignal): Promise<SwaggerResponse<FamilyUserDtoPaginatedResponseDto>>;
+
+    /**
+     * Remove user from family
+     * @return OK
+     */
+    removeUserFromFamily(familyId: string, userId: string, signal?: AbortSignal): Promise<SwaggerResponse<any>>;
+
+    /**
+     * Get family user
+     * @return OK
+     */
+    getFamilyUserById(familyId: string, userId: string, signal?: AbortSignal): Promise<SwaggerResponse<FamilyUserDto>>;
+
+    /**
+     * Create feed log
+     * @return OK
+     */
+    createFeedLog(body: CreateFeedLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<FeedLogDto>>;
+
+    /**
+     * List feed logs
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param dependentId (optional) 
+     * @param startDate (optional) 
+     * @param endDate (optional) 
+     * @return OK
+     */
+    getFeedLogs(page?: number | undefined, pageSize?: number | undefined, dependentId?: string | undefined, startDate?: Date | undefined, endDate?: Date | undefined, signal?: AbortSignal): Promise<SwaggerResponse<FeedLogDtoPaginatedResponseDto>>;
+
+    /**
+     * Update feed log
+     * @return OK
+     */
+    updateFeedLog(id: string, body: UpdateFeedLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<FeedLogDto>>;
+
+    /**
+     * Get feed log
+     * @return OK
+     */
+    getFeedLogById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<FeedLogDto>>;
+
+    /**
+     * Create medicine log
+     * @return OK
+     */
+    createMedicineLog(body: CreateMedicineLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<MedicineLogDto>>;
+
+    /**
+     * List medicine logs
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param dependentId (optional) 
+     * @param medicineName (optional) 
+     * @param startDate (optional) 
+     * @param endDate (optional) 
+     * @return OK
+     */
+    getMedicineLogs(page?: number | undefined, pageSize?: number | undefined, dependentId?: string | undefined, medicineName?: string | undefined, startDate?: Date | undefined, endDate?: Date | undefined, signal?: AbortSignal): Promise<SwaggerResponse<MedicineLogDtoPaginatedResponseDto>>;
+
+    /**
+     * Update medicine log
+     * @return OK
+     */
+    updateMedicineLog(id: string, body: UpdateMedicineLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<MedicineLogDto>>;
+
+    /**
+     * Get medicine log
+     * @return OK
+     */
+    getMedicineLogById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<MedicineLogDto>>;
+
+    /**
      * Get system settings
      * @return OK
      */
@@ -336,6 +507,1435 @@ export class Client extends ApiBase implements IClient {
             });
         }
         return Promise.resolve<SwaggerResponse<RegisterResponseDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Create dependent
+     * @return OK
+     */
+    createDependent(body: CreateDependentCommand, signal?: AbortSignal): Promise<SwaggerResponse<DependentDto>> {
+        let url_ = this.baseUrl + "/api/dependents";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processCreateDependent(_response);
+        });
+    }
+
+    protected processCreateDependent(response: Response): Promise<SwaggerResponse<DependentDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as DependentDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 201) {
+            return response.text().then((_responseText) => {
+            let result201: any = null;
+            result201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as DependentDto;
+            return new SwaggerResponse(status, _headers, result201);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<DependentDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * List dependents
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param familyId (optional) 
+     * @param searchTerm (optional) 
+     * @return OK
+     */
+    getDependents(page?: number | undefined, pageSize?: number | undefined, familyId?: string | undefined, searchTerm?: string | undefined, signal?: AbortSignal): Promise<SwaggerResponse<DependentDtoPaginatedResponseDto>> {
+        let url_ = this.baseUrl + "/api/dependents?";
+        if (page === null)
+            throw new globalThis.Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (familyId === null)
+            throw new globalThis.Error("The parameter 'familyId' cannot be null.");
+        else if (familyId !== undefined)
+            url_ += "familyId=" + encodeURIComponent("" + familyId) + "&";
+        if (searchTerm === null)
+            throw new globalThis.Error("The parameter 'searchTerm' cannot be null.");
+        else if (searchTerm !== undefined)
+            url_ += "searchTerm=" + encodeURIComponent("" + searchTerm) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetDependents(_response);
+        });
+    }
+
+    protected processGetDependents(response: Response): Promise<SwaggerResponse<DependentDtoPaginatedResponseDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as DependentDtoPaginatedResponseDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<DependentDtoPaginatedResponseDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Update dependent
+     * @return OK
+     */
+    updateDependent(id: string, body: UpdateDependentCommand, signal?: AbortSignal): Promise<SwaggerResponse<DependentDto>> {
+        let url_ = this.baseUrl + "/api/dependents/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processUpdateDependent(_response);
+        });
+    }
+
+    protected processUpdateDependent(response: Response): Promise<SwaggerResponse<DependentDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as DependentDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<DependentDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Get dependent
+     * @return OK
+     */
+    getDependentById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<DependentDto>> {
+        let url_ = this.baseUrl + "/api/dependents/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetDependentById(_response);
+        });
+    }
+
+    protected processGetDependentById(response: Response): Promise<SwaggerResponse<DependentDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as DependentDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            return throwException("Not Found", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<DependentDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Create diaper log
+     * @return OK
+     */
+    createDiperLog(body: CreateDiperLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<DiperLogDto>> {
+        let url_ = this.baseUrl + "/api/diper-logs";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processCreateDiperLog(_response);
+        });
+    }
+
+    protected processCreateDiperLog(response: Response): Promise<SwaggerResponse<DiperLogDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as DiperLogDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 201) {
+            return response.text().then((_responseText) => {
+            let result201: any = null;
+            result201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as DiperLogDto;
+            return new SwaggerResponse(status, _headers, result201);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<DiperLogDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * List diaper logs
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param dependentId (optional) 
+     * @param startDate (optional) 
+     * @param endDate (optional) 
+     * @return OK
+     */
+    getDiperLogs(page?: number | undefined, pageSize?: number | undefined, dependentId?: string | undefined, startDate?: Date | undefined, endDate?: Date | undefined, signal?: AbortSignal): Promise<SwaggerResponse<DiperLogDtoPaginatedResponseDto>> {
+        let url_ = this.baseUrl + "/api/diper-logs?";
+        if (page === null)
+            throw new globalThis.Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (dependentId === null)
+            throw new globalThis.Error("The parameter 'dependentId' cannot be null.");
+        else if (dependentId !== undefined)
+            url_ += "dependentId=" + encodeURIComponent("" + dependentId) + "&";
+        if (startDate === null)
+            throw new globalThis.Error("The parameter 'startDate' cannot be null.");
+        else if (startDate !== undefined)
+            url_ += "startDate=" + encodeURIComponent(startDate ? "" + startDate.toISOString() : "") + "&";
+        if (endDate === null)
+            throw new globalThis.Error("The parameter 'endDate' cannot be null.");
+        else if (endDate !== undefined)
+            url_ += "endDate=" + encodeURIComponent(endDate ? "" + endDate.toISOString() : "") + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetDiperLogs(_response);
+        });
+    }
+
+    protected processGetDiperLogs(response: Response): Promise<SwaggerResponse<DiperLogDtoPaginatedResponseDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as DiperLogDtoPaginatedResponseDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<DiperLogDtoPaginatedResponseDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Update diaper log
+     * @return OK
+     */
+    updateDiperLog(id: string, body: UpdateDiperLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<DiperLogDto>> {
+        let url_ = this.baseUrl + "/api/diper-logs/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processUpdateDiperLog(_response);
+        });
+    }
+
+    protected processUpdateDiperLog(response: Response): Promise<SwaggerResponse<DiperLogDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as DiperLogDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<DiperLogDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Get diaper log
+     * @return OK
+     */
+    getDiperLogById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<DiperLogDto>> {
+        let url_ = this.baseUrl + "/api/diper-logs/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetDiperLogById(_response);
+        });
+    }
+
+    protected processGetDiperLogById(response: Response): Promise<SwaggerResponse<DiperLogDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as DiperLogDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            return throwException("Not Found", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<DiperLogDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Create family
+     * @return OK
+     */
+    createFamily(body: CreateFamilyCommand, signal?: AbortSignal): Promise<SwaggerResponse<FamilyDto>> {
+        let url_ = this.baseUrl + "/api/families";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processCreateFamily(_response);
+        });
+    }
+
+    protected processCreateFamily(response: Response): Promise<SwaggerResponse<FamilyDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FamilyDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 201) {
+            return response.text().then((_responseText) => {
+            let result201: any = null;
+            result201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FamilyDto;
+            return new SwaggerResponse(status, _headers, result201);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<FamilyDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * List families
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param searchTerm (optional) 
+     * @return OK
+     */
+    getFamilies(page?: number | undefined, pageSize?: number | undefined, searchTerm?: string | undefined, signal?: AbortSignal): Promise<SwaggerResponse<FamilyDtoPaginatedResponseDto>> {
+        let url_ = this.baseUrl + "/api/families?";
+        if (page === null)
+            throw new globalThis.Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (searchTerm === null)
+            throw new globalThis.Error("The parameter 'searchTerm' cannot be null.");
+        else if (searchTerm !== undefined)
+            url_ += "searchTerm=" + encodeURIComponent("" + searchTerm) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetFamilies(_response);
+        });
+    }
+
+    protected processGetFamilies(response: Response): Promise<SwaggerResponse<FamilyDtoPaginatedResponseDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FamilyDtoPaginatedResponseDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<FamilyDtoPaginatedResponseDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Update family
+     * @return OK
+     */
+    updateFamily(id: string, body: UpdateFamilyCommand, signal?: AbortSignal): Promise<SwaggerResponse<FamilyDto>> {
+        let url_ = this.baseUrl + "/api/families/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processUpdateFamily(_response);
+        });
+    }
+
+    protected processUpdateFamily(response: Response): Promise<SwaggerResponse<FamilyDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FamilyDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<FamilyDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Get family
+     * @return OK
+     */
+    getFamilyById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<FamilyDto>> {
+        let url_ = this.baseUrl + "/api/families/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetFamilyById(_response);
+        });
+    }
+
+    protected processGetFamilyById(response: Response): Promise<SwaggerResponse<FamilyDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FamilyDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            return throwException("Not Found", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<FamilyDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Add user to family
+     * @return OK
+     */
+    addUserToFamily(body: AddUserToFamilyCommand, signal?: AbortSignal): Promise<SwaggerResponse<FamilyUserDto>> {
+        let url_ = this.baseUrl + "/api/family-users";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processAddUserToFamily(_response);
+        });
+    }
+
+    protected processAddUserToFamily(response: Response): Promise<SwaggerResponse<FamilyUserDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FamilyUserDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 201) {
+            return response.text().then((_responseText) => {
+            let result201: any = null;
+            result201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FamilyUserDto;
+            return new SwaggerResponse(status, _headers, result201);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<FamilyUserDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * List family users
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param familyId (optional) 
+     * @param userId (optional) 
+     * @return OK
+     */
+    getFamilyUsers(page?: number | undefined, pageSize?: number | undefined, familyId?: string | undefined, userId?: string | undefined, signal?: AbortSignal): Promise<SwaggerResponse<FamilyUserDtoPaginatedResponseDto>> {
+        let url_ = this.baseUrl + "/api/family-users?";
+        if (page === null)
+            throw new globalThis.Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (familyId === null)
+            throw new globalThis.Error("The parameter 'familyId' cannot be null.");
+        else if (familyId !== undefined)
+            url_ += "familyId=" + encodeURIComponent("" + familyId) + "&";
+        if (userId === null)
+            throw new globalThis.Error("The parameter 'userId' cannot be null.");
+        else if (userId !== undefined)
+            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetFamilyUsers(_response);
+        });
+    }
+
+    protected processGetFamilyUsers(response: Response): Promise<SwaggerResponse<FamilyUserDtoPaginatedResponseDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FamilyUserDtoPaginatedResponseDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<FamilyUserDtoPaginatedResponseDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Remove user from family
+     * @return OK
+     */
+    removeUserFromFamily(familyId: string, userId: string, signal?: AbortSignal): Promise<SwaggerResponse<any>> {
+        let url_ = this.baseUrl + "/api/family-users/{familyId}/users/{userId}";
+        if (familyId === undefined || familyId === null)
+            throw new globalThis.Error("The parameter 'familyId' must be defined.");
+        url_ = url_.replace("{familyId}", encodeURIComponent("" + familyId));
+        if (userId === undefined || userId === null)
+            throw new globalThis.Error("The parameter 'userId' must be defined.");
+        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processRemoveUserFromFamily(_response);
+        });
+    }
+
+    protected processRemoveUserFromFamily(response: Response): Promise<SwaggerResponse<any>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as any;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<any>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Get family user
+     * @return OK
+     */
+    getFamilyUserById(familyId: string, userId: string, signal?: AbortSignal): Promise<SwaggerResponse<FamilyUserDto>> {
+        let url_ = this.baseUrl + "/api/family-users/{familyId}/users/{userId}";
+        if (familyId === undefined || familyId === null)
+            throw new globalThis.Error("The parameter 'familyId' must be defined.");
+        url_ = url_.replace("{familyId}", encodeURIComponent("" + familyId));
+        if (userId === undefined || userId === null)
+            throw new globalThis.Error("The parameter 'userId' must be defined.");
+        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetFamilyUserById(_response);
+        });
+    }
+
+    protected processGetFamilyUserById(response: Response): Promise<SwaggerResponse<FamilyUserDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FamilyUserDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            return throwException("Not Found", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<FamilyUserDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Create feed log
+     * @return OK
+     */
+    createFeedLog(body: CreateFeedLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<FeedLogDto>> {
+        let url_ = this.baseUrl + "/api/feed-logs";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processCreateFeedLog(_response);
+        });
+    }
+
+    protected processCreateFeedLog(response: Response): Promise<SwaggerResponse<FeedLogDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FeedLogDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 201) {
+            return response.text().then((_responseText) => {
+            let result201: any = null;
+            result201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FeedLogDto;
+            return new SwaggerResponse(status, _headers, result201);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<FeedLogDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * List feed logs
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param dependentId (optional) 
+     * @param startDate (optional) 
+     * @param endDate (optional) 
+     * @return OK
+     */
+    getFeedLogs(page?: number | undefined, pageSize?: number | undefined, dependentId?: string | undefined, startDate?: Date | undefined, endDate?: Date | undefined, signal?: AbortSignal): Promise<SwaggerResponse<FeedLogDtoPaginatedResponseDto>> {
+        let url_ = this.baseUrl + "/api/feed-logs?";
+        if (page === null)
+            throw new globalThis.Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (dependentId === null)
+            throw new globalThis.Error("The parameter 'dependentId' cannot be null.");
+        else if (dependentId !== undefined)
+            url_ += "dependentId=" + encodeURIComponent("" + dependentId) + "&";
+        if (startDate === null)
+            throw new globalThis.Error("The parameter 'startDate' cannot be null.");
+        else if (startDate !== undefined)
+            url_ += "startDate=" + encodeURIComponent(startDate ? "" + startDate.toISOString() : "") + "&";
+        if (endDate === null)
+            throw new globalThis.Error("The parameter 'endDate' cannot be null.");
+        else if (endDate !== undefined)
+            url_ += "endDate=" + encodeURIComponent(endDate ? "" + endDate.toISOString() : "") + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetFeedLogs(_response);
+        });
+    }
+
+    protected processGetFeedLogs(response: Response): Promise<SwaggerResponse<FeedLogDtoPaginatedResponseDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FeedLogDtoPaginatedResponseDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<FeedLogDtoPaginatedResponseDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Update feed log
+     * @return OK
+     */
+    updateFeedLog(id: string, body: UpdateFeedLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<FeedLogDto>> {
+        let url_ = this.baseUrl + "/api/feed-logs/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processUpdateFeedLog(_response);
+        });
+    }
+
+    protected processUpdateFeedLog(response: Response): Promise<SwaggerResponse<FeedLogDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FeedLogDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<FeedLogDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Get feed log
+     * @return OK
+     */
+    getFeedLogById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<FeedLogDto>> {
+        let url_ = this.baseUrl + "/api/feed-logs/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetFeedLogById(_response);
+        });
+    }
+
+    protected processGetFeedLogById(response: Response): Promise<SwaggerResponse<FeedLogDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FeedLogDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            return throwException("Not Found", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<FeedLogDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Create medicine log
+     * @return OK
+     */
+    createMedicineLog(body: CreateMedicineLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<MedicineLogDto>> {
+        let url_ = this.baseUrl + "/api/medicine-logs";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processCreateMedicineLog(_response);
+        });
+    }
+
+    protected processCreateMedicineLog(response: Response): Promise<SwaggerResponse<MedicineLogDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as MedicineLogDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 201) {
+            return response.text().then((_responseText) => {
+            let result201: any = null;
+            result201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as MedicineLogDto;
+            return new SwaggerResponse(status, _headers, result201);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<MedicineLogDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * List medicine logs
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param dependentId (optional) 
+     * @param medicineName (optional) 
+     * @param startDate (optional) 
+     * @param endDate (optional) 
+     * @return OK
+     */
+    getMedicineLogs(page?: number | undefined, pageSize?: number | undefined, dependentId?: string | undefined, medicineName?: string | undefined, startDate?: Date | undefined, endDate?: Date | undefined, signal?: AbortSignal): Promise<SwaggerResponse<MedicineLogDtoPaginatedResponseDto>> {
+        let url_ = this.baseUrl + "/api/medicine-logs?";
+        if (page === null)
+            throw new globalThis.Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (dependentId === null)
+            throw new globalThis.Error("The parameter 'dependentId' cannot be null.");
+        else if (dependentId !== undefined)
+            url_ += "dependentId=" + encodeURIComponent("" + dependentId) + "&";
+        if (medicineName === null)
+            throw new globalThis.Error("The parameter 'medicineName' cannot be null.");
+        else if (medicineName !== undefined)
+            url_ += "medicineName=" + encodeURIComponent("" + medicineName) + "&";
+        if (startDate === null)
+            throw new globalThis.Error("The parameter 'startDate' cannot be null.");
+        else if (startDate !== undefined)
+            url_ += "startDate=" + encodeURIComponent(startDate ? "" + startDate.toISOString() : "") + "&";
+        if (endDate === null)
+            throw new globalThis.Error("The parameter 'endDate' cannot be null.");
+        else if (endDate !== undefined)
+            url_ += "endDate=" + encodeURIComponent(endDate ? "" + endDate.toISOString() : "") + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetMedicineLogs(_response);
+        });
+    }
+
+    protected processGetMedicineLogs(response: Response): Promise<SwaggerResponse<MedicineLogDtoPaginatedResponseDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as MedicineLogDtoPaginatedResponseDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<MedicineLogDtoPaginatedResponseDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Update medicine log
+     * @return OK
+     */
+    updateMedicineLog(id: string, body: UpdateMedicineLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<MedicineLogDto>> {
+        let url_ = this.baseUrl + "/api/medicine-logs/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processUpdateMedicineLog(_response);
+        });
+    }
+
+    protected processUpdateMedicineLog(response: Response): Promise<SwaggerResponse<MedicineLogDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as MedicineLogDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<MedicineLogDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Get medicine log
+     * @return OK
+     */
+    getMedicineLogById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<MedicineLogDto>> {
+        let url_ = this.baseUrl + "/api/medicine-logs/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetMedicineLogById(_response);
+        });
+    }
+
+    protected processGetMedicineLogById(response: Response): Promise<SwaggerResponse<MedicineLogDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as MedicineLogDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            return throwException("Not Found", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<MedicineLogDto>>(new SwaggerResponse(status, _headers, null as any));
     }
 
     /**
@@ -662,6 +2262,161 @@ export class Client extends ApiBase implements IClient {
     }
 }
 
+export interface AddUserToFamilyCommand {
+    familyId?: string;
+    userId?: string | null;
+}
+
+export interface CreateDependentCommand {
+    familyId?: string;
+    dependentName?: string | null;
+    dependentSurname?: string | null;
+    dateOfBirth?: Date;
+}
+
+export interface CreateDiperLogCommand {
+    dependentId?: string;
+    diperDate?: Date;
+    fecalDischargeColour?: FecalDischargeColour;
+    urinaryDischargeColour?: UrinalDischargeColour;
+    notes?: string[] | null;
+}
+
+export interface CreateFamilyCommand {
+    familyName?: string | null;
+    familyLastName?: string | null;
+}
+
+export interface CreateFeedLogCommand {
+    dependentId?: string;
+    feedType?: FeedLogType;
+    timeFed?: Date;
+    mililitersFed?: number | null;
+    notes?: string[] | null;
+}
+
+export interface CreateMedicineLogCommand {
+    dependentId?: string;
+    medicineName?: string | null;
+    dosage?: string | null;
+    timeAdministered?: Date;
+    notes?: string[] | null;
+}
+
+export interface DependentDto {
+    dependentId?: string;
+    familyId?: string;
+    dependentName?: string | null;
+    dependentSurname?: string | null;
+    dateOfBirth?: Date;
+    age?: number;
+    createdOn?: Date;
+    createdBy?: string | null;
+    lastModifiedOn?: Date;
+    lastModifiedBy?: string | null;
+}
+
+export interface DependentDtoPaginatedResponseDto {
+    items?: DependentDto[] | null;
+    pageNumber?: number;
+    pageSize?: number;
+    totalCount?: number;
+    readonly totalPages?: number;
+}
+
+export interface DiperLogDto {
+    diperLogId?: string;
+    dependentId?: string;
+    diperDate?: Date;
+    fecalDischargeColour?: FecalDischargeColour;
+    urinaryDischargeColour?: UrinalDischargeColour;
+    notes?: string[] | null;
+    createdOn?: Date;
+    createdBy?: string | null;
+    lastModifiedOn?: Date;
+    lastModifiedBy?: string | null;
+}
+
+export interface DiperLogDtoPaginatedResponseDto {
+    items?: DiperLogDto[] | null;
+    pageNumber?: number;
+    pageSize?: number;
+    totalCount?: number;
+    readonly totalPages?: number;
+}
+
+export interface FamilyDto {
+    familyId?: string;
+    familyName?: string | null;
+    familyLastName?: string | null;
+    createdOn?: Date;
+    createdBy?: string | null;
+    lastModifiedOn?: Date;
+    lastModifiedBy?: string | null;
+}
+
+export interface FamilyDtoPaginatedResponseDto {
+    items?: FamilyDto[] | null;
+    pageNumber?: number;
+    pageSize?: number;
+    totalCount?: number;
+    readonly totalPages?: number;
+}
+
+export interface FamilyUserDto {
+    familyId?: string;
+    userId?: string | null;
+    createdOn?: Date;
+    createdBy?: string | null;
+    lastModifiedOn?: Date;
+    lastModifiedBy?: string | null;
+}
+
+export interface FamilyUserDtoPaginatedResponseDto {
+    items?: FamilyUserDto[] | null;
+    pageNumber?: number;
+    pageSize?: number;
+    totalCount?: number;
+    readonly totalPages?: number;
+}
+
+export enum FecalDischargeColour {
+    _1 = 1,
+    _2 = 2,
+    _3 = 3,
+    _4 = 4,
+    _5 = 5,
+    _6 = 6,
+    __1 = -1,
+}
+
+export interface FeedLogDto {
+    feedLogId?: string;
+    dependentId?: string;
+    feedType?: FeedLogType;
+    timeFed?: Date;
+    mililitersFed?: number | null;
+    notes?: string[] | null;
+    createdOn?: Date;
+    createdBy?: string | null;
+    lastModifiedOn?: Date;
+    lastModifiedBy?: string | null;
+}
+
+export interface FeedLogDtoPaginatedResponseDto {
+    items?: FeedLogDto[] | null;
+    pageNumber?: number;
+    pageSize?: number;
+    totalCount?: number;
+    readonly totalPages?: number;
+}
+
+export enum FeedLogType {
+    _1 = 1,
+    _2 = 2,
+    _3 = 3,
+}
+
 export interface LoginRequestDto {
     username?: string | null;
     password?: string | null;
@@ -671,6 +2426,27 @@ export interface LoginResponseDto {
     token?: string | null;
     expiresAt?: Date;
     user?: UserDto;
+}
+
+export interface MedicineLogDto {
+    medicineLogId?: string;
+    dependentId?: string;
+    medicineName?: string | null;
+    dosage?: string | null;
+    timeAdministered?: Date;
+    notes?: string[] | null;
+    createdOn?: Date;
+    createdBy?: string | null;
+    lastModifiedOn?: Date;
+    lastModifiedBy?: string | null;
+}
+
+export interface MedicineLogDtoPaginatedResponseDto {
+    items?: MedicineLogDto[] | null;
+    pageNumber?: number;
+    pageSize?: number;
+    totalCount?: number;
+    readonly totalPages?: number;
 }
 
 export interface RegisterRequestDto {
@@ -691,6 +2467,43 @@ export interface SystemSettingsDto {
     setupCompleted?: boolean;
 }
 
+export interface UpdateDependentCommand {
+    dependentId?: string;
+    dependentName?: string | null;
+    dependentSurname?: string | null;
+    dateOfBirth?: Date | null;
+}
+
+export interface UpdateDiperLogCommand {
+    diperLogId?: string;
+    diperDate?: Date | null;
+    fecalDischargeColour?: FecalDischargeColour;
+    urinaryDischargeColour?: UrinalDischargeColour;
+    notes?: string[] | null;
+}
+
+export interface UpdateFamilyCommand {
+    familyId?: string;
+    familyName?: string | null;
+    familyLastName?: string | null;
+}
+
+export interface UpdateFeedLogCommand {
+    feedLogId?: string;
+    feedType?: FeedLogType;
+    timeFed?: Date | null;
+    mililitersFed?: number | null;
+    notes?: string[] | null;
+}
+
+export interface UpdateMedicineLogCommand {
+    medicineLogId?: string;
+    medicineName?: string | null;
+    dosage?: string | null;
+    timeAdministered?: Date | null;
+    notes?: string[] | null;
+}
+
 export interface UpdateProfileRequestDto {
     firstName?: string | null;
     lastName?: string | null;
@@ -699,6 +2512,15 @@ export interface UpdateProfileRequestDto {
 
 export interface UpdateSystemSettingsCommand {
     setupCompleted?: boolean | null;
+}
+
+export enum UrinalDischargeColour {
+    _1 = 1,
+    _2 = 2,
+    _3 = 3,
+    _4 = 4,
+    _5 = 5,
+    __1 = -1,
 }
 
 export interface UserDto {

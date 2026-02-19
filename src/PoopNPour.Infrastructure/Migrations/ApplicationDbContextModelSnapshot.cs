@@ -232,6 +232,219 @@ namespace PoopNPour.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("PoopNPour.Domain.Entities.Dependent", b =>
+                {
+                    b.Property<Guid>("DependentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("DateOfBirth")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("DependentName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DependentSurname")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("FamilyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("LastModifiedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("DependentId");
+
+                    b.HasIndex("FamilyId");
+
+                    b.ToTable("Dependents", (string)null);
+                });
+
+            modelBuilder.Entity("PoopNPour.Domain.Entities.DiperLog", b =>
+                {
+                    b.Property<Guid>("DiperLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("DependentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("DiperDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("FecalDischargeColour")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("LastModifiedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UrinaryDischargeColour")
+                        .HasColumnType("int");
+
+                    b.HasKey("DiperLogId");
+
+                    b.HasIndex("DependentId");
+
+                    b.ToTable("DiperLogs", (string)null);
+                });
+
+            modelBuilder.Entity("PoopNPour.Domain.Entities.Family", b =>
+                {
+                    b.Property<Guid>("FamilyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("FamilyLastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FamilyName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("LastModifiedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("FamilyId");
+
+                    b.ToTable("Families", (string)null);
+                });
+
+            modelBuilder.Entity("PoopNPour.Domain.Entities.FamilyUser", b =>
+                {
+                    b.Property<Guid>("FamilyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("LastModifiedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("FamilyId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FamilyUsers", (string)null);
+                });
+
+            modelBuilder.Entity("PoopNPour.Domain.Entities.FeedLog", b =>
+                {
+                    b.Property<Guid>("FeedLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("DependentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("FeedType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("LastModifiedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<decimal?>("MililitersFed")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("TimeFed")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("FeedLogId");
+
+                    b.HasIndex("DependentId");
+
+                    b.ToTable("FeedLogs", (string)null);
+                });
+
+            modelBuilder.Entity("PoopNPour.Domain.Entities.MedicineLog", b =>
+                {
+                    b.Property<Guid>("MedicineLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DependentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Dosage")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MedicineName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("TimeAdministered")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("MedicineLogId");
+
+                    b.HasIndex("DependentId");
+
+                    b.ToTable("MedicineLogs", (string)null);
+                });
+
             modelBuilder.Entity("PoopNPour.Domain.Entities.Setting", b =>
                 {
                     b.Property<int>("SettingId")
@@ -314,6 +527,90 @@ namespace PoopNPour.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PoopNPour.Domain.Entities.Dependent", b =>
+                {
+                    b.HasOne("PoopNPour.Domain.Entities.Family", "Family")
+                        .WithMany("Dependents")
+                        .HasForeignKey("FamilyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Family");
+                });
+
+            modelBuilder.Entity("PoopNPour.Domain.Entities.DiperLog", b =>
+                {
+                    b.HasOne("PoopNPour.Domain.Entities.Dependent", "Dependent")
+                        .WithMany("DiperLogs")
+                        .HasForeignKey("DependentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dependent");
+                });
+
+            modelBuilder.Entity("PoopNPour.Domain.Entities.FamilyUser", b =>
+                {
+                    b.HasOne("PoopNPour.Domain.Entities.Family", "Family")
+                        .WithMany("Users")
+                        .HasForeignKey("FamilyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PoopNPour.Domain.Common.Identity.ApplicationUser", "User")
+                        .WithMany("FamilyUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Family");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PoopNPour.Domain.Entities.FeedLog", b =>
+                {
+                    b.HasOne("PoopNPour.Domain.Entities.Dependent", "Dependent")
+                        .WithMany("FeedLogs")
+                        .HasForeignKey("DependentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dependent");
+                });
+
+            modelBuilder.Entity("PoopNPour.Domain.Entities.MedicineLog", b =>
+                {
+                    b.HasOne("PoopNPour.Domain.Entities.Dependent", "Dependent")
+                        .WithMany("MedicineLogs")
+                        .HasForeignKey("DependentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dependent");
+                });
+
+            modelBuilder.Entity("PoopNPour.Domain.Common.Identity.ApplicationUser", b =>
+                {
+                    b.Navigation("FamilyUsers");
+                });
+
+            modelBuilder.Entity("PoopNPour.Domain.Entities.Dependent", b =>
+                {
+                    b.Navigation("DiperLogs");
+
+                    b.Navigation("FeedLogs");
+
+                    b.Navigation("MedicineLogs");
+                });
+
+            modelBuilder.Entity("PoopNPour.Domain.Entities.Family", b =>
+                {
+                    b.Navigation("Dependents");
+
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

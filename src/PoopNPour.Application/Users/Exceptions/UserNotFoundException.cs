@@ -1,9 +1,11 @@
+using PoopNPour.Application.Common.Exceptions;
+
 namespace PoopNPour.Application.Users.Exceptions;
 
 /// <summary>
 /// Exception thrown when user is not found
 /// </summary>
-public class UserNotFoundException : Exception
+public class UserNotFoundException : NotFoundException
 {
     public UserNotFoundException(string userId) 
         : base($"User with ID '{userId}' was not found.")

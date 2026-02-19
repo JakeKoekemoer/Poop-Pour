@@ -7,12 +7,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using PoopNPour.Abstractions.Authentication;
+using PoopNPour.Abstractions.Dependent;
+using PoopNPour.Abstractions.DiperLog;
+using PoopNPour.Abstractions.Family;
+using PoopNPour.Abstractions.FamilyUser;
+using PoopNPour.Abstractions.FeedLog;
 using PoopNPour.Abstractions.Identity;
+using PoopNPour.Abstractions.MedicineLog;
 using PoopNPour.Abstractions.Settings;
+using PoopNPour.Abstractions.User;
 using PoopNPour.Application.Authorization;
 using PoopNPour.Domain.Common.Auth;
 using PoopNPour.Domain.Common.Identity;
-using PoopNPour.Abstractions.User;
 using PoopNPour.Infrastructure.Authentication;
 using PoopNPour.Infrastructure.Authorization;
 using PoopNPour.Infrastructure.Data;
@@ -20,6 +26,12 @@ using PoopNPour.Infrastructure.Data.Interceptors;
 using PoopNPour.Infrastructure.Identity;
 using PoopNPour.Infrastructure.Repositories.SettingsRepository;
 using PoopNPour.Infrastructure.Repositories.UserRepository;
+using PoopNPour.Infrastructure.Services.DependentService;
+using PoopNPour.Infrastructure.Services.DiperLogService;
+using PoopNPour.Infrastructure.Services.FamilyService;
+using PoopNPour.Infrastructure.Services.FamilyUserService;
+using PoopNPour.Infrastructure.Services.FeedLogService;
+using PoopNPour.Infrastructure.Services.MedicineLogService;
 using PoopNPour.Infrastructure.SettingsService;
 using System.Text;
 
@@ -152,7 +164,15 @@ public static class DependencyInjection
         // Register Database Seeder
         services.AddScoped<DatabaseSeeder>();
 
-        // Register repositories here as they are created
+        // Register Family services
+        services.AddScoped<IFamilyService, FamilyService>();
+        services.AddScoped<IFamilyUserService, FamilyUserService>();
+        services.AddScoped<IDependentService, DependentService>();
+
+        // Register Log services
+        services.AddScoped<IFeedLogService, FeedLogService>();
+        services.AddScoped<IDiperLogService, DiperLogService>();
+        services.AddScoped<IMedicineLogService, MedicineLogService>();
 
         return services;
     }
