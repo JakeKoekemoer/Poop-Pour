@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { LayoutDashboard, TrendingUp, Baby, Clock } from 'lucide-vue-next'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { LayoutDashboard } from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
+
+import DashboardStatsGrid from '@/components/views/secure/Dashboard/DashboardStatsGrid.vue'
+import DashboardWelcomeCard from '@/components/views/secure/Dashboard/DashboardWelcomeCard.vue'
 </script>
 
 <template>
@@ -17,59 +19,8 @@ import { Separator } from '@/components/ui/separator'
 
     <Separator />
 
-    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <Card>
-        <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle class="text-sm font-medium">Total Activities</CardTitle>
-          <TrendingUp class="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div class="text-2xl font-bold">0</div>
-          <p class="text-xs text-muted-foreground">
-            No activities tracked yet
-          </p>
-        </CardContent>
-      </Card>
+    <DashboardStatsGrid />
 
-      <Card>
-        <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle class="text-sm font-medium">Babies</CardTitle>
-          <Baby class="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div class="text-2xl font-bold">0</div>
-          <p class="text-xs text-muted-foreground">
-            Add your first baby
-          </p>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle class="text-sm font-medium">Last Activity</CardTitle>
-          <Clock class="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div class="text-2xl font-bold">--</div>
-          <p class="text-xs text-muted-foreground">
-            No recent activity
-          </p>
-        </CardContent>
-      </Card>
-    </div>
-
-    <Card>
-      <CardHeader>
-        <CardTitle>Welcome to Your Dashboard</CardTitle>
-        <CardDescription>
-          Your baby tracking data will appear here once you start logging activities.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p class="text-sm text-muted-foreground">
-          Dashboard features coming soon...
-        </p>
-      </CardContent>
-    </Card>
+    <DashboardWelcomeCard />
   </div>
 </template>
