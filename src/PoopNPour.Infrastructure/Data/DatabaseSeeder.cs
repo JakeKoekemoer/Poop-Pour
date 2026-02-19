@@ -83,7 +83,6 @@ public class DatabaseSeeder
             return;
         }
 
-        // Check if admin user already exists
         var existingUser = await _identityService.GetUserByUserNameAsync(userName, cancellationToken);
         if (existingUser != null)
         {
@@ -91,7 +90,6 @@ public class DatabaseSeeder
             return;
         }
 
-        // Create admin user
         _logger.LogInformation("Creating default admin user: {UserName}", userName);
         var adminUser = await _identityService.CreateUserAsync(
             userName,
@@ -101,7 +99,6 @@ public class DatabaseSeeder
             lastName,
             cancellationToken);
 
-        // Add admin role
         await _identityService.AddUserToRoleAsync(adminUser, Roles.Administrator, cancellationToken);
 
         _logger.LogInformation("Default admin user created successfully: {UserName}", userName);
@@ -146,7 +143,6 @@ public class DatabaseSeeder
             return;
         }
 
-        // Read the regeneration flag from configuration
         var regenerateTokens = _configuration.GetValue<bool>("RegenerateApiTokensOnStartup");
 
         foreach (var apiClientConfig in apiClients)
@@ -182,12 +178,10 @@ public class DatabaseSeeder
                 continue;
             }
 
-            // Check if API client user already exists
             var existingUser = await _identityService.GetUserByUserNameAsync(userName, cancellationToken);
             
             if (existingUser == null)
             {
-                // Create API client user
                 _logger.LogInformation("Creating API client user: {UserName}", userName);
                 existingUser = await _identityService.CreateUserAsync(
                     userName,
@@ -197,7 +191,6 @@ public class DatabaseSeeder
                     lastName ?? "Client",
                     cancellationToken);
 
-                // Add role to the user
                 await _identityService.AddUserToRoleAsync(existingUser, role, cancellationToken);
                 
                 _logger.LogInformation("API client user {UserName} created successfully", userName);

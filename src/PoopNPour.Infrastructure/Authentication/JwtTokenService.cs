@@ -44,7 +44,6 @@ public class JwtTokenService : IJwtTokenService
             new Claim(ClaimTypes.Name, userName ?? string.Empty)
         };
 
-        // Add role claims
         foreach (var role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));
@@ -86,7 +85,6 @@ public class JwtTokenService : IJwtTokenService
             new Claim("token_type", "api_token")
         };
 
-        // Add role claims
         foreach (var role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));

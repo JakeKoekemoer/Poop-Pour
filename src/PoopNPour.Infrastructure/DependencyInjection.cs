@@ -54,7 +54,6 @@ public static class DependencyInjection
         var maxRetryCount = efSettings.GetValue<int?>("MaxRetryCount") ?? 3;
         var maxRetryDelay = efSettings.GetValue<TimeSpan?>("MaxRetryDelay") ?? TimeSpan.FromSeconds(30);
 
-        // Add EF Core interceptors to the service collection.
         // For more information see https://learn.microsoft.com/en-us/ef/core/logging-events-diagnostics/interceptors
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>(); // Sets the CreatedBy, CreatedOn, LastModifiedBy, and LastModifiedOn properties
 
@@ -63,7 +62,6 @@ public static class DependencyInjection
 
         services.AddDbContext<ApplicationDbContext>((sp, options) =>
         {
-            // Map the interceptors to this context
             options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
 
             options.UseSqlServer(connectionString, sqlOptions =>
@@ -136,7 +134,6 @@ public static class DependencyInjection
 
         });
 
-        // Add Authorization services
         services.AddAuthorization(options =>
         {
             // Configure all policies using centralized mappings

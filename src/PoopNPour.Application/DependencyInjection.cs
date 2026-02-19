@@ -12,7 +12,6 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        // Scan the assembly for FluentValidation Validators
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         // Register MediatR and pipeline behaviors (order matters!)

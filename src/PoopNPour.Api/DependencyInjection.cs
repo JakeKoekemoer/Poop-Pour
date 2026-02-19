@@ -61,7 +61,6 @@ public static class DependencyInjection
                 }
             });
 
-            // Add operation filters (.NET 10 Swashbuckle approach)
             options.OperationFilter<EndpointDocumentationFilter>();  // Summary/Description
             options.OperationFilter<AutoResponseTypesFilter>();      // Automatic response types
             options.SchemaFilter<SchemaExampleFilter>();             // User-friendly request examples

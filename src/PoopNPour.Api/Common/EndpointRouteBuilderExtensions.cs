@@ -15,8 +15,6 @@ public static class EndpointRouteBuilderExtensions
         string pattern = "")
     {
         var routeBuilder = builder.MapGet(pattern, handler);
-        
-        // Use the method name as the endpoint name
         routeBuilder.WithName(handler.Method.Name);
         
         return builder;

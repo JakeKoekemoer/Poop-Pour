@@ -25,10 +25,8 @@ public class SettingsService : ISettingsService
     /// <returns></returns>
     public T LoadSetting<T>(string extraIdentifier = "") where T : ISettings, new()
     {
-        //Create the setting object
         var settings = Activator.CreateInstance<T>();
 
-        //Build the settings object
         foreach (var prop in typeof(T).GetProperties())
         {
             if (!prop.CanRead || !prop.CanWrite) continue;
@@ -37,7 +35,6 @@ public class SettingsService : ISettingsService
             var key = typeof(T).Name + "." + prop.Name;
             if (!string.IsNullOrEmpty(extraIdentifier)) key += "." + extraIdentifier;
 
-            //Get the setting
             var setting = GetSettingByKey(key);
 
             if (Attribute.IsDefined(prop, typeof(SettingComplexType)))
@@ -76,24 +73,18 @@ public class SettingsService : ISettingsService
             }
             else if (setting != null)
             {
-                //Get the type converter
                 var converter = TypeDescriptor.GetConverter(prop.PropertyType);
 
-                //Check if the type can be converted from a string
                 if (!converter.CanConvertFrom(typeof(string))) continue;
 
-                //Check if the setting value can be converted into the target type
                 if (!converter.IsValid(setting.Value)) continue;
 
-                //Get the value of the property
                 var value = converter.ConvertFromInvariantString(setting.Value);
 
-                //Set the property
                 prop.SetValue(settings, value);
             }
         }
 
-        //Return the settings object
         return settings;
     }
 
@@ -113,10 +104,8 @@ public class SettingsService : ISettingsService
             var key = typeof(T).Name + "." + prop.Name;
             if (!string.IsNullOrEmpty(extraIdentifier)) key += "." + extraIdentifier;
 
-            //Get the value
             var value = prop.GetValue(settings, null);
 
-            //Set the setting
             if (Attribute.IsDefined(prop, typeof(SettingComplexType)))
             {
                 if (value == null) SetSetting(key, string.Empty);
@@ -199,7 +188,6 @@ public class SettingsService : ISettingsService
     {
         if (setting == null) throw new ArgumentNullException(nameof(setting));
 
-        //Insert into database
         _context.Settings.Add(setting);
         _context.SaveChanges();
     }
@@ -216,7 +204,6 @@ public class SettingsService : ISettingsService
         if (!_context.Settings.Any(s => s.SettingId == setting.SettingId))
             return;
 
-        //Update the database
         _context.Settings.Update(setting);
     }
 
@@ -232,7 +219,6 @@ public class SettingsService : ISettingsService
         //Always store lowercase keys
         key = key.Trim().ToLowerInvariant();
 
-        //Update an existing setting
         if (SettingExists(key))
         {
             var setting = GetSettingByKey(key);
@@ -241,7 +227,6 @@ public class SettingsService : ISettingsService
             setting.LastModifiedOn = DateTimeOffset.UtcNow;
             UpdateSetting(setting);
         }
-        //Insert a new setting
         else
         {
             var newSetting = new Setting
@@ -262,10 +247,8 @@ public class SettingsService : ISettingsService
         //Always store lowercase keys
         key = key.Trim().ToLowerInvariant();
 
-        // Serialize the object
         var saveValue = JsonSerializer.Serialize(value);
 
-        //Update an existing setting
         if (SettingExists(key))
         {
             var setting = GetSettingByKey(key);
@@ -274,7 +257,6 @@ public class SettingsService : ISettingsService
             setting.LastModifiedOn = DateTimeOffset.UtcNow;
             UpdateSetting(setting);
         }
-        //Insert a new setting
         else
         {
             var newSetting = new Setting

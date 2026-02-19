@@ -29,7 +29,6 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
-        // Check if the request has an Authorize attribute
         var authorizeAttributes = request.GetType()
             .GetCustomAttributes<AuthorizeAttribute>()
             .ToList();

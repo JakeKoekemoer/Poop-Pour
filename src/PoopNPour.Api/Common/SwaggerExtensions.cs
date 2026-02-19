@@ -11,7 +11,6 @@ public class EndpointDocumentationFilter : IOperationFilter
 {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        // Get metadata from endpoint
         var documentationMetadata = context.ApiDescription.ActionDescriptor.EndpointMetadata
             .OfType<EndpointDocumentationMetadata>()
             .FirstOrDefault();

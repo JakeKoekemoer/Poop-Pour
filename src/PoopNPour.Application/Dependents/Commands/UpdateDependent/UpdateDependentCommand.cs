@@ -59,7 +59,6 @@ public class UpdateDependentCommandHandler(IDependentService dependentService) :
         // Business validation: Check for duplicate dependent name if updating name fields
         if (request.DependentName != null || request.DependentSurname != null)
         {
-            // Get the current dependent to check which values need validation
             var currentDependent = await dependentService.GetDependentByIdAsync(request.DependentId, cancellationToken);
             if (currentDependent != null)
             {

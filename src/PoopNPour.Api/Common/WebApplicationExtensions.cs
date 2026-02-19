@@ -33,7 +33,6 @@ public static class WebApplicationExtensions
     {
         var endpointGroupType = typeof(EndpointGroupBase);
         
-        // Get the assembly where EndpointGroupBase is defined (the API assembly)
         var assembly = endpointGroupType.Assembly;
 
         var endpointGroupTypes = assembly.GetTypes()
@@ -91,7 +90,6 @@ public static class WebApplicationExtensions
     /// </summary>
     private static string ConvertToRouteName(string className)
     {
-        // Remove "Endpoints" suffix if present
         if (className.EndsWith("Endpoints", StringComparison.OrdinalIgnoreCase))
         {
             className = className.Substring(0, className.Length - "Endpoints".Length);

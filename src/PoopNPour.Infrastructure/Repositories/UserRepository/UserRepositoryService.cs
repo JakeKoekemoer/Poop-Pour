@@ -115,7 +115,6 @@ public class UserRepositoryService(IIdentityService identityService) : IUserServ
         if (user == null)
             throw new UserNotFoundException(userId);
 
-        // Check if email is being changed and if it's already in use
         if (!string.IsNullOrEmpty(email) && email != user.Email)
         {
             var existingUser = await identityService.GetUserByEmailAsync(email, cancellationToken);

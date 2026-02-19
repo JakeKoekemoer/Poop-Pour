@@ -24,7 +24,6 @@ public static class RouteHandlerExtensions
         // Always produce success response
         builder.Produces<TResponse>(StatusCodes.Status200OK);
 
-        // Check if request has [Authorize] attribute
         var authorizeAttribute = requestType.GetCustomAttribute<AuthorizeAttribute>();
         
         if (authorizeAttribute != null)
@@ -40,7 +39,6 @@ public static class RouteHandlerExtensions
             }
         }
 
-        // Add any additional status codes specified
         foreach (var statusCode in additionalStatusCodes)
         {
             builder.Produces(statusCode);
@@ -71,10 +69,8 @@ public static class RouteHandlerExtensions
     {
         var requestType = typeof(TRequest);
 
-        // Created response
         builder.Produces<TResponse>(StatusCodes.Status201Created);
 
-        // Check authorization
         var authorizeAttribute = requestType.GetCustomAttribute<AuthorizeAttribute>();
         if (authorizeAttribute != null)
         {
@@ -87,10 +83,8 @@ public static class RouteHandlerExtensions
             }
         }
 
-        // Add validation error for creation
         builder.Produces(StatusCodes.Status400BadRequest);
 
-        // Add any additional status codes
         foreach (var statusCode in additionalStatusCodes)
         {
             builder.Produces(statusCode);

@@ -14,7 +14,6 @@ public class AutoResponseTypesFilter : IOperationFilter
 {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        // Get the handler method
         var methodInfo = context.MethodInfo;
         if (methodInfo == null) return;
 
@@ -32,7 +31,6 @@ public class AutoResponseTypesFilter : IOperationFilter
             AddResponse(operation, context, 200, "Success", responseType);
         }
 
-        // Check for authorization requirements on the MediatR request
         var authorizationRequired = CheckAuthorizationRequirements(methodInfo, out bool hasRolesOrPolicies);
         
         if (authorizationRequired)
@@ -45,13 +43,11 @@ public class AutoResponseTypesFilter : IOperationFilter
             }
         }
 
-        // Add 404 for endpoints with route parameters (likely fetching single items)
         if (httpMethod == "GET" && HasRouteParameters(context))
         {
             AddResponse(operation, context, 404, "Not Found", null);
         }
 
-        // Add 400 for POST/PUT/PATCH (validation errors)
         if (httpMethod is "POST" or "PUT" or "PATCH")
         {
             AddResponse(operation, context, 400, "Bad Request", null);
@@ -62,7 +58,6 @@ public class AutoResponseTypesFilter : IOperationFilter
     {
         var returnType = methodInfo.ReturnType;
 
-        // Handle Task<IResult> or IResult
         if (returnType.IsGenericType && returnType.GetGenericTypeDefinition() == typeof(Task<>))
         {
             returnType = returnType.GetGenericArguments()[0];
@@ -101,11 +96,6 @@ public class AutoResponseTypesFilter : IOperationFilter
 
     private Type? FindMediatRRequestType(MethodInfo methodInfo)
     {
-        // Scan the method's class for common patterns
-        // In Pipeline-X style, the command/query is created in the handler method
-        // We can try to infer it from parameter types or method body analysis
-        
-        // For now, look for types matching naming conventions
         var declaringType = methodInfo.DeclaringType;
         if (declaringType == null) return null;
 
@@ -166,15 +156,12 @@ public class AutoResponseTypesFilter : IOperationFilter
     {
         hasRolesOrPolicies = false;
 
-        // Find the MediatR request type from the method
         var requestType = FindMediatRRequestType(methodInfo);
         if (requestType == null) return false;
 
-        // Check for [Authorize] attribute on the command/query
         var authorizeAttr = requestType.GetCustomAttribute<AuthorizeAttribute>();
         if (authorizeAttr == null) return false;
 
-        // Check if it has roles or policies
         var roles = authorizeAttr.GetRoles();
         var policies = authorizeAttr.GetPolicies();
         

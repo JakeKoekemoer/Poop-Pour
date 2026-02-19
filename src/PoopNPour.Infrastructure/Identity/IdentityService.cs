@@ -52,7 +52,6 @@ public class IdentityService : IIdentityService
         if (user == null)
             return false;
 
-        // Create a ClaimsPrincipal from the user
         var claims = await _userManager.GetClaimsAsync(user);
         var roles = await _userManager.GetRolesAsync(user);
         
@@ -208,7 +207,6 @@ public class IdentityService : IIdentityService
             return null;
         }
 
-        // Validate password
         var isValid = await _userManager.CheckPasswordAsync(user, password);
         
         return isValid ? user : null;

@@ -24,7 +24,6 @@ public class FamilyService(ApplicationDbContext context) : IFamilyService
         context.Families.Add(family);
         await context.SaveChangesAsync(cancellationToken);
 
-        // If a creator user ID is provided, add them as a family member
         if (!string.IsNullOrEmpty(creatorUserId))
         {
             var familyUser = new Domain.Entities.FamilyUser

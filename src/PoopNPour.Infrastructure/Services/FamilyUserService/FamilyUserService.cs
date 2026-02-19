@@ -15,14 +15,12 @@ public class FamilyUserService(ApplicationDbContext context) : IFamilyUserServic
         string userId,
         CancellationToken cancellationToken = default)
     {
-        // Check if family exists
         var familyExists = await context.Families.AnyAsync(f => f.FamilyId == familyId, cancellationToken);
         if (!familyExists)
         {
             throw new Application.Families.Exceptions.FamilyNotFoundException(familyId);
         }
 
-        // Check if already exists
         var existing = await context.FamilyUsers
             .FirstOrDefaultAsync(fu => fu.FamilyId == familyId && fu.UserId == userId, cancellationToken);
 

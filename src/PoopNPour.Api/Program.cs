@@ -8,13 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Load database configuration from separate file (not in version control)
 builder.Configuration.AddJsonFile("database.config.json", optional: true, reloadOnChange: true);
 
-// Add Infrastructure (Database, Repositories, Identity)
 builder.Services.AddInfrastructure(builder.Configuration);
-
-// Add Application Services (MediatR, FluentValidation, pipeline behaviors)
 builder.Services.AddApplicationServices();
-
-// Add API Services (Swagger, CORS, HttpContextAccessor)
 builder.Services.AddApiServices();
 
 var app = builder.Build();
@@ -30,7 +25,6 @@ app.UseCors();
 
 app.UseHttpsRedirection();
 
-// Add Identity middleware
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -48,7 +42,6 @@ app.MapEndpointGroups();
 // Serve Vue app for all non-API routes (supports Vue Router history mode)
 app.MapFallbackToFile("index.html");
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     // Enable Swagger UI (custom theme via static index.html with Tailwind + Alpine.js)
