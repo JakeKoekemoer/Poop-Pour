@@ -16,6 +16,11 @@
 export { authService } from './AuthService';
 export { userService } from './UserService';
 export { settingsService } from './SettingsService';
+export { familyService } from './FamilyService';
+export { familyUserService } from './FamilyUserService';
+export { diperLogService } from './DiperLogService';
+export { feedLogService } from './FeedLogService';
+export { medicineLogService } from './MedicineLogService';
 
 // Export common types
 export type { ApiResponse, ApiError } from './types';
