@@ -115,6 +115,23 @@ public class FeedLogService(ApplicationDbContext context) : IFeedLogService
         return (entities.Select(MapToDto), totalCount);
     }
 
+    public async Task<bool> IsFeedLogTimestampDuplicateAsync(
+        Guid dependentId,
+        DateTimeOffset timeFed,
+        Guid? excludeFeedLogId = null,
+        CancellationToken cancellationToken = default)
+    {
+        var query = context.FeedLogs
+            .Where(fl => fl.DependentId == dependentId && fl.TimeFed == timeFed);
+
+        if (excludeFeedLogId.HasValue)
+        {
+            query = query.Where(fl => fl.FeedLogId != excludeFeedLogId.Value);
+        }
+
+        return await query.AnyAsync(cancellationToken);
+    }
+
     private static FeedLogDto MapToDto(Domain.Entities.FeedLog feedLog)
     {
         return new FeedLogDto

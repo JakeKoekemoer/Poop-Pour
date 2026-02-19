@@ -115,6 +115,23 @@ public class DiperLogService(ApplicationDbContext context) : IDiperLogService
         return (entities.Select(MapToDto), totalCount);
     }
 
+    public async Task<bool> IsDiperLogTimestampDuplicateAsync(
+        Guid dependentId,
+        DateTimeOffset diperDate,
+        Guid? excludeDiperLogId = null,
+        CancellationToken cancellationToken = default)
+    {
+        var query = context.DiperLogs
+            .Where(dl => dl.DependentId == dependentId && dl.DiperDate == diperDate);
+
+        if (excludeDiperLogId.HasValue)
+        {
+            query = query.Where(dl => dl.DiperLogId != excludeDiperLogId.Value);
+        }
+
+        return await query.AnyAsync(cancellationToken);
+    }
+
     private static DiperLogDto MapToDto(Domain.Entities.DiperLog diperLog)
     {
         return new DiperLogDto

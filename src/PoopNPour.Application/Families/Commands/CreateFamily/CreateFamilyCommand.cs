@@ -1,8 +1,11 @@
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using PoopNPour.Abstractions.Family;
 using PoopNPour.Application.Authorization;
+using PoopNPour.Application.Families.Exceptions;
 using PoopNPour.Domain.Common.Auth;
+using System.Security.Claims;
 
 namespace PoopNPour.Application.Families.Commands.CreateFamily;
 
@@ -25,24 +28,42 @@ public class CreateFamilyCommandValidator : AbstractValidator<CreateFamilyComman
         RuleFor(x => x.FamilyName)
             .NotEmpty()
             .WithMessage("Family name is required.")
-            .MaximumLength(200)
-            .WithMessage("Family name must not exceed 200 characters.");
+            .MaximumLength(100)
+            .WithMessage("Family name must not exceed 100 characters.");
 
         RuleFor(x => x.FamilyLastName)
             .NotEmpty()
             .WithMessage("Family last name is required.")
-            .MaximumLength(200)
-            .WithMessage("Family last name must not exceed 200 characters.");
+            .MaximumLength(100)
+            .WithMessage("Family last name must not exceed 100 characters.");
     }
 }
 
 /// <summary>
 /// Handler for CreateFamilyCommand
 /// </summary>
-public class CreateFamilyCommandHandler(IFamilyService familyService) : IRequestHandler<CreateFamilyCommand, FamilyDto>
+public class CreateFamilyCommandHandler(
+    IFamilyService familyService,
+    IHttpContextAccessor httpContextAccessor) : IRequestHandler<CreateFamilyCommand, FamilyDto>
 {
     public async Task<FamilyDto> Handle(CreateFamilyCommand request, CancellationToken cancellationToken)
     {
+        // Business validation: Check for duplicate family name
+        var userId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!string.IsNullOrEmpty(userId))
+        {
+            var isDuplicate = await familyService.IsFamilyNameDuplicateAsync(
+                request.FamilyName,
+                userId,
+                null,
+                cancellationToken);
+
+            if (isDuplicate)
+            {
+                throw new DuplicateFamilyNameException(request.FamilyName, userId);
+            }
+        }
+
         return await familyService.CreateFamilyAsync(
             request.FamilyName,
             request.FamilyLastName,

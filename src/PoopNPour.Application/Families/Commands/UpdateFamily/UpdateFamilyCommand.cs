@@ -1,9 +1,11 @@
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using PoopNPour.Abstractions.Family;
 using PoopNPour.Application.Authorization;
 using PoopNPour.Application.Families.Exceptions;
 using PoopNPour.Domain.Common.Auth;
+using System.Security.Claims;
 
 namespace PoopNPour.Application.Families.Commands.UpdateFamily;
 
@@ -33,8 +35,8 @@ public class UpdateFamilyCommandValidator : AbstractValidator<UpdateFamilyComman
             RuleFor(x => x.FamilyName)
                 .NotEmpty()
                 .WithMessage("Family name cannot be empty if provided.")
-                .MaximumLength(200)
-                .WithMessage("Family name must not exceed 200 characters.");
+                .MaximumLength(100)
+                .WithMessage("Family name must not exceed 100 characters.");
         });
 
         When(x => x.FamilyLastName != null, () =>
@@ -42,8 +44,8 @@ public class UpdateFamilyCommandValidator : AbstractValidator<UpdateFamilyComman
             RuleFor(x => x.FamilyLastName)
                 .NotEmpty()
                 .WithMessage("Family last name cannot be empty if provided.")
-                .MaximumLength(200)
-                .WithMessage("Family last name must not exceed 200 characters.");
+                .MaximumLength(100)
+                .WithMessage("Family last name must not exceed 100 characters.");
         });
     }
 }
@@ -51,10 +53,31 @@ public class UpdateFamilyCommandValidator : AbstractValidator<UpdateFamilyComman
 /// <summary>
 /// Handler for UpdateFamilyCommand
 /// </summary>
-public class UpdateFamilyCommandHandler(IFamilyService familyService) : IRequestHandler<UpdateFamilyCommand, FamilyDto>
+public class UpdateFamilyCommandHandler(
+    IFamilyService familyService,
+    IHttpContextAccessor httpContextAccessor) : IRequestHandler<UpdateFamilyCommand, FamilyDto>
 {
     public async Task<FamilyDto> Handle(UpdateFamilyCommand request, CancellationToken cancellationToken)
     {
+        // Business validation: Check for duplicate family name if updating the name
+        if (request.FamilyName != null)
+        {
+            var userId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!string.IsNullOrEmpty(userId))
+            {
+                var isDuplicate = await familyService.IsFamilyNameDuplicateAsync(
+                    request.FamilyName,
+                    userId,
+                    request.FamilyId,
+                    cancellationToken);
+
+                if (isDuplicate)
+                {
+                    throw new DuplicateFamilyNameException(request.FamilyName, userId);
+                }
+            }
+        }
+
         var family = await familyService.UpdateFamilyAsync(
             request.FamilyId,
             request.FamilyName,

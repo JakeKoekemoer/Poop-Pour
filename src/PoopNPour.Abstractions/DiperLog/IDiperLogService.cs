@@ -46,4 +46,13 @@ public interface IDiperLogService
         DateTimeOffset? startDate = null,
         DateTimeOffset? endDate = null,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Checks if a diaper log with the same timestamp already exists for a dependent
+    /// </summary>
+    Task<bool> IsDiperLogTimestampDuplicateAsync(
+        Guid dependentId,
+        DateTimeOffset diperDate,
+        Guid? excludeDiperLogId = null,
+        CancellationToken cancellationToken = default);
 }

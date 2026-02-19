@@ -46,4 +46,13 @@ public interface IFeedLogService
         DateTimeOffset? startDate = null,
         DateTimeOffset? endDate = null,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Checks if a feed log with the same timestamp already exists for a dependent
+    /// </summary>
+    Task<bool> IsFeedLogTimestampDuplicateAsync(
+        Guid dependentId,
+        DateTimeOffset timeFed,
+        Guid? excludeFeedLogId = null,
+        CancellationToken cancellationToken = default);
 }

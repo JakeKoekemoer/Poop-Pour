@@ -90,6 +90,25 @@ public class FamilyService(ApplicationDbContext context) : IFamilyService
         return (entities.Select(MapToDto), totalCount);
     }
 
+    public async Task<bool> IsFamilyNameDuplicateAsync(
+        string familyName,
+        string userId,
+        Guid? excludeFamilyId = null,
+        CancellationToken cancellationToken = default)
+    {
+        var query = context.FamilyUsers
+            .Include(fu => fu.Family)
+            .Where(fu => fu.UserId == userId && 
+                         EF.Functions.Like(fu.Family!.FamilyName, familyName));
+
+        if (excludeFamilyId.HasValue)
+        {
+            query = query.Where(fu => fu.FamilyId != excludeFamilyId.Value);
+        }
+
+        return await query.AnyAsync(cancellationToken);
+    }
+
     private static FamilyDto MapToDto(Domain.Entities.Family family)
     {
         return new FamilyDto

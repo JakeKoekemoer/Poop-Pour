@@ -105,6 +105,26 @@ public class DependentService(ApplicationDbContext context) : IDependentService
         return (entities.Select(MapToDto), totalCount);
     }
 
+    public async Task<bool> IsDependentNameDuplicateAsync(
+        Guid familyId,
+        string dependentName,
+        string dependentSurname,
+        Guid? excludeDependentId = null,
+        CancellationToken cancellationToken = default)
+    {
+        var query = context.Dependents
+            .Where(d => d.FamilyId == familyId &&
+                        EF.Functions.Like(d.DependentName, dependentName) &&
+                        EF.Functions.Like(d.DependentSurname, dependentSurname));
+
+        if (excludeDependentId.HasValue)
+        {
+            query = query.Where(d => d.DependentId != excludeDependentId.Value);
+        }
+
+        return await query.AnyAsync(cancellationToken);
+    }
+
     private static DependentDto MapToDto(Domain.Entities.Dependent dependent)
     {
         return new DependentDto

@@ -54,6 +54,25 @@ public class UpdateDiperLogCommandHandler(IDiperLogService diperLogService) : IR
 {
     public async Task<DiperLogDto> Handle(UpdateDiperLogCommand request, CancellationToken cancellationToken)
     {
+        // Business validation: Check for duplicate timestamp if updating the date
+        if (request.DiperDate.HasValue)
+        {
+            var currentDiperLog = await diperLogService.GetDiperLogByIdAsync(request.DiperLogId, cancellationToken);
+            if (currentDiperLog != null)
+            {
+                var isDuplicate = await diperLogService.IsDiperLogTimestampDuplicateAsync(
+                    currentDiperLog.DependentId,
+                    request.DiperDate.Value,
+                    request.DiperLogId,
+                    cancellationToken);
+
+                if (isDuplicate)
+                {
+                    throw new DuplicateDiperLogTimestampException(currentDiperLog.DependentId, request.DiperDate.Value);
+                }
+            }
+        }
+
         var diperLog = await diperLogService.UpdateDiperLogAsync(
             request.DiperLogId,
             request.DiperDate,

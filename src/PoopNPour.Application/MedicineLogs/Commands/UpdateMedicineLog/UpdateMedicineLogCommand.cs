@@ -57,6 +57,29 @@ public class UpdateMedicineLogCommandHandler(IMedicineLogService medicineLogServ
 {
     public async Task<MedicineLogDto> Handle(UpdateMedicineLogCommand request, CancellationToken cancellationToken)
     {
+        // Business validation: Check for duplicate medicine + timestamp if updating either field
+        if (request.MedicineName != null || request.TimeAdministered.HasValue)
+        {
+            var currentMedicineLog = await medicineLogService.GetMedicineLogByIdAsync(request.MedicineLogId, cancellationToken);
+            if (currentMedicineLog != null)
+            {
+                var medicineNameToCheck = request.MedicineName ?? currentMedicineLog.MedicineName;
+                var timeToCheck = request.TimeAdministered ?? currentMedicineLog.TimeAdministered;
+                
+                var isDuplicate = await medicineLogService.IsMedicineLogDuplicateAsync(
+                    currentMedicineLog.DependentId,
+                    medicineNameToCheck,
+                    timeToCheck,
+                    request.MedicineLogId,
+                    cancellationToken);
+
+                if (isDuplicate)
+                {
+                    throw new DuplicateMedicineLogException(currentMedicineLog.DependentId, medicineNameToCheck, timeToCheck);
+                }
+            }
+        }
+
         var medicineLog = await medicineLogService.UpdateMedicineLogAsync(
             request.MedicineLogId,
             request.MedicineName,

@@ -47,6 +47,25 @@ public class UpdateFeedLogCommandHandler(IFeedLogService feedLogService) : IRequ
 {
     public async Task<FeedLogDto> Handle(UpdateFeedLogCommand request, CancellationToken cancellationToken)
     {
+        // Business validation: Check for duplicate timestamp if updating the time
+        if (request.TimeFed.HasValue)
+        {
+            var currentFeedLog = await feedLogService.GetFeedLogByIdAsync(request.FeedLogId, cancellationToken);
+            if (currentFeedLog != null)
+            {
+                var isDuplicate = await feedLogService.IsFeedLogTimestampDuplicateAsync(
+                    currentFeedLog.DependentId,
+                    request.TimeFed.Value,
+                    request.FeedLogId,
+                    cancellationToken);
+
+                if (isDuplicate)
+                {
+                    throw new DuplicateFeedLogTimestampException(currentFeedLog.DependentId, request.TimeFed.Value);
+                }
+            }
+        }
+
         var feedLog = await feedLogService.UpdateFeedLogAsync(
             request.FeedLogId,
             request.FeedType,

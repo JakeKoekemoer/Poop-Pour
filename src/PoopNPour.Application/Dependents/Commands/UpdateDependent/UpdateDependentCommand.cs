@@ -56,6 +56,30 @@ public class UpdateDependentCommandHandler(IDependentService dependentService) :
 {
     public async Task<DependentDto> Handle(UpdateDependentCommand request, CancellationToken cancellationToken)
     {
+        // Business validation: Check for duplicate dependent name if updating name fields
+        if (request.DependentName != null || request.DependentSurname != null)
+        {
+            // Get the current dependent to check which values need validation
+            var currentDependent = await dependentService.GetDependentByIdAsync(request.DependentId, cancellationToken);
+            if (currentDependent != null)
+            {
+                var nameToCheck = request.DependentName ?? currentDependent.DependentName;
+                var surnameToCheck = request.DependentSurname ?? currentDependent.DependentSurname;
+                
+                var isDuplicate = await dependentService.IsDependentNameDuplicateAsync(
+                    currentDependent.FamilyId,
+                    nameToCheck,
+                    surnameToCheck,
+                    request.DependentId,
+                    cancellationToken);
+
+                if (isDuplicate)
+                {
+                    throw new DuplicateDependentNameException(nameToCheck, surnameToCheck, currentDependent.FamilyId);
+                }
+            }
+        }
+
         var dependent = await dependentService.UpdateDependentAsync(
             request.DependentId,
             request.DependentName,

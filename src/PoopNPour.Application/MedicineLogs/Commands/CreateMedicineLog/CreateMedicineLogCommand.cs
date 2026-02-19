@@ -2,6 +2,7 @@ using FluentValidation;
 using MediatR;
 using PoopNPour.Abstractions.MedicineLog;
 using PoopNPour.Application.Authorization;
+using PoopNPour.Application.MedicineLogs.Exceptions;
 using PoopNPour.Domain.Common.Auth;
 
 namespace PoopNPour.Application.MedicineLogs.Commands.CreateMedicineLog;
@@ -54,6 +55,19 @@ public class CreateMedicineLogCommandHandler(IMedicineLogService medicineLogServ
 {
     public async Task<MedicineLogDto> Handle(CreateMedicineLogCommand request, CancellationToken cancellationToken)
     {
+        // Business validation: Check for duplicate medicine + timestamp
+        var isDuplicate = await medicineLogService.IsMedicineLogDuplicateAsync(
+            request.DependentId,
+            request.MedicineName,
+            request.TimeAdministered,
+            null,
+            cancellationToken);
+
+        if (isDuplicate)
+        {
+            throw new DuplicateMedicineLogException(request.DependentId, request.MedicineName, request.TimeAdministered);
+        }
+
         return await medicineLogService.CreateMedicineLogAsync(
             request.DependentId,
             request.MedicineName,

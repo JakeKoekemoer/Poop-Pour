@@ -120,6 +120,26 @@ public class MedicineLogService(ApplicationDbContext context) : IMedicineLogServ
         return (entities.Select(MapToDto), totalCount);
     }
 
+    public async Task<bool> IsMedicineLogDuplicateAsync(
+        Guid dependentId,
+        string medicineName,
+        DateTimeOffset timeAdministered,
+        Guid? excludeMedicineLogId = null,
+        CancellationToken cancellationToken = default)
+    {
+        var query = context.MedicineLogs
+            .Where(ml => ml.DependentId == dependentId &&
+                         EF.Functions.Like(ml.MedicineName, medicineName) &&
+                         ml.TimeAdministered == timeAdministered);
+
+        if (excludeMedicineLogId.HasValue)
+        {
+            query = query.Where(ml => ml.MedicineLogId != excludeMedicineLogId.Value);
+        }
+
+        return await query.AnyAsync(cancellationToken);
+    }
+
     private static MedicineLogDto MapToDto(Domain.Entities.MedicineLog medicineLog)
     {
         return new MedicineLogDto

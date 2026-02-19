@@ -2,6 +2,7 @@ using FluentValidation;
 using MediatR;
 using PoopNPour.Abstractions.FeedLog;
 using PoopNPour.Application.Authorization;
+using PoopNPour.Application.FeedLogs.Exceptions;
 using PoopNPour.Domain.Common.Auth;
 using PoopNPour.Domain.Enums.FeedLog;
 
@@ -47,6 +48,18 @@ public class CreateFeedLogCommandHandler(IFeedLogService feedLogService) : IRequ
 {
     public async Task<FeedLogDto> Handle(CreateFeedLogCommand request, CancellationToken cancellationToken)
     {
+        // Business validation: Check for duplicate timestamp
+        var isDuplicate = await feedLogService.IsFeedLogTimestampDuplicateAsync(
+            request.DependentId,
+            request.TimeFed,
+            null,
+            cancellationToken);
+
+        if (isDuplicate)
+        {
+            throw new DuplicateFeedLogTimestampException(request.DependentId, request.TimeFed);
+        }
+
         return await feedLogService.CreateFeedLogAsync(
             request.DependentId,
             request.FeedType,

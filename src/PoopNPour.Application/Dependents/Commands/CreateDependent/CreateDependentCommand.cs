@@ -2,6 +2,7 @@ using FluentValidation;
 using MediatR;
 using PoopNPour.Abstractions.Dependent;
 using PoopNPour.Application.Authorization;
+using PoopNPour.Application.Dependents.Exceptions;
 using PoopNPour.Domain.Common.Auth;
 
 namespace PoopNPour.Application.Dependents.Commands.CreateDependent;
@@ -53,6 +54,19 @@ public class CreateDependentCommandHandler(IDependentService dependentService) :
 {
     public async Task<DependentDto> Handle(CreateDependentCommand request, CancellationToken cancellationToken)
     {
+        // Business validation: Check for duplicate dependent name in the family
+        var isDuplicate = await dependentService.IsDependentNameDuplicateAsync(
+            request.FamilyId,
+            request.DependentName,
+            request.DependentSurname,
+            null,
+            cancellationToken);
+
+        if (isDuplicate)
+        {
+            throw new DuplicateDependentNameException(request.DependentName, request.DependentSurname, request.FamilyId);
+        }
+
         return await dependentService.CreateDependentAsync(
             request.FamilyId,
             request.DependentName,

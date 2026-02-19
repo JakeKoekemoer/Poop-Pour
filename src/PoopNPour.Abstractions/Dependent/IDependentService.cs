@@ -41,4 +41,14 @@ public interface IDependentService
         Guid? familyId = null,
         string? searchTerm = null,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Checks if a dependent name is a duplicate within a family
+    /// </summary>
+    Task<bool> IsDependentNameDuplicateAsync(
+        Guid familyId,
+        string dependentName,
+        string dependentSurname,
+        Guid? excludeDependentId = null,
+        CancellationToken cancellationToken = default);
 }

@@ -2,6 +2,7 @@ using FluentValidation;
 using MediatR;
 using PoopNPour.Abstractions.DiperLog;
 using PoopNPour.Application.Authorization;
+using PoopNPour.Application.DiperLogs.Exceptions;
 using PoopNPour.Domain.Common.Auth;
 using PoopNPour.Domain.Enums.DiperLog;
 
@@ -51,6 +52,18 @@ public class CreateDiperLogCommandHandler(IDiperLogService diperLogService) : IR
 {
     public async Task<DiperLogDto> Handle(CreateDiperLogCommand request, CancellationToken cancellationToken)
     {
+        // Business validation: Check for duplicate timestamp
+        var isDuplicate = await diperLogService.IsDiperLogTimestampDuplicateAsync(
+            request.DependentId,
+            request.DiperDate,
+            null,
+            cancellationToken);
+
+        if (isDuplicate)
+        {
+            throw new DuplicateDiperLogTimestampException(request.DependentId, request.DiperDate);
+        }
+
         return await diperLogService.CreateDiperLogAsync(
             request.DependentId,
             request.DiperDate,

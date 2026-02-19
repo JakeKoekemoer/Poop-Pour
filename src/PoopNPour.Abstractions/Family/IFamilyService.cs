@@ -37,4 +37,13 @@ public interface IFamilyService
         int pageSize,
         string? searchTerm = null,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Checks if a family name is a duplicate for a given user
+    /// </summary>
+    Task<bool> IsFamilyNameDuplicateAsync(
+        string familyName,
+        string userId,
+        Guid? excludeFamilyId = null,
+        CancellationToken cancellationToken = default);
 }

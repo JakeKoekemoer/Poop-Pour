@@ -45,4 +45,14 @@ public interface IMedicineLogService
         DateTimeOffset? startDate = null,
         DateTimeOffset? endDate = null,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Checks if the same medicine has already been administered at the same time for a dependent
+    /// </summary>
+    Task<bool> IsMedicineLogDuplicateAsync(
+        Guid dependentId,
+        string medicineName,
+        DateTimeOffset timeAdministered,
+        Guid? excludeMedicineLogId = null,
+        CancellationToken cancellationToken = default);
 }
