@@ -5,11 +5,13 @@ import { useRouter } from "vue-router";
 import { authService } from "@/services/AuthService/AuthService";
 import { RouteHelper } from "@/routes/helpers/RouteHelper";
 import { PUBLIC_ROUTES, SECURE_ROUTES } from "@/routes/constants";
+import { useAppToast } from "@/composables/useAppToast";
 
 import RegisterForm from "@/components/views/public/Register/RegisterForm.vue";
 import type { RegisterFormValues } from "@/components/views/public/Register/registerSchema";
 
 const router = useRouter();
+const toast = useAppToast();
 const isSubmitting = ref(false);
 const errorMessage = ref<string | null>(null);
 
@@ -27,12 +29,17 @@ async function handleRegister(values: RegisterFormValues) {
     );
 
     if (response.success) {
+      toast.success("Account created!", "Welcome — you are now signed in.");
       await router.push({ name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.DASHBOARD) });
     } else {
-      errorMessage.value = response.error.message || "Registration failed. Please try again.";
+      const message = response.error.message || "Registration failed. Please try again.";
+      errorMessage.value = message;
+      toast.error("Registration failed", message);
     }
   } catch (error) {
-    errorMessage.value = "An unexpected error occurred. Please try again.";
+    const message = "An unexpected error occurred. Please try again.";
+    errorMessage.value = message;
+    toast.error("Something went wrong", message);
     console.error("Registration error:", error);
   } finally {
     isSubmitting.value = false;
