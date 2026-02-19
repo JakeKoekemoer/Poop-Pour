@@ -7,6 +7,7 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
+import { EnvConfig } from '@/lib/env';
 export class ApiBase {
   /**
    * NB: THIS COMMENT CANNOT LIVE ABOVE THE API BASE CLASS DECLARATION

@@ -1,11 +1,11 @@
-import { BaseService } from '../BaseService';
-import type { ApiResponse } from '../types';
-import type { LoginRequestDto, RegisterRequestDto } from '@/api/api-client';
-import { useUserStore, type UserProfile } from '@/stores';
-import { toUserProfile } from '@/stores/user/types';
-import router from '@/routes';
-import { RouteHelper } from '@/routes/helpers/RouteHelper';
-import { PUBLIC_ROUTES } from '@/routes/constants';
+import { BaseService } from "../BaseService";
+import type { ApiResponse } from "../types";
+import type { LoginRequestDto, RegisterRequestDto } from "@/api/api-client";
+import { useUserStore, type UserProfile } from "@/stores/user";
+import { toUserProfile } from "@/stores/user/types";
+import router from "@/routes";
+import { RouteHelper } from "@/routes/helpers/RouteHelper";
+import { PUBLIC_ROUTES } from "@/routes/constants";
 
 /**
  * Authentication service for login, registration, and logout operations
@@ -13,14 +13,14 @@ import { PUBLIC_ROUTES } from '@/routes/constants';
 class AuthService extends BaseService {
   /**
    * Authenticate user with username and password
-   * 
+   *
    * @param username - User's username
    * @param password - User's password
    * @returns Promise with login response containing token, expiresAt, and user
    */
   async login(
     username: string,
-    password: string
+    password: string,
   ): Promise<ApiResponse<{ token: string; expiresAt: Date; user: UserProfile }>> {
     const dto: LoginRequestDto = {
       username,
@@ -31,11 +31,11 @@ class AuthService extends BaseService {
 
     if (response.success && response.data) {
       const { token, expiresAt, user } = response.data;
-      
+
       if (token && user && expiresAt) {
         const userProfile = toUserProfile(user);
         const expiryDate = new Date(expiresAt);
-        
+
         const userStore = useUserStore();
         userStore.setAuth(token, userProfile, expiryDate);
 
@@ -55,7 +55,7 @@ class AuthService extends BaseService {
 
   /**
    * Register a new user account
-   * 
+   *
    * @param email - User's email address
    * @param userName - User's username
    * @param password - User's password
@@ -68,7 +68,7 @@ class AuthService extends BaseService {
     userName: string,
     password: string,
     firstName?: string,
-    lastName?: string
+    lastName?: string,
   ): Promise<ApiResponse<{ token: string; expiresAt: Date; user: UserProfile }>> {
     const dto: RegisterRequestDto = {
       email,
@@ -82,11 +82,11 @@ class AuthService extends BaseService {
 
     if (response.success && response.data) {
       const { token, expiresAt, user } = response.data;
-      
+
       if (token && user && expiresAt) {
         const userProfile = toUserProfile(user);
         const expiryDate = new Date(expiresAt);
-        
+
         const userStore = useUserStore();
         userStore.setAuth(token, userProfile, expiryDate);
 
@@ -112,8 +112,8 @@ class AuthService extends BaseService {
     const userStore = useUserStore();
     userStore.clearAuth();
 
-    router.push({ name: RouteHelper.GetPublicRouteName(PUBLIC_ROUTES.LOGIN) }).catch(err => {
-      console.error('Failed to redirect to login:', err);
+    router.push({ name: RouteHelper.GetPublicRouteName(PUBLIC_ROUTES.LOGIN) }).catch((err: unknown) => {
+      console.error("Failed to redirect to login:", err);
     });
   }
 }

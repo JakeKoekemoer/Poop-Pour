@@ -3,3 +3,5 @@
 export { useThemeStore } from './theme'
 export { useUserStore } from './user'
 export type { UserProfile } from './user'
+export { useNotificationStore } from './notification'
+export type { PendingToast, ToastSeverity } from './notification'

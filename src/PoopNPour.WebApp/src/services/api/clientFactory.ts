@@ -46,7 +46,7 @@ export function getApiClient(): Client {
       // The store clearAuth method will be called from the router
 
       // Redirect to login page
-      router.push({ name: RouteHelper.GetPublicRouteName(PUBLIC_ROUTES.LOGIN) }).catch((err) => {
+      router.push({ name: RouteHelper.GetPublicRouteName(PUBLIC_ROUTES.LOGIN) }).catch((err: unknown) => {
         console.error("Failed to redirect to login:", err);
       });
     });

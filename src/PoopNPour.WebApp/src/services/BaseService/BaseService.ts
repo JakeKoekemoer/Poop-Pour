@@ -1,4 +1,4 @@
-import { getApiClient } from '../api';
+import { getApiClient } from '../api/clientFactory';
 import type { ApiResponse, ApiError } from '../types';
 import { Client, SwaggerResponse, ApiException } from '@/api/api-client';
 

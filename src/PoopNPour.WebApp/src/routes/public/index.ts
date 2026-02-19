@@ -17,11 +17,25 @@ export const publicRoutes: RouteRecordRaw[] = [
         path: "login",
         name: RouteHelper.GetPublicRouteName(PUBLIC_ROUTES.LOGIN),
         component: () => import("@/views/public/Login/LoginPage.vue"),
+        meta: {
+          guestOnly: true,
+          guestOnlyMessage: {
+            summary: 'Already signed in',
+            detail: 'You are already signed in. Here\'s your profile.',
+          },
+        },
       },
       {
         path: "register",
         name: RouteHelper.GetPublicRouteName(PUBLIC_ROUTES.REGISTER),
         component: () => import("@/views/public/Register/RegisterPage.vue"),
+        meta: {
+          guestOnly: true,
+          guestOnlyMessage: {
+            summary: 'Already registered',
+            detail: 'You already have an account. Here\'s your profile.',
+          },
+        },
       },
       {
         path: "unauthorized",

@@ -7,6 +7,7 @@ export type { UserProfile } from './types';
 
 const AUTH_TOKEN_COOKIE = 'poop-pour-auth-token';
 const TOKEN_EXPIRY_COOKIE = 'poop-pour-token-expiry';
+const USER_PROFILE_KEY = 'poop-pour-user-profile';
 const COOKIE_OPTIONS = {
   sameSite: 'strict' as const,
   secure: import.meta.env.PROD,
@@ -78,6 +79,8 @@ export const useUserStore = defineStore('user', {
         expires: expiryDays > 0 ? expiryDays : 1,
       });
 
+      localStorage.setItem(USER_PROFILE_KEY, JSON.stringify(user));
+
       setClientAuthToken(token);
     },
 
@@ -88,6 +91,7 @@ export const useUserStore = defineStore('user', {
 
       Cookies.remove(AUTH_TOKEN_COOKIE);
       Cookies.remove(TOKEN_EXPIRY_COOKIE);
+      localStorage.removeItem(USER_PROFILE_KEY);
 
       clearClientAuthToken();
     },
@@ -106,8 +110,17 @@ export const useUserStore = defineStore('user', {
           return;
         }
 
+        const userJson = localStorage.getItem(USER_PROFILE_KEY);
+        const user: UserProfile | null = userJson ? JSON.parse(userJson) : null;
+
+        if (!user) {
+          this.clearAuth();
+          return;
+        }
+
         this.token = token;
         this.expiresAt = expiresAt;
+        this.user = user;
         
         setClientAuthToken(token);
       }
