@@ -62,7 +62,7 @@ public class UpdateFamilyCommandHandler(
         // Business validation: Check for duplicate family name if updating the name
         if (request.FamilyName != null)
         {
-            var userId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = httpContextAccessor.HttpContext?.User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
             if (!string.IsNullOrEmpty(userId))
             {
                 var isDuplicate = await familyService.IsFamilyNameDuplicateAsync(

@@ -49,7 +49,7 @@ public class CreateFamilyCommandHandler(
     public async Task<FamilyDto> Handle(CreateFamilyCommand request, CancellationToken cancellationToken)
     {
         // Business validation: Check for duplicate family name
-        var userId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userId = httpContextAccessor.HttpContext?.User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
         if (!string.IsNullOrEmpty(userId))
         {
             var isDuplicate = await familyService.IsFamilyNameDuplicateAsync(
