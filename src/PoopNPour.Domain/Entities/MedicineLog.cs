@@ -1,6 +1,8 @@
-﻿namespace PoopNPour.Domain.Entities;
+﻿using PoopNPour.Domain.Common;
 
-public class MedicineLog
+namespace PoopNPour.Domain.Entities;
+
+public class MedicineLog : BaseAuditableEntity
 {
     // PK
     public Guid MedicineLogId { get; set; }
