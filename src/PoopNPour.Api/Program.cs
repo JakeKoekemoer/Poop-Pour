@@ -118,6 +118,9 @@ using (var scope = app.Services.CreateScope())
 // NB: Run before Swagger UI is configured
 app.MapEndpointGroups();
 
+// Serve Vue app for all non-API routes (supports Vue Router history mode)
+app.MapFallbackToFile("index.html");
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

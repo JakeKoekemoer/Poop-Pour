@@ -11,6 +11,10 @@ export default defineConfig({
             '@': path.resolve(__dirname, './src'),
         },
     },
+    build: {
+        outDir: '../PoopNPour.Api/wwwroot',
+        emptyOutDir: false,
+    },
     server: {
         port: process.env['PORT'] ? parseInt(process.env['PORT']) : 51500,
         strictPort: false,
