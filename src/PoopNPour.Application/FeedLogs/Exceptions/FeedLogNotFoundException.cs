@@ -1,9 +1,11 @@
+using PoopNPour.Application.Common.Exceptions;
+
 namespace PoopNPour.Application.FeedLogs.Exceptions;
 
 /// <summary>
 /// Exception thrown when feed log is not found
 /// </summary>
-public class FeedLogNotFoundException : Exception
+public class FeedLogNotFoundException : NotFoundException
 {
     public FeedLogNotFoundException(Guid feedLogId) 
         : base($"Feed log with ID '{feedLogId}' was not found.")

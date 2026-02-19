@@ -12,6 +12,7 @@ public class FamilyService(ApplicationDbContext context) : IFamilyService
     public async Task<FamilyDto> CreateFamilyAsync(
         string familyName,
         string familyLastName,
+        string? creatorUserId = null,
         CancellationToken cancellationToken = default)
     {
         var family = new Domain.Entities.Family
@@ -22,6 +23,19 @@ public class FamilyService(ApplicationDbContext context) : IFamilyService
 
         context.Families.Add(family);
         await context.SaveChangesAsync(cancellationToken);
+
+        // If a creator user ID is provided, add them as a family member
+        if (!string.IsNullOrEmpty(creatorUserId))
+        {
+            var familyUser = new Domain.Entities.FamilyUser
+            {
+                FamilyId = family.FamilyId,
+                UserId = creatorUserId
+            };
+
+            context.FamilyUsers.Add(familyUser);
+            await context.SaveChangesAsync(cancellationToken);
+        }
 
         return MapToDto(family);
     }
@@ -99,7 +113,7 @@ public class FamilyService(ApplicationDbContext context) : IFamilyService
         var query = context.FamilyUsers
             .Include(fu => fu.Family)
             .Where(fu => fu.UserId == userId && 
-                         EF.Functions.Like(fu.Family!.FamilyName, familyName));
+                         fu.Family!.FamilyName == familyName);
 
         if (excludeFamilyId.HasValue)
         {

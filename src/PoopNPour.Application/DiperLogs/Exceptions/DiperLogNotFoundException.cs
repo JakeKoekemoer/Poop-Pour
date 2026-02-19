@@ -1,9 +1,11 @@
+using PoopNPour.Application.Common.Exceptions;
+
 namespace PoopNPour.Application.DiperLogs.Exceptions;
 
 /// <summary>
 /// Exception thrown when diper log is not found
 /// </summary>
-public class DiperLogNotFoundException : Exception
+public class DiperLogNotFoundException : NotFoundException
 {
     public DiperLogNotFoundException(Guid diperLogId) 
         : base($"Diper log with ID '{diperLogId}' was not found.")

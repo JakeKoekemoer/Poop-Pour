@@ -750,7 +750,7 @@ export class Client extends ApiBase implements IClient {
      * @return OK
      */
     createDiperLog(body: CreateDiperLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<DiperLogDto>> {
-        let url_ = this.baseUrl + "/api/diperlogs";
+        let url_ = this.baseUrl + "/api/diper-logs";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -817,7 +817,7 @@ export class Client extends ApiBase implements IClient {
      * @return OK
      */
     getDiperLogs(page?: number | undefined, pageSize?: number | undefined, dependentId?: string | undefined, startDate?: Date | undefined, endDate?: Date | undefined, signal?: AbortSignal): Promise<SwaggerResponse<DiperLogDtoPaginatedResponseDto>> {
-        let url_ = this.baseUrl + "/api/diperlogs?";
+        let url_ = this.baseUrl + "/api/diper-logs?";
         if (page === null)
             throw new globalThis.Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
@@ -877,7 +877,7 @@ export class Client extends ApiBase implements IClient {
      * @return OK
      */
     updateDiperLog(id: string, body: UpdateDiperLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<DiperLogDto>> {
-        let url_ = this.baseUrl + "/api/diperlogs/{id}";
+        let url_ = this.baseUrl + "/api/diper-logs/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -936,7 +936,7 @@ export class Client extends ApiBase implements IClient {
      * @return OK
      */
     getDiperLogById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<DiperLogDto>> {
-        let url_ = this.baseUrl + "/api/diperlogs/{id}";
+        let url_ = this.baseUrl + "/api/diper-logs/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1222,7 +1222,7 @@ export class Client extends ApiBase implements IClient {
      * @return OK
      */
     addUserToFamily(body: AddUserToFamilyCommand, signal?: AbortSignal): Promise<SwaggerResponse<FamilyUserDto>> {
-        let url_ = this.baseUrl + "/api/familyusers";
+        let url_ = this.baseUrl + "/api/family-users";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -1288,7 +1288,7 @@ export class Client extends ApiBase implements IClient {
      * @return OK
      */
     getFamilyUsers(page?: number | undefined, pageSize?: number | undefined, familyId?: string | undefined, userId?: string | undefined, signal?: AbortSignal): Promise<SwaggerResponse<FamilyUserDtoPaginatedResponseDto>> {
-        let url_ = this.baseUrl + "/api/familyusers?";
+        let url_ = this.baseUrl + "/api/family-users?";
         if (page === null)
             throw new globalThis.Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
@@ -1344,7 +1344,7 @@ export class Client extends ApiBase implements IClient {
      * @return OK
      */
     removeUserFromFamily(familyId: string, userId: string, signal?: AbortSignal): Promise<SwaggerResponse<any>> {
-        let url_ = this.baseUrl + "/api/familyusers/{familyId}/users/{userId}";
+        let url_ = this.baseUrl + "/api/family-users/{familyId}/users/{userId}";
         if (familyId === undefined || familyId === null)
             throw new globalThis.Error("The parameter 'familyId' must be defined.");
         url_ = url_.replace("{familyId}", encodeURIComponent("" + familyId));
@@ -1398,7 +1398,7 @@ export class Client extends ApiBase implements IClient {
      * @return OK
      */
     getFamilyUserById(familyId: string, userId: string, signal?: AbortSignal): Promise<SwaggerResponse<FamilyUserDto>> {
-        let url_ = this.baseUrl + "/api/familyusers/{familyId}/users/{userId}";
+        let url_ = this.baseUrl + "/api/family-users/{familyId}/users/{userId}";
         if (familyId === undefined || familyId === null)
             throw new globalThis.Error("The parameter 'familyId' must be defined.");
         url_ = url_.replace("{familyId}", encodeURIComponent("" + familyId));
@@ -1456,7 +1456,7 @@ export class Client extends ApiBase implements IClient {
      * @return OK
      */
     createFeedLog(body: CreateFeedLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<FeedLogDto>> {
-        let url_ = this.baseUrl + "/api/feedlogs";
+        let url_ = this.baseUrl + "/api/feed-logs";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -1523,7 +1523,7 @@ export class Client extends ApiBase implements IClient {
      * @return OK
      */
     getFeedLogs(page?: number | undefined, pageSize?: number | undefined, dependentId?: string | undefined, startDate?: Date | undefined, endDate?: Date | undefined, signal?: AbortSignal): Promise<SwaggerResponse<FeedLogDtoPaginatedResponseDto>> {
-        let url_ = this.baseUrl + "/api/feedlogs?";
+        let url_ = this.baseUrl + "/api/feed-logs?";
         if (page === null)
             throw new globalThis.Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
@@ -1583,7 +1583,7 @@ export class Client extends ApiBase implements IClient {
      * @return OK
      */
     updateFeedLog(id: string, body: UpdateFeedLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<FeedLogDto>> {
-        let url_ = this.baseUrl + "/api/feedlogs/{id}";
+        let url_ = this.baseUrl + "/api/feed-logs/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1642,7 +1642,7 @@ export class Client extends ApiBase implements IClient {
      * @return OK
      */
     getFeedLogById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<FeedLogDto>> {
-        let url_ = this.baseUrl + "/api/feedlogs/{id}";
+        let url_ = this.baseUrl + "/api/feed-logs/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1697,7 +1697,7 @@ export class Client extends ApiBase implements IClient {
      * @return OK
      */
     createMedicineLog(body: CreateMedicineLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<MedicineLogDto>> {
-        let url_ = this.baseUrl + "/api/medicinelogs";
+        let url_ = this.baseUrl + "/api/medicine-logs";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -1765,7 +1765,7 @@ export class Client extends ApiBase implements IClient {
      * @return OK
      */
     getMedicineLogs(page?: number | undefined, pageSize?: number | undefined, dependentId?: string | undefined, medicineName?: string | undefined, startDate?: Date | undefined, endDate?: Date | undefined, signal?: AbortSignal): Promise<SwaggerResponse<MedicineLogDtoPaginatedResponseDto>> {
-        let url_ = this.baseUrl + "/api/medicinelogs?";
+        let url_ = this.baseUrl + "/api/medicine-logs?";
         if (page === null)
             throw new globalThis.Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
@@ -1829,7 +1829,7 @@ export class Client extends ApiBase implements IClient {
      * @return OK
      */
     updateMedicineLog(id: string, body: UpdateMedicineLogCommand, signal?: AbortSignal): Promise<SwaggerResponse<MedicineLogDto>> {
-        let url_ = this.baseUrl + "/api/medicinelogs/{id}";
+        let url_ = this.baseUrl + "/api/medicine-logs/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1888,7 +1888,7 @@ export class Client extends ApiBase implements IClient {
      * @return OK
      */
     getMedicineLogById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<MedicineLogDto>> {
-        let url_ = this.baseUrl + "/api/medicinelogs/{id}";
+        let url_ = this.baseUrl + "/api/medicine-logs/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));

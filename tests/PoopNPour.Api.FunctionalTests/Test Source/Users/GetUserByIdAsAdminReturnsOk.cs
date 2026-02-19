@@ -21,7 +21,7 @@ public class GetUserByIdAsAdminReturnsOk : AuthenticatedTestBase
         using var client = await CreateAdminClientAsync();
         var listResponse = await client.GetAsync("/api/users?page=1&pageSize=1");
         listResponse.EnsureSuccessStatusCode();
-        var listResult = await listResponse.Content.ReadFromJsonAsync<PoopNPour.Application.Users.Models.PaginatedResponseDto<UserDto>>();
+        var listResult = await listResponse.Content.ReadFromJsonAsync<PoopNPour.Application.Common.Models.PaginatedResponseDto<UserDto>>();
         var userId = listResult!.Items.First().Id;
 
         // Act

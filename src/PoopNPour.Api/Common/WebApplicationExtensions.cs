@@ -87,7 +87,7 @@ public static class WebApplicationExtensions
 
     /// <summary>
     /// Converts a class name to a route name
-    /// Examples: "UsersEndpoints" -> "users", "Users" -> "users", "AuthenticationEndpoints" -> "authentication"
+    /// Examples: "UsersEndpoints" -> "users", "Users" -> "users", "AuthenticationEndpoints" -> "authentication", "FeedLogsEndpoints" -> "feed-logs"
     /// </summary>
     private static string ConvertToRouteName(string className)
     {
@@ -97,8 +97,11 @@ public static class WebApplicationExtensions
             className = className.Substring(0, className.Length - "Endpoints".Length);
         }
 
+        // Convert PascalCase to kebab-case (e.g., "FeedLogs" -> "feed-logs")
+        var kebabCase = System.Text.RegularExpressions.Regex.Replace(className, "(?<!^)([A-Z])", "-$1");
+
         // Convert to lowercase
-        return className.ToLowerInvariant();
+        return kebabCase.ToLowerInvariant();
     }
 
 }

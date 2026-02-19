@@ -69,6 +69,64 @@ public static class PolicyRoleMappings
 
         #endregion Settings Policies
 
+        #region Family Policies
+
+        options.AddPolicy(Policies.CanManageFamilies,
+            policy => policy.RequireRole([
+                Roles.Family_Head,
+                Roles.Administrator
+            ])
+        );
+
+        options.AddPolicy(Policies.CanViewFamilies,
+            policy => policy.RequireRole([
+                Roles.Family_Head,
+                Roles.Family_Member,
+                Roles.Administrator
+            ])
+        );
+
+        #endregion Family Policies
+
+        #region Dependent Policies
+
+        options.AddPolicy(Policies.CanManageDependents,
+            policy => policy.RequireRole([
+                Roles.Family_Head,
+                Roles.Administrator
+            ])
+        );
+
+        options.AddPolicy(Policies.CanViewDependents,
+            policy => policy.RequireRole([
+                Roles.Family_Head,
+                Roles.Family_Member,
+                Roles.Administrator
+            ])
+        );
+
+        #endregion Dependent Policies
+
+        #region Log Policies
+
+        options.AddPolicy(Policies.CanManageLogs,
+            policy => policy.RequireRole([
+                Roles.Family_Head,
+                Roles.Family_Member,
+                Roles.Administrator
+            ])
+        );
+
+        options.AddPolicy(Policies.CanViewLogs,
+            policy => policy.RequireRole([
+                Roles.Family_Head,
+                Roles.Family_Member,
+                Roles.Administrator
+            ])
+        );
+
+        #endregion Log Policies
+
         return options;
     }
 }

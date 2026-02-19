@@ -11,6 +11,7 @@ public interface IFamilyService
     Task<FamilyDto> CreateFamilyAsync(
         string familyName,
         string familyLastName,
+        string? creatorUserId = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>

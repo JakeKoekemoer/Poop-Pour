@@ -1,9 +1,11 @@
+using PoopNPour.Application.Common.Exceptions;
+
 namespace PoopNPour.Application.Dependents.Exceptions;
 
 /// <summary>
 /// Exception thrown when dependent is not found
 /// </summary>
-public class DependentNotFoundException : Exception
+public class DependentNotFoundException : NotFoundException
 {
     public DependentNotFoundException(Guid dependentId) 
         : base($"Dependent with ID '{dependentId}' was not found.")

@@ -67,6 +67,7 @@ public class CreateFamilyCommandHandler(
         return await familyService.CreateFamilyAsync(
             request.FamilyName,
             request.FamilyLastName,
+            userId,
             cancellationToken);
     }
 }

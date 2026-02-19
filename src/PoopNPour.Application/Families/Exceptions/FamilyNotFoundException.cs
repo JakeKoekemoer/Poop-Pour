@@ -1,9 +1,11 @@
+using PoopNPour.Application.Common.Exceptions;
+
 namespace PoopNPour.Application.Families.Exceptions;
 
 /// <summary>
 /// Exception thrown when family is not found
 /// </summary>
-public class FamilyNotFoundException : Exception
+public class FamilyNotFoundException : NotFoundException
 {
     public FamilyNotFoundException(Guid familyId) 
         : base($"Family with ID '{familyId}' was not found.")

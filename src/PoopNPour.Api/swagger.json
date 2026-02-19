@@ -278,7 +278,7 @@
         }
       }
     },
-    "/api/diperlogs": {
+    "/api/diper-logs": {
       "post": {
         "tags": [
           "Diper Logs"
@@ -393,7 +393,7 @@
         }
       }
     },
-    "/api/diperlogs/{id}": {
+    "/api/diper-logs/{id}": {
       "put": {
         "tags": [
           "Diper Logs"
@@ -675,7 +675,7 @@
         }
       }
     },
-    "/api/familyusers": {
+    "/api/family-users": {
       "post": {
         "tags": [
           "Family Users"
@@ -781,7 +781,7 @@
         }
       }
     },
-    "/api/familyusers/{familyId}/users/{userId}": {
+    "/api/family-users/{familyId}/users/{userId}": {
       "delete": {
         "tags": [
           "Family Users"
@@ -874,7 +874,7 @@
         }
       }
     },
-    "/api/feedlogs": {
+    "/api/feed-logs": {
       "post": {
         "tags": [
           "Feed Logs"
@@ -989,7 +989,7 @@
         }
       }
     },
-    "/api/feedlogs/{id}": {
+    "/api/feed-logs/{id}": {
       "put": {
         "tags": [
           "Feed Logs"
@@ -1081,7 +1081,7 @@
         }
       }
     },
-    "/api/medicinelogs": {
+    "/api/medicine-logs": {
       "post": {
         "tags": [
           "Medicine Logs"
@@ -1203,7 +1203,7 @@
         }
       }
     },
-    "/api/medicinelogs/{id}": {
+    "/api/medicine-logs/{id}": {
       "put": {
         "tags": [
           "Medicine Logs"

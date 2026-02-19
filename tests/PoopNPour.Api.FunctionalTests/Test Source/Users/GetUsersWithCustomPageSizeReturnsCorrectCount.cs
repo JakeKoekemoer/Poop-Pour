@@ -2,7 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
 using PoopNPour.Api.FunctionalTests.Infrastructure;
-using PoopNPour.Application.Users.Models;
+using PoopNPour.Application.Common.Models;
 using PoopNPour.Abstractions.User;
 using Xunit;
 

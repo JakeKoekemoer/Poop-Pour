@@ -1,9 +1,11 @@
+using PoopNPour.Application.Common.Exceptions;
+
 namespace PoopNPour.Application.MedicineLogs.Exceptions;
 
 /// <summary>
 /// Exception thrown when the same medicine has already been administered at the same time for a dependent
 /// </summary>
-public class DuplicateMedicineLogException : Exception
+public class DuplicateMedicineLogException : DuplicateException
 {
     public DuplicateMedicineLogException(Guid dependentId, string medicineName, DateTimeOffset timeAdministered) 
         : base($"Medicine '{medicineName}' has already been administered at '{timeAdministered}' for dependent '{dependentId}'.")
