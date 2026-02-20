@@ -1,9 +1,12 @@
 import type { DataTableColumn } from '@/components/generic/DataTable'
+import type { UserProfile } from '@/stores'
 
-export const columns: DataTableColumn[] = [
-  { key: 'name', label: 'Name' },
+type UserColumn = DataTableColumn & { key: keyof UserProfile | 'actions' }
+
+export const columns: UserColumn[] = [
+  { key: 'firstName', label: 'First Name' },
+  { key: 'lastName', label: 'Last Name' },
   { key: 'email', label: 'Email' },
-  { key: 'role', label: 'Role' },
-  { key: 'status', label: 'Status' },
+  { key: 'roles', label: 'Roles' },
   { key: 'actions', label: 'Actions', align: 'right' },
 ]
