@@ -101,6 +101,14 @@ public interface IIdentityService
         CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Removes a role from a user
+    /// </summary>
+    Task RemoveUserFromRoleAsync(
+        ApplicationUser user,
+        string role,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Checks if a user is in a role (by ApplicationUser object)
     /// </summary>
     Task<bool> IsUserInRoleAsync(

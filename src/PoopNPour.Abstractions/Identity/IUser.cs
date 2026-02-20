@@ -24,4 +24,9 @@ public interface IUser
     /// Indicates whether the user is authenticated
     /// </summary>
     bool IsAuthenticated { get; }
+
+    /// <summary>
+    /// Indicates whether the user is an administrator
+    /// </summary>
+    bool IsAdmin { get; }
 }

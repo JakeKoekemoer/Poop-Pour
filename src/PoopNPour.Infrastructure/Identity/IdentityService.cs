@@ -157,6 +157,23 @@ public class IdentityService(
         }
     }
 
+    public async Task RemoveUserFromRoleAsync(
+        ApplicationUser user,
+        string role,
+        CancellationToken cancellationToken = default)
+    {
+        if (!await userManager.IsInRoleAsync(user, role))
+            return;
+
+        var result = await userManager.RemoveFromRoleAsync(user, role);
+
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => $"{e.Code}: {e.Description}"));
+            throw new InvalidOperationException($"Failed to remove user from role: {errors}");
+        }
+    }
+
     public async Task<bool> IsUserInRoleAsync(
         ApplicationUser user,
         string role,

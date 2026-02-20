@@ -10,6 +10,16 @@ public static class UserMockBuilder
         var user = Substitute.For<IUser>();
         user.Id.Returns(id);
         user.IsAuthenticated.Returns(true);
+        user.IsAdmin.Returns(false);
+        return user;
+    }
+
+    public static IUser CreateAdmin(string id = "admin-123")
+    {
+        var user = Substitute.For<IUser>();
+        user.Id.Returns(id);
+        user.IsAuthenticated.Returns(true);
+        user.IsAdmin.Returns(true);
         return user;
     }
 
@@ -18,6 +28,7 @@ public static class UserMockBuilder
         var user = Substitute.For<IUser>();
         user.Id.Returns((string?)null);
         user.IsAuthenticated.Returns(false);
+        user.IsAdmin.Returns(false);
         return user;
     }
 }

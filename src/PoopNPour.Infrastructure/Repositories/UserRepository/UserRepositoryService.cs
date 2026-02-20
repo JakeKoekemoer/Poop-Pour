@@ -116,6 +116,28 @@ public class UserRepositoryService(IIdentityService identityService) : IUserServ
         return MapToDto(user, roles);
     }
 
+    public async Task<UserDto> AddUserRoleAsync(string userId, string role, CancellationToken cancellationToken = default)
+    {
+        var user = await identityService.GetUserByIdAsync(userId, cancellationToken)
+            ?? throw new UserNotFoundException(userId);
+
+        await identityService.AddUserToRoleAsync(user, role, cancellationToken);
+
+        var roles = await identityService.GetUserRolesAsync(user, cancellationToken);
+        return MapToDto(user, roles);
+    }
+
+    public async Task<UserDto> RemoveUserRoleAsync(string userId, string role, CancellationToken cancellationToken = default)
+    {
+        var user = await identityService.GetUserByIdAsync(userId, cancellationToken)
+            ?? throw new UserNotFoundException(userId);
+
+        await identityService.RemoveUserFromRoleAsync(user, role, cancellationToken);
+
+        var roles = await identityService.GetUserRolesAsync(user, cancellationToken);
+        return MapToDto(user, roles);
+    }
+
     public async Task DeleteUserAsync(string userId, CancellationToken cancellationToken = default)
     {
         var user = await identityService.GetUserByIdAsync(userId, cancellationToken);

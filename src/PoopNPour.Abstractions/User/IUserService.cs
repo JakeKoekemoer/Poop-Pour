@@ -66,6 +66,16 @@ public interface IUserService
         CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Adds a role to a user and returns the updated UserDto
+    /// </summary>
+    Task<UserDto> AddUserRoleAsync(string userId, string role, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Removes a role from a user and returns the updated UserDto
+    /// </summary>
+    Task<UserDto> RemoveUserRoleAsync(string userId, string role, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Gets all claims for a user by ID
     /// </summary>
     Task<IList<ClaimDto>> GetUserClaimsAsync(string userId, CancellationToken cancellationToken = default);

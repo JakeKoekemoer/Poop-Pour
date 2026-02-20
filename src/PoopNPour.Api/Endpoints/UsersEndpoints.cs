@@ -49,7 +49,13 @@ public class UsersEndpoints : EndpointGroupBase
                 .WithRequestResponse<IEnumerable<ClaimDto>, IList<ClaimDto>>())
             .MapDelete(RemoveUserClaimsAsync, "{id}/claims", route => route
                 .WithDocumentation("Remove user claims", "Remove claims from a user (admin only)")
-                .WithRequestResponse<IEnumerable<ClaimDto>, IList<ClaimDto>>());
+                .WithRequestResponse<IEnumerable<ClaimDto>, IList<ClaimDto>>())
+            .MapPost(AddUserRoleAsync, "{id}/roles", route => route
+                .WithDocumentation("Add user role", "Add a role to a user (admin only)")
+                .WithRequestResponse<AddUserRoleCommand, UserDto>())
+            .MapDelete(RemoveUserRoleAsync, "{id}/roles/{role}", route => route
+                .WithDocumentation("Remove user role", "Remove a role from a user (admin only)")
+                .WithResponse<UserDto>());
     }
 
     public async Task<IResult> GetUsersAsync(
@@ -155,6 +161,27 @@ public class UsersEndpoints : EndpointGroupBase
     {
         var command = new RemoveUserClaimsCommand(id, claims);
         var result = await mediator.Send(command, cancellationToken);
+        return Results.Ok(result);
+    }
+
+    public async Task<IResult> AddUserRoleAsync(
+        IMediator mediator,
+        [FromRoute] string id,
+        [FromBody] AddUserRoleCommand command,
+        CancellationToken cancellationToken)
+    {
+        var resolvedCommand = command with { UserId = id };
+        var result = await mediator.Send(resolvedCommand, cancellationToken);
+        return Results.Ok(result);
+    }
+
+    public async Task<IResult> RemoveUserRoleAsync(
+        IMediator mediator,
+        [FromRoute] string id,
+        [FromRoute] string role,
+        CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new RemoveUserRoleCommand(id, role), cancellationToken);
         return Results.Ok(result);
     }
 }

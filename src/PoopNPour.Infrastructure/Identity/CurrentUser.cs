@@ -16,4 +16,6 @@ public class CurrentUser(IHttpContextAccessor httpContextAccessor) : IUser
     public string? Email => httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email);
 
     public bool IsAuthenticated => httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
+
+    public bool IsAdmin => httpContextAccessor.HttpContext?.User?.IsInRole(Domain.Common.Auth.Roles.Administrator) ?? false;
 }
