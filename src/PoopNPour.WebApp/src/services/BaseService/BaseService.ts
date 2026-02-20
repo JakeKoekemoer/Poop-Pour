@@ -70,6 +70,9 @@ export abstract class BaseService {
     try {
       const parsed = JSON.parse(exception.response);
       
+      if (parsed.detail) {
+        return parsed.detail;
+      }
       if (parsed.title) {
         return parsed.title;
       }
