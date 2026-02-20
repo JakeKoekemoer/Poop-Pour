@@ -10,25 +10,12 @@ namespace PoopNPour.Infrastructure.Identity;
 /// <summary>
 /// Implementation of IIdentityService using ASP.NET Core Identity
 /// </summary>
-public class IdentityService : IIdentityService
+public class IdentityService(
+    UserManager<ApplicationUser> userManager,
+    RoleManager<IdentityRole> roleManager,
+    ApplicationDbContext context,
+    IAuthorizationService authorizationService) : IIdentityService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly ApplicationDbContext _context;
-    private readonly IAuthorizationService _authorizationService;
-
-    public IdentityService(
-        UserManager<ApplicationUser> userManager,
-        RoleManager<IdentityRole> roleManager,
-        ApplicationDbContext context,
-        IAuthorizationService authorizationService)
-    {
-        _userManager = userManager;
-        _roleManager = roleManager;
-        _context = context;
-        _authorizationService = authorizationService;
-    }
-
     #region Authorization (Used by AuthorizationBehavior)
 
     /// <summary>
@@ -36,11 +23,11 @@ public class IdentityService : IIdentityService
     /// </summary>
     public async Task<bool> IsInRoleAsync(string userId, string role)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await userManager.FindByIdAsync(userId);
         if (user == null)
             return false;
 
-        return await _userManager.IsInRoleAsync(user, role);
+        return await userManager.IsInRoleAsync(user, role);
     }
 
     /// <summary>
@@ -48,12 +35,12 @@ public class IdentityService : IIdentityService
     /// </summary>
     public async Task<bool> AuthorizeAsync(string userId, string policyName)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await userManager.FindByIdAsync(userId);
         if (user == null)
             return false;
 
-        var claims = await _userManager.GetClaimsAsync(user);
-        var roles = await _userManager.GetRolesAsync(user);
+        var claims = await userManager.GetClaimsAsync(user);
+        var roles = await userManager.GetRolesAsync(user);
         
         var identity = new System.Security.Claims.ClaimsIdentity(claims, "Identity");
         identity.AddClaim(new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, user.Id));
@@ -65,7 +52,7 @@ public class IdentityService : IIdentityService
 
         var principal = new System.Security.Claims.ClaimsPrincipal(identity);
         
-        var result = await _authorizationService.AuthorizeAsync(principal, policyName);
+        var result = await authorizationService.AuthorizeAsync(principal, policyName);
         return result.Succeeded;
     }
 
@@ -74,11 +61,11 @@ public class IdentityService : IIdentityService
     /// </summary>
     public async Task<IList<string>> GetUserRolesAsync(string userId)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await userManager.FindByIdAsync(userId);
         if (user == null)
             return Array.Empty<string>();
 
-        return await _userManager.GetRolesAsync(user);
+        return await userManager.GetRolesAsync(user);
     }
 
     #endregion
@@ -101,7 +88,7 @@ public class IdentityService : IIdentityService
             EmailConfirmed = true // Auto-confirm for seeded users
         };
 
-        var result = await _userManager.CreateAsync(user, password);
+        var result = await userManager.CreateAsync(user, password);
         
         if (!result.Succeeded)
         {
@@ -116,28 +103,28 @@ public class IdentityService : IIdentityService
         string userName,
         CancellationToken cancellationToken = default)
     {
-        return await _userManager.FindByNameAsync(userName);
+        return await userManager.FindByNameAsync(userName);
     }
 
     public async Task<ApplicationUser?> GetUserByEmailAsync(
         string email,
         CancellationToken cancellationToken = default)
     {
-        return await _userManager.FindByEmailAsync(email);
+        return await userManager.FindByEmailAsync(email);
     }
 
     public async Task<ApplicationUser?> GetUserByIdAsync(
         string userId,
         CancellationToken cancellationToken = default)
     {
-        return await _userManager.FindByIdAsync(userId);
+        return await userManager.FindByIdAsync(userId);
     }
 
     public async Task<bool> UserExistsByUserNameAsync(
         string userName,
         CancellationToken cancellationToken = default)
     {
-        var user = await _userManager.FindByNameAsync(userName);
+        var user = await userManager.FindByNameAsync(userName);
         return user != null;
     }
 
@@ -145,7 +132,7 @@ public class IdentityService : IIdentityService
         string email,
         CancellationToken cancellationToken = default)
     {
-        var user = await _userManager.FindByEmailAsync(email);
+        var user = await userManager.FindByEmailAsync(email);
         return user != null;
     }
 
@@ -156,9 +143,9 @@ public class IdentityService : IIdentityService
     {
         await EnsureRoleExistsAsync(role, cancellationToken);
         
-        if (!await _userManager.IsInRoleAsync(user, role))
+        if (!await userManager.IsInRoleAsync(user, role))
         {
-            var result = await _userManager.AddToRoleAsync(user, role);
+            var result = await userManager.AddToRoleAsync(user, role);
             
             if (!result.Succeeded)
             {
@@ -173,17 +160,17 @@ public class IdentityService : IIdentityService
         string role,
         CancellationToken cancellationToken = default)
     {
-        return await _userManager.IsInRoleAsync(user, role);
+        return await userManager.IsInRoleAsync(user, role);
     }
 
     public async Task EnsureRoleExistsAsync(
         string role,
         CancellationToken cancellationToken = default)
     {
-        if (!await _roleManager.RoleExistsAsync(role))
+        if (!await roleManager.RoleExistsAsync(role))
         {
             var identityRole = new IdentityRole(role);
-            var result = await _roleManager.CreateAsync(identityRole);
+            var result = await roleManager.CreateAsync(identityRole);
             
             if (!result.Succeeded)
             {
@@ -199,15 +186,15 @@ public class IdentityService : IIdentityService
         CancellationToken cancellationToken = default)
     {
         // Try to find user by email first, then by username
-        var user = await _userManager.FindByEmailAsync(userNameOrEmail) 
-                   ?? await _userManager.FindByNameAsync(userNameOrEmail);
+        var user = await userManager.FindByEmailAsync(userNameOrEmail) 
+                   ?? await userManager.FindByNameAsync(userNameOrEmail);
 
         if (user == null)
         {
             return null;
         }
 
-        var isValid = await _userManager.CheckPasswordAsync(user, password);
+        var isValid = await userManager.CheckPasswordAsync(user, password);
         
         return isValid ? user : null;
     }
@@ -218,7 +205,7 @@ public class IdentityService : IIdentityService
         string? searchTerm = null,
         CancellationToken cancellationToken = default)
     {
-        var query = _userManager.Users.AsQueryable();
+        var query = userManager.Users.AsQueryable();
 
         // Apply search filter if provided
         if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -246,14 +233,14 @@ public class IdentityService : IIdentityService
         ApplicationUser user,
         CancellationToken cancellationToken = default)
     {
-        return await _userManager.GetRolesAsync(user);
+        return await userManager.GetRolesAsync(user);
     }
 
     public async Task<ApplicationUser> UpdateUserAsync(
         ApplicationUser user,
         CancellationToken cancellationToken = default)
     {
-        var result = await _userManager.UpdateAsync(user);
+        var result = await userManager.UpdateAsync(user);
         
         if (!result.Succeeded)
         {
@@ -271,7 +258,7 @@ public class IdentityService : IIdentityService
         string tokenValue,
         CancellationToken cancellationToken = default)
     {
-        var result = await _userManager.SetAuthenticationTokenAsync(user, loginProvider, tokenName, tokenValue);
+        var result = await userManager.SetAuthenticationTokenAsync(user, loginProvider, tokenName, tokenValue);
         
         if (!result.Succeeded)
         {
@@ -286,6 +273,6 @@ public class IdentityService : IIdentityService
         string tokenName,
         CancellationToken cancellationToken = default)
     {
-        return await _userManager.GetAuthenticationTokenAsync(user, loginProvider, tokenName);
+        return await userManager.GetAuthenticationTokenAsync(user, loginProvider, tokenName);
     }
 }

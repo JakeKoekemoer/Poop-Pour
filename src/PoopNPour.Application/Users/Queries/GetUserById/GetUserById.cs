@@ -17,18 +17,11 @@ public record GetUserByIdQuery(string UserId)
 /// <summary>
 /// Handler for GetUserByIdQuery
 /// </summary>
-public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto>
+public class GetUserByIdQueryHandler(IUserService userService) : IRequestHandler<GetUserByIdQuery, UserDto>
 {
-    private readonly IUserService _userService;
-
-    public GetUserByIdQueryHandler(IUserService userService)
-    {
-        _userService = userService;
-    }
-
     public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userService.GetUserByIdAsync(request.UserId, cancellationToken);
+        var user = await userService.GetUserByIdAsync(request.UserId, cancellationToken);
 
         if (user == null)
         {

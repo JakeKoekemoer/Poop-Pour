@@ -20,23 +20,14 @@ public record UpdateMyProfileCommand(
 /// <summary>
 /// Handler for UpdateMyProfileCommand
 /// </summary>
-public class UpdateMyProfileCommandHandler : IRequestHandler<UpdateMyProfileCommand, UserDto>
+public class UpdateMyProfileCommandHandler(
+    IUserService userService,
+    IUser user) : IRequestHandler<UpdateMyProfileCommand, UserDto>
 {
-    private readonly IUserService _userService;
-    private readonly IUser _user;
-
-    public UpdateMyProfileCommandHandler(
-        IUserService userService,
-        IUser user)
-    {
-        _userService = userService;
-        _user = user;
-    }
-
     public async Task<UserDto> Handle(UpdateMyProfileCommand request, CancellationToken cancellationToken)
     {
-        return await _userService.UpdateUserAsync(
-            _user.Id!,
+        return await userService.UpdateUserAsync(
+            user.Id!,
             request.FirstName,
             request.LastName,
             request.Email,

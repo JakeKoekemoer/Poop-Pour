@@ -18,26 +18,17 @@ public record GetMyProfileQuery()
 /// <summary>
 /// Handler for GetMyProfileQuery
 /// </summary>
-public class GetMyProfileQueryHandler : IRequestHandler<GetMyProfileQuery, UserDto>
+public class GetMyProfileQueryHandler(
+    IUserService userService,
+    IUser currentUser) : IRequestHandler<GetMyProfileQuery, UserDto>
 {
-    private readonly IUserService _userService;
-    private readonly IUser _user;
-
-    public GetMyProfileQueryHandler(
-        IUserService userService,
-        IUser user)
-    {
-        _userService = userService;
-        _user = user;
-    }
-
     public async Task<UserDto> Handle(GetMyProfileQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userService.GetUserByIdAsync(_user.Id!, cancellationToken);
+        var user = await userService.GetUserByIdAsync(currentUser.Id!, cancellationToken);
 
         if (user == null)
         {
-            throw new UserNotFoundException(_user.Id!);
+            throw new UserNotFoundException(currentUser.Id!);
         }
 
         return user;

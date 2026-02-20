@@ -10,20 +10,11 @@ namespace PoopNPour.Application.Common.Behaviours;
 /// MediatR pipeline behavior that enforces authorization based on AuthorizeAttribute
 /// Combines best practices from both Pipeline-X and Poop-Pour patterns
 /// </summary>
-public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public class AuthorizationBehavior<TRequest, TResponse>(
+    IUser user,
+    IIdentityService identityService) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
 {
-    private readonly IUser _user;
-    private readonly IIdentityService _identityService;
-
-    public AuthorizationBehavior(
-        IUser user,
-        IIdentityService identityService)
-    {
-        _user = user;
-        _identityService = identityService;
-    }
-
     public async Task<TResponse> Handle(
         TRequest request,
         RequestHandlerDelegate<TResponse> next,
@@ -40,7 +31,7 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
         }
 
         // Must be authenticated user
-        if (!_user.IsAuthenticated || string.IsNullOrEmpty(_user.Id))
+        if (!user.IsAuthenticated || string.IsNullOrEmpty(user.Id))
         {
             throw new UnauthorizedAccessException("User is not authenticated.");
         }
@@ -70,7 +61,7 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
             authorized = true;
             foreach (var role in roles)
             {
-                var isInRole = await _identityService.IsInRoleAsync(_user.Id!, role);
+                var isInRole = await identityService.IsInRoleAsync(user.Id!, role);
                 if (!isInRole)
                 {
                     authorized = false;
@@ -83,7 +74,7 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
             // OR logic: user must have AT LEAST ONE role
             foreach (var role in roles)
             {
-                var isInRole = await _identityService.IsInRoleAsync(_user.Id!, role);
+                var isInRole = await identityService.IsInRoleAsync(user.Id!, role);
                 if (isInRole)
                 {
                     authorized = true;
@@ -113,7 +104,7 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
             authorized = true;
             foreach (var policy in policies)
             {
-                var satisfiesPolicy = await _identityService.AuthorizeAsync(_user.Id!, policy);
+                var satisfiesPolicy = await identityService.AuthorizeAsync(user.Id!, policy);
                 if (!satisfiesPolicy)
                 {
                     authorized = false;
@@ -126,7 +117,7 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
             // OR logic: user must satisfy AT LEAST ONE policy
             foreach (var policy in policies)
             {
-                var satisfiesPolicy = await _identityService.AuthorizeAsync(_user.Id!, policy);
+                var satisfiesPolicy = await identityService.AuthorizeAsync(user.Id!, policy);
                 if (satisfiesPolicy)
                 {
                     authorized = true;

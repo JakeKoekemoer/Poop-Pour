@@ -8,15 +8,8 @@ using PoopNPour.Infrastructure.Data;
 
 namespace PoopNPour.Infrastructure.SettingsService;
 
-public class SettingsService : ISettingsService
+public class SettingsService(ApplicationDbContext context) : ISettingsService
 {
-    private readonly ApplicationDbContext _context;
-
-    public SettingsService(ApplicationDbContext context)
-    {
-        _context = context;
-    }
-
     /// <summary>
     /// Loads a setting class from the database
     /// </summary>
@@ -117,7 +110,7 @@ public class SettingsService : ISettingsService
             }
         }
 
-        _context.SaveChanges();
+        context.SaveChanges();
     }
 
     /// <summary>
@@ -134,9 +127,9 @@ public class SettingsService : ISettingsService
             toDelete.Add(key);
         }
 
-        var settings = _context.Settings.Where(s => toDelete.Contains(s.Key));
-        _context.Settings.RemoveRange(settings);
-        _context.SaveChanges();
+        var settings = context.Settings.Where(s => toDelete.Contains(s.Key));
+        context.Settings.RemoveRange(settings);
+        context.SaveChanges();
     }
 
     #region Private Methods
@@ -147,7 +140,7 @@ public class SettingsService : ISettingsService
     /// <returns>A Dictionary of Setting objects</returns>
     private IDictionary<string, Setting> GetAllSettings()
     {
-        var result = _context.Settings.ToList();
+        var result = context.Settings.ToList();
         var dict = new Dictionary<string, Setting>();
         foreach (var res in result)
         {
@@ -188,8 +181,8 @@ public class SettingsService : ISettingsService
     {
         if (setting == null) throw new ArgumentNullException(nameof(setting));
 
-        _context.Settings.Add(setting);
-        _context.SaveChanges();
+        context.Settings.Add(setting);
+        context.SaveChanges();
     }
 
     /// <summary>
@@ -201,10 +194,10 @@ public class SettingsService : ISettingsService
         if (setting == null) throw new ArgumentNullException(nameof(setting));
 
         //Check if the setting belongs to this context
-        if (!_context.Settings.Any(s => s.SettingId == setting.SettingId))
+        if (!context.Settings.Any(s => s.SettingId == setting.SettingId))
             return;
 
-        _context.Settings.Update(setting);
+        context.Settings.Update(setting);
     }
 
     /// <summary>

@@ -6,17 +6,8 @@ using PoopNPour.Abstractions.Identity;
 
 namespace PoopNPour.Infrastructure.Data.Interceptors;
 
-public class AuditableEntityInterceptor : SaveChangesInterceptor
+public class AuditableEntityInterceptor(IUser user, TimeProvider dateTime) : SaveChangesInterceptor
 {
-    private readonly IUser _user;
-    private readonly TimeProvider _dateTime;
-
-    public AuditableEntityInterceptor(IUser user, TimeProvider dateTime)
-    {
-        _user = user;
-        _dateTime = dateTime;
-    }
-
     public override InterceptionResult<int> SavingChanges(
         DbContextEventData eventData,
         InterceptionResult<int> result
@@ -50,13 +41,13 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
                 || entry.HasChangedOwnedEntities()
             )
             {
-                var utcNow = _dateTime.GetUtcNow();
+                var utcNow = dateTime.GetUtcNow();
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Entity.CreatedBy = _user.Id;
+                    entry.Entity.CreatedBy = user.Id;
                     entry.Entity.CreatedOn = utcNow;
                 }
-                entry.Entity.LastModifiedBy = _user.Id;
+                entry.Entity.LastModifiedBy = user.Id;
                 entry.Entity.LastModifiedOn = utcNow;
             }
         }

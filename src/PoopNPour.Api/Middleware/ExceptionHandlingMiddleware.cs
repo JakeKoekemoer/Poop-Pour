@@ -16,22 +16,15 @@ namespace PoopNPour.Api.Middleware;
 /// Middleware that translates application exceptions to HTTP responses
 /// This is the ONLY place where we map domain/application exceptions to HTTP status codes
 /// </summary>
-public class ExceptionHandlingMiddleware
+public class ExceptionHandlingMiddleware(
+    RequestDelegate next,
+    ILogger<ExceptionHandlingMiddleware> logger)
 {
-    private readonly RequestDelegate _next;
-    private readonly ILogger<ExceptionHandlingMiddleware> _logger;
-
-    public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
-    {
-        _next = next;
-        _logger = logger;
-    }
-
     public async Task InvokeAsync(HttpContext context)
     {
         try
         {
-            await _next(context);
+            await next(context);
         }
         catch (Exception ex)
         {
@@ -106,15 +99,15 @@ public class ExceptionHandlingMiddleware
         // Log at API layer (HTTP context available here)
         if (errorResponse.StatusCode >= 500)
         {
-            _logger.LogError(exception, "Server error occurred while processing request to {Path}", context.Request.Path);
+            logger.LogError(exception, "Server error occurred while processing request to {Path}", context.Request.Path);
         }
         else if (errorResponse.StatusCode == 401 || errorResponse.StatusCode == 403)
         {
-            _logger.LogWarning("Authorization failed for request to {Path}: {Message}", context.Request.Path, exception.Message);
+            logger.LogWarning("Authorization failed for request to {Path}: {Message}", context.Request.Path, exception.Message);
         }
         else
         {
-            _logger.LogInformation("Client error occurred for request to {Path}: {Message}", context.Request.Path, exception.Message);
+            logger.LogInformation("Client error occurred for request to {Path}: {Message}", context.Request.Path, exception.Message);
         }
 
         response.StatusCode = errorResponse.StatusCode;

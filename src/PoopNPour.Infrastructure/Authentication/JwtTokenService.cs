@@ -10,22 +10,15 @@ namespace PoopNPour.Infrastructure.Authentication;
 /// <summary>
 /// Implementation of JWT token service
 /// </summary>
-public class JwtTokenService : IJwtTokenService
+public class JwtTokenService(IConfiguration configuration) : IJwtTokenService
 {
-    private readonly IConfiguration _configuration;
-
-    public JwtTokenService(IConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
-
     public Task<(string Token, DateTime ExpiresAt)> GenerateTokenAsync(
         string userId,
         string email,
         string userName,
         IEnumerable<string> roles)
     {
-        var jwtSettings = _configuration.GetSection("Jwt");
+        var jwtSettings = configuration.GetSection("Jwt");
         var secretKey = jwtSettings["SecretKey"]
             ?? throw new InvalidOperationException("JWT SecretKey not found in configuration.");
         var issuer = jwtSettings["Issuer"]
@@ -65,7 +58,7 @@ public class JwtTokenService : IJwtTokenService
 
     public string GenerateApiToken(string userId, IEnumerable<string> roles)
     {
-        var jwtSettings = _configuration.GetSection("Jwt");
+        var jwtSettings = configuration.GetSection("Jwt");
         var secretKey = jwtSettings["SecretKey"]
             ?? throw new InvalidOperationException("JWT SecretKey not found in configuration.");
         var issuer = jwtSettings["Issuer"]
