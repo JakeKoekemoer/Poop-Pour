@@ -437,6 +437,18 @@ export interface IClient {
      * @return OK
      */
     removeUserClaims(id: string, body: ClaimDto[], signal?: AbortSignal): Promise<SwaggerResponse<ClaimDto[]>>;
+
+    /**
+     * Add user role
+     * @return OK
+     */
+    addUserRole(id: string, body: AddUserRoleCommand, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>>;
+
+    /**
+     * Remove user role
+     * @return OK
+     */
+    removeUserRole(id: string, role: string, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>>;
 }
 
 export class Client extends ApiBase implements IClient {
@@ -2635,6 +2647,130 @@ export class Client extends ApiBase implements IClient {
         }
         return Promise.resolve<SwaggerResponse<ClaimDto[]>>(new SwaggerResponse(status, _headers, null as any));
     }
+
+    /**
+     * Add user role
+     * @return OK
+     */
+    addUserRole(id: string, body: AddUserRoleCommand, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>> {
+        let url_ = this.baseUrl + "/api/users/{id}/roles";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processAddUserRole(_response);
+        });
+    }
+
+    protected processAddUserRole(response: Response): Promise<SwaggerResponse<UserDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 201) {
+            return response.text().then((_responseText) => {
+            let result201: any = null;
+            result201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserDto;
+            return new SwaggerResponse(status, _headers, result201);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<UserDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Remove user role
+     * @return OK
+     */
+    removeUserRole(id: string, role: string, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>> {
+        let url_ = this.baseUrl + "/api/users/{id}/roles/{role}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (role === undefined || role === null)
+            throw new globalThis.Error("The parameter 'role' must be defined.");
+        url_ = url_.replace("{role}", encodeURIComponent("" + role));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processRemoveUserRole(_response);
+        });
+    }
+
+    protected processRemoveUserRole(response: Response): Promise<SwaggerResponse<UserDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<UserDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+}
+
+export interface AddUserRoleCommand {
+    userId?: string | null;
+    role?: string | null;
 }
 
 export interface AddUserToFamilyCommand {

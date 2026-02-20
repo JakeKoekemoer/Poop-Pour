@@ -23,6 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { PasswordInput } from "@/components/generic/PasswordInput";
 
 import { registerSchema, type RegisterFormValues } from "./registerSchema";
 
@@ -92,12 +93,7 @@ const onSubmit = form.handleSubmit((values) => {
           <FormItem>
             <FormLabel>Password</FormLabel>
             <FormControl>
-              <Input
-                type="password"
-                placeholder="••••••••"
-                v-bind="componentField"
-                :disabled="props.isSubmitting"
-              />
+              <PasswordInput v-bind="componentField" :disabled="props.isSubmitting" />
             </FormControl>
             <FormDescription> Must be at least 8 characters </FormDescription>
             <FormMessage />

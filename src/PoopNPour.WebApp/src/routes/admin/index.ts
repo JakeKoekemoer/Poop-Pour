@@ -19,6 +19,21 @@ export const adminRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/Users/UsersPage.vue'),
       },
       {
+        path: 'users/add',
+        name: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.ADD_USER),
+        component: () => import('@/views/admin/Users/AddUserPage.vue'),
+      },
+      {
+        path: 'users/:id/edit',
+        name: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.EDIT_USER),
+        component: () => import('@/views/admin/Users/EditUserPage.vue'),
+      },
+      {
+        path: 'users/:id/delete',
+        name: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.DELETE_USER),
+        component: () => import('@/views/admin/Users/DeleteUserPage.vue'),
+      },
+      {
         path: 'settings',
         name: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.SETTINGS),
         component: () => import('@/views/admin/Settings/SettingsPage.vue'),

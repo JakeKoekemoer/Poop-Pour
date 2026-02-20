@@ -14,6 +14,9 @@ export const SECURE_ROUTES = {
 export const ADMIN_ROUTES = {
   DASHBOARD: "dashboard",
   USERS: "users",
+  ADD_USER: "add-user",
+  EDIT_USER: "edit-user",
+  DELETE_USER: "delete-user",
   SETTINGS: "settings",
   FAMILIES: "families",
   FAMILY_USERS: "family-users",

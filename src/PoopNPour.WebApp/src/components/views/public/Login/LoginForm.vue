@@ -21,6 +21,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { PasswordInput } from "@/components/generic/PasswordInput";
 
 import { loginSchema, type LoginFormValues } from "./loginSchema";
 
@@ -73,12 +74,7 @@ const onSubmit = form.handleSubmit((values) => {
           <FormItem>
             <FormLabel>Password</FormLabel>
             <FormControl>
-              <Input
-                type="password"
-                placeholder="••••••••"
-                v-bind="componentField"
-                :disabled="props.isSubmitting"
-              />
+              <PasswordInput v-bind="componentField" :disabled="props.isSubmitting" />
             </FormControl>
             <FormMessage />
           </FormItem>

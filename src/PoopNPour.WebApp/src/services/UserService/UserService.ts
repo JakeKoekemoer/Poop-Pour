@@ -1,18 +1,10 @@
 import { BaseService } from '../BaseService';
 import type { ApiResponse } from '../types';
-import type { UpdateProfileRequestDto } from '@/api/api-client';
+import type { UpdateProfileRequestDto, RegisterRequestDto, UpdateUserCommand, ClaimDto, AddUserRoleCommand } from '@/api/api-client';
 import { useUserStore, type UserProfile } from '@/stores';
 import { toUserProfile } from '@/stores/user/types';
 
-/**
- * User service for profile and user management operations
- */
 class UserService extends BaseService {
-  /**
-   * Get the current user's profile
-   * 
-   * @returns Promise with user profile data
-   */
   async getMyProfile(): Promise<ApiResponse<UserProfile>> {
     const response = await this.execute(() => this.client.getMyProfile());
 
@@ -31,14 +23,6 @@ class UserService extends BaseService {
     return response as ApiResponse<UserProfile>;
   }
 
-  /**
-   * Update the current user's profile
-   * 
-   * @param firstName - Optional first name
-   * @param lastName - Optional last name
-   * @param email - Optional email address
-   * @returns Promise with updated user profile data
-   */
   async updateMyProfile(
     firstName?: string,
     lastName?: string,
@@ -67,15 +51,6 @@ class UserService extends BaseService {
     return response as ApiResponse<UserProfile>;
   }
 
-  /**
-   * Get a paginated list of users
-   * Requires admin privileges
-   * 
-   * @param page - Page number (1-indexed)
-   * @param pageSize - Number of items per page
-   * @param searchTerm - Optional search term to filter users
-   * @returns Promise with paginated user list
-   */
   async getUsers(
     page?: number,
     pageSize?: number,
@@ -115,13 +90,62 @@ class UserService extends BaseService {
     }>;
   }
 
-  /**
-   * Get a specific user by ID
-   * Requires admin privileges
-   * 
-   * @param id - User ID
-   * @returns Promise with user data
-   */
+  // Uses the register endpoint but does NOT affect the current admin's auth session.
+  async createUser(
+    email: string,
+    userName: string,
+    password: string,
+    firstName?: string,
+    lastName?: string,
+  ): Promise<ApiResponse<UserProfile>> {
+    const dto: RegisterRequestDto = {
+      email,
+      userName,
+      password,
+      firstName,
+      lastName,
+    };
+
+    const response = await this.execute(() => this.client.register(dto));
+
+    if (response.success && response.data) {
+      const { user } = response.data;
+      if (user) {
+        return {
+          success: true,
+          data: toUserProfile(user),
+        };
+      }
+    }
+
+    return response as ApiResponse<UserProfile>;
+  }
+
+  async updateUser(
+    id: string,
+    firstName?: string,
+    lastName?: string,
+    email?: string,
+  ): Promise<ApiResponse<UserProfile>> {
+    const dto: UpdateUserCommand = {
+      userId: id,
+      firstName,
+      lastName,
+      email,
+    };
+
+    const response = await this.execute(() => this.client.updateUser(id, dto));
+
+    if (response.success && response.data) {
+      return {
+        success: true,
+        data: toUserProfile(response.data),
+      };
+    }
+
+    return response as ApiResponse<UserProfile>;
+  }
+
   async getUserById(id: string): Promise<ApiResponse<UserProfile>> {
     const response = await this.execute(() => this.client.getUserById(id));
 
@@ -133,6 +157,77 @@ class UserService extends BaseService {
     }
 
     return response as ApiResponse<UserProfile>;
+  }
+
+  async getUserClaims(id: string): Promise<ApiResponse<ClaimDto[]>> {
+    const response = await this.execute(() => this.client.getUserClaims(id));
+
+    if (response.success && response.data) {
+      return {
+        success: true,
+        data: response.data,
+      };
+    }
+
+    return response as ApiResponse<ClaimDto[]>;
+  }
+
+  async addUserClaims(id: string, claims: ClaimDto[]): Promise<ApiResponse<ClaimDto[]>> {
+    const response = await this.execute(() => this.client.addUserClaims(id, claims));
+
+    if (response.success && response.data) {
+      return {
+        success: true,
+        data: response.data,
+      };
+    }
+
+    return response as ApiResponse<ClaimDto[]>;
+  }
+
+  async removeUserClaims(id: string, claims: ClaimDto[]): Promise<ApiResponse<ClaimDto[]>> {
+    const response = await this.execute(() => this.client.removeUserClaims(id, claims));
+
+    if (response.success && response.data) {
+      return {
+        success: true,
+        data: response.data,
+      };
+    }
+
+    return response as ApiResponse<ClaimDto[]>;
+  }
+
+  async addUserRole(id: string, role: string): Promise<ApiResponse<string[]>> {
+    const dto: AddUserRoleCommand = { userId: id, role };
+
+    const response = await this.execute(() => this.client.addUserRole(id, dto));
+
+    if (response.success && response.data) {
+      return {
+        success: true,
+        data: response.data.roles ?? [],
+      };
+    }
+
+    return response as ApiResponse<string[]>;
+  }
+
+  async removeUserRole(id: string, role: string): Promise<ApiResponse<string[]>> {
+    const response = await this.execute(() => this.client.removeUserRole(id, role));
+
+    if (response.success && response.data) {
+      return {
+        success: true,
+        data: response.data.roles ?? [],
+      };
+    }
+
+    return response as ApiResponse<string[]>;
+  }
+
+  async deleteUser(id: string): Promise<ApiResponse<void>> {
+    return this.executeVoid(() => this.client.deleteUser(id));
   }
 }
 
