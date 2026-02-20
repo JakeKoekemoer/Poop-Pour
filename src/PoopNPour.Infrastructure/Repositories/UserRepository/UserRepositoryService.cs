@@ -1,7 +1,6 @@
 using PoopNPour.Abstractions.Identity;
 using PoopNPour.Abstractions.User;
 using PoopNPour.Application.Users.Exceptions;
-using PoopNPour.Domain.Common.Auth;
 using PoopNPour.Domain.Common.Identity;
 
 namespace PoopNPour.Infrastructure.Repositories.UserRepository;
@@ -91,15 +90,27 @@ public class UserRepositoryService(IIdentityService identityService) : IUserServ
         string? role = null,
         CancellationToken cancellationToken = default)
     {
-        var user = await identityService.CreateUserAsync(
-            userName,
-            email,
-            password,
-            firstName,
-            lastName,
-            cancellationToken);
+        ApplicationUser user;
 
-        await identityService.AddUserToRoleAsync(user, role ?? Roles.Web_Api, cancellationToken);
+        try
+        {
+            user = await identityService.CreateUserAsync(
+                userName,
+                email,
+                password,
+                firstName,
+                lastName,
+                cancellationToken);
+        }
+        catch (InvalidOperationException ex)
+        {
+            throw new UserCreationFailedException(ex.Message, ex);
+        }
+
+        if (role is not null)
+        {
+            await identityService.AddUserToRoleAsync(user, role, cancellationToken);
+        }
 
         var roles = await identityService.GetUserRolesAsync(user, cancellationToken);
         return MapToDto(user, roles);

@@ -21,7 +21,8 @@ public static class PolicyRoleMappings
         options.AddPolicy(Policies.AccountRegistration,
             policy => policy.RequireRole([
                 Roles.Web_Api,
-                Roles.Mobile_Api
+                Roles.Mobile_Api,
+                Roles.Administrator
             ])
         );
 

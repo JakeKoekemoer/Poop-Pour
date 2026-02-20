@@ -70,6 +70,14 @@ public class ExceptionHandlingMiddleware(
                 Detail = exception.Message
             },
 
+            // All CreateFailedException derived exceptions (base catch-all for creation failures)
+            CreateFailedException => new ErrorResponse
+            {
+                StatusCode = (int)HttpStatusCode.BadRequest,
+                Message = "Creation Failed",
+                Detail = exception.Message
+            },
+
             // Authentication exceptions (from Application layer)
             InvalidCredentialsException => new ErrorResponse
             {
