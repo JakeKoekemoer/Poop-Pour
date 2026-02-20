@@ -34,7 +34,7 @@ public class RegisterUserCommandHandlerTests
             .WithLastName("User")
             .Build();
         _userService
-            .CreateUserAsync("newuser", "new@test.com", "Password1!", "New", "User", Arg.Any<CancellationToken>())
+            .CreateUserAsync("newuser", "new@test.com", "Password1!", "New", "User", Arg.Any<string?>(), Arg.Any<CancellationToken>())
             .Returns(createdUser);
         _jwtTokenService
             .GenerateTokenAsync(createdUser.Id, createdUser.Email, createdUser.UserName, createdUser.Roles)
@@ -69,7 +69,7 @@ public class RegisterUserCommandHandlerTests
         var act = () => _sut.Handle(command, CancellationToken.None);
 
         await act.Should().ThrowAsync<UserAlreadyExistsException>();
-        await _userService.DidNotReceive().CreateUserAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
+        await _userService.DidNotReceive().CreateUserAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -88,6 +88,6 @@ public class RegisterUserCommandHandlerTests
         var act = () => _sut.Handle(command, CancellationToken.None);
 
         await act.Should().ThrowAsync<UserAlreadyExistsException>();
-        await _userService.DidNotReceive().CreateUserAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
+        await _userService.DidNotReceive().CreateUserAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
     }
 }
