@@ -1,3 +1,4 @@
+using PoopNPour.Abstractions.User;
 using PoopNPour.Domain.Common.Identity;
 
 namespace PoopNPour.Abstractions.Identity;
@@ -61,6 +62,13 @@ public interface IIdentityService
     /// </summary>
     Task<ApplicationUser> UpdateUserAsync(
         ApplicationUser user,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Deletes a user by ID
+    /// </summary>
+    Task DeleteUserAsync(
+        string userId,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -135,6 +143,33 @@ public interface IIdentityService
     /// Used by authorization pipeline
     /// </summary>
     Task<bool> AuthorizeAsync(string userId, string policyName);
+
+    #endregion
+
+    #region Claims Management
+
+    /// <summary>
+    /// Gets all claims for a user
+    /// </summary>
+    Task<IList<ClaimDto>> GetUserClaimsAsync(
+        ApplicationUser user,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Adds claims to a user
+    /// </summary>
+    Task AddUserClaimsAsync(
+        ApplicationUser user,
+        IEnumerable<ClaimDto> claims,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Removes claims from a user
+    /// </summary>
+    Task RemoveUserClaimsAsync(
+        ApplicationUser user,
+        IEnumerable<ClaimDto> claims,
+        CancellationToken cancellationToken = default);
 
     #endregion
 

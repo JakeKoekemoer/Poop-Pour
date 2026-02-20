@@ -31,7 +31,7 @@ public interface IUserService
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Creates a new user with default role and returns the UserDto
+    /// Creates a new user and returns the UserDto. The role defaults to Web_Api when not specified.
     /// </summary>
     Task<UserDto> CreateUserAsync(
         string userName,
@@ -39,7 +39,13 @@ public interface IUserService
         string password,
         string? firstName = null,
         string? lastName = null,
+        string? role = null,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Deletes a user by ID
+    /// </summary>
+    Task DeleteUserAsync(string userId, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Updates user information and returns the updated UserDto
@@ -58,4 +64,19 @@ public interface IUserService
         string userNameOrEmail,
         string password,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets all claims for a user by ID
+    /// </summary>
+    Task<IList<ClaimDto>> GetUserClaimsAsync(string userId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Adds claims to a user and returns the updated full claim list
+    /// </summary>
+    Task<IList<ClaimDto>> AddUserClaimsAsync(string userId, IEnumerable<ClaimDto> claims, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Removes claims from a user and returns the remaining claim list
+    /// </summary>
+    Task<IList<ClaimDto>> RemoveUserClaimsAsync(string userId, IEnumerable<ClaimDto> claims, CancellationToken cancellationToken = default);
 }

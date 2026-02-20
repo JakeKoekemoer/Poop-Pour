@@ -385,10 +385,28 @@ export interface IClient {
     getUsers(page?: number | undefined, pageSize?: number | undefined, searchTerm?: string | undefined, signal?: AbortSignal): Promise<SwaggerResponse<UserDtoPaginatedResponseDto>>;
 
     /**
+     * Create user
+     * @return Created
+     */
+    createUser(body: CreateUserCommand, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>>;
+
+    /**
      * Get user
      * @return OK
      */
     getUserById(id: string, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>>;
+
+    /**
+     * Update user
+     * @return OK
+     */
+    updateUser(id: string, body: UpdateUserCommand, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>>;
+
+    /**
+     * Delete user
+     * @return No Content
+     */
+    deleteUser(id: string, signal?: AbortSignal): Promise<SwaggerResponse<void>>;
 
     /**
      * My profile
@@ -401,6 +419,24 @@ export interface IClient {
      * @return OK
      */
     updateMyProfile(body: UpdateProfileRequestDto, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>>;
+
+    /**
+     * Get user claims
+     * @return OK
+     */
+    getUserClaims(id: string, signal?: AbortSignal): Promise<SwaggerResponse<ClaimDto[]>>;
+
+    /**
+     * Add user claims
+     * @return OK
+     */
+    addUserClaims(id: string, body: ClaimDto[], signal?: AbortSignal): Promise<SwaggerResponse<ClaimDto[]>>;
+
+    /**
+     * Remove user claims
+     * @return OK
+     */
+    removeUserClaims(id: string, body: ClaimDto[], signal?: AbortSignal): Promise<SwaggerResponse<ClaimDto[]>>;
 }
 
 export class Client extends ApiBase implements IClient {
@@ -2104,6 +2140,62 @@ export class Client extends ApiBase implements IClient {
     }
 
     /**
+     * Create user
+     * @return Created
+     */
+    createUser(body: CreateUserCommand, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>> {
+        let url_ = this.baseUrl + "/api/users";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processCreateUser(_response);
+        });
+    }
+
+    protected processCreateUser(response: Response): Promise<SwaggerResponse<UserDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 201) {
+            return response.text().then((_responseText) => {
+            let result201: any = null;
+            result201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserDto;
+            return new SwaggerResponse(status, _headers, result201);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<UserDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
      * Get user
      * @return OK
      */
@@ -2156,6 +2248,113 @@ export class Client extends ApiBase implements IClient {
             });
         }
         return Promise.resolve<SwaggerResponse<UserDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Update user
+     * @return OK
+     */
+    updateUser(id: string, body: UpdateUserCommand, signal?: AbortSignal): Promise<SwaggerResponse<UserDto>> {
+        let url_ = this.baseUrl + "/api/users/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processUpdateUser(_response);
+        });
+    }
+
+    protected processUpdateUser(response: Response): Promise<SwaggerResponse<UserDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<UserDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Delete user
+     * @return No Content
+     */
+    deleteUser(id: string, signal?: AbortSignal): Promise<SwaggerResponse<void>> {
+        let url_ = this.baseUrl + "/api/users/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            signal,
+            headers: {
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processDeleteUser(_response);
+        });
+    }
+
+    protected processDeleteUser(response: Response): Promise<SwaggerResponse<void>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return new SwaggerResponse(status, _headers, null as any);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<void>>(new SwaggerResponse(status, _headers, null as any));
     }
 
     /**
@@ -2261,11 +2460,191 @@ export class Client extends ApiBase implements IClient {
         }
         return Promise.resolve<SwaggerResponse<UserDto>>(new SwaggerResponse(status, _headers, null as any));
     }
+
+    /**
+     * Get user claims
+     * @return OK
+     */
+    getUserClaims(id: string, signal?: AbortSignal): Promise<SwaggerResponse<ClaimDto[]>> {
+        let url_ = this.baseUrl + "/api/users/{id}/claims";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetUserClaims(_response);
+        });
+    }
+
+    protected processGetUserClaims(response: Response): Promise<SwaggerResponse<ClaimDto[]>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ClaimDto[];
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            return throwException("Not Found", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<ClaimDto[]>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Add user claims
+     * @return OK
+     */
+    addUserClaims(id: string, body: ClaimDto[], signal?: AbortSignal): Promise<SwaggerResponse<ClaimDto[]>> {
+        let url_ = this.baseUrl + "/api/users/{id}/claims";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processAddUserClaims(_response);
+        });
+    }
+
+    protected processAddUserClaims(response: Response): Promise<SwaggerResponse<ClaimDto[]>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ClaimDto[];
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 201) {
+            return response.text().then((_responseText) => {
+            let result201: any = null;
+            result201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ClaimDto[];
+            return new SwaggerResponse(status, _headers, result201);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<ClaimDto[]>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Remove user claims
+     * @return OK
+     */
+    removeUserClaims(id: string, body: ClaimDto[], signal?: AbortSignal): Promise<SwaggerResponse<ClaimDto[]>> {
+        let url_ = this.baseUrl + "/api/users/{id}/claims";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "DELETE",
+            signal,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processRemoveUserClaims(_response);
+        });
+    }
+
+    protected processRemoveUserClaims(response: Response): Promise<SwaggerResponse<ClaimDto[]>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ClaimDto[];
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<ClaimDto[]>>(new SwaggerResponse(status, _headers, null as any));
+    }
 }
 
 export interface AddUserToFamilyCommand {
     familyId?: string;
     userId?: string | null;
+}
+
+export interface ClaimDto {
+    type?: string | null;
+    value?: string | null;
 }
 
 export interface CreateDependentCommand {
@@ -2302,6 +2681,15 @@ export interface CreateMedicineLogCommand {
     dosage?: string | null;
     timeAdministered?: Date;
     notes?: string[] | null;
+}
+
+export interface CreateUserCommand {
+    userName?: string | null;
+    email?: string | null;
+    password?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    role?: string | null;
 }
 
 export interface DependentDto {
@@ -2513,6 +2901,13 @@ export interface UpdateProfileRequestDto {
 
 export interface UpdateSystemSettingsCommand {
     setupCompleted?: boolean | null;
+}
+
+export interface UpdateUserCommand {
+    userId?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    email?: string | null;
 }
 
 export enum UrinalDischargeColour {

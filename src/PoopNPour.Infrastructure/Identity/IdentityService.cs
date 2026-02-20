@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PoopNPour.Abstractions.Identity;
+using PoopNPour.Abstractions.User;
 using PoopNPour.Domain.Common.Identity;
 using PoopNPour.Infrastructure.Data;
+using System.Security.Claims;
 
 namespace PoopNPour.Infrastructure.Identity;
 
@@ -250,6 +252,64 @@ public class IdentityService(
 
         return user;
     }
+
+    public async Task DeleteUserAsync(
+        string userId,
+        CancellationToken cancellationToken = default)
+    {
+        var user = await userManager.FindByIdAsync(userId)
+            ?? throw new InvalidOperationException($"User with ID '{userId}' was not found.");
+
+        var result = await userManager.DeleteAsync(user);
+
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => $"{e.Code}: {e.Description}"));
+            throw new InvalidOperationException($"Failed to delete user: {errors}");
+        }
+    }
+
+    #region Claims Management
+
+    public async Task<IList<ClaimDto>> GetUserClaimsAsync(
+        ApplicationUser user,
+        CancellationToken cancellationToken = default)
+    {
+        var claims = await userManager.GetClaimsAsync(user);
+        return claims.Select(c => new ClaimDto { Type = c.Type, Value = c.Value }).ToList();
+    }
+
+    public async Task AddUserClaimsAsync(
+        ApplicationUser user,
+        IEnumerable<ClaimDto> claims,
+        CancellationToken cancellationToken = default)
+    {
+        var identityClaims = claims.Select(c => new Claim(c.Type, c.Value)).ToList();
+        var result = await userManager.AddClaimsAsync(user, identityClaims);
+
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => $"{e.Code}: {e.Description}"));
+            throw new InvalidOperationException($"Failed to add claims: {errors}");
+        }
+    }
+
+    public async Task RemoveUserClaimsAsync(
+        ApplicationUser user,
+        IEnumerable<ClaimDto> claims,
+        CancellationToken cancellationToken = default)
+    {
+        var identityClaims = claims.Select(c => new Claim(c.Type, c.Value)).ToList();
+        var result = await userManager.RemoveClaimsAsync(user, identityClaims);
+
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => $"{e.Code}: {e.Description}"));
+            throw new InvalidOperationException($"Failed to remove claims: {errors}");
+        }
+    }
+
+    #endregion
 
     public async Task SetAuthenticationTokenAsync(
         ApplicationUser user,

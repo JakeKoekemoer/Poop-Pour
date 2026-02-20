@@ -88,6 +88,7 @@ public class UserRepositoryService(IIdentityService identityService) : IUserServ
         string password,
         string? firstName = null,
         string? lastName = null,
+        string? role = null,
         CancellationToken cancellationToken = default)
     {
         var user = await identityService.CreateUserAsync(
@@ -98,10 +99,19 @@ public class UserRepositoryService(IIdentityService identityService) : IUserServ
             lastName,
             cancellationToken);
 
-        await identityService.AddUserToRoleAsync(user, Roles.Web_Api, cancellationToken);
+        await identityService.AddUserToRoleAsync(user, role ?? Roles.Web_Api, cancellationToken);
 
         var roles = await identityService.GetUserRolesAsync(user, cancellationToken);
         return MapToDto(user, roles);
+    }
+
+    public async Task DeleteUserAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        var user = await identityService.GetUserByIdAsync(userId, cancellationToken);
+        if (user == null)
+            throw new UserNotFoundException(userId);
+
+        await identityService.DeleteUserAsync(userId, cancellationToken);
     }
 
     public async Task<UserDto> UpdateUserAsync(
@@ -138,6 +148,39 @@ public class UserRepositoryService(IIdentityService identityService) : IUserServ
     }
 
     #endregion Updating
+
+    #region Claims
+
+    public async Task<IList<ClaimDto>> GetUserClaimsAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        var user = await identityService.GetUserByIdAsync(userId, cancellationToken);
+        if (user == null)
+            throw new UserNotFoundException(userId);
+
+        return await identityService.GetUserClaimsAsync(user, cancellationToken);
+    }
+
+    public async Task<IList<ClaimDto>> AddUserClaimsAsync(string userId, IEnumerable<ClaimDto> claims, CancellationToken cancellationToken = default)
+    {
+        var user = await identityService.GetUserByIdAsync(userId, cancellationToken);
+        if (user == null)
+            throw new UserNotFoundException(userId);
+
+        await identityService.AddUserClaimsAsync(user, claims, cancellationToken);
+        return await identityService.GetUserClaimsAsync(user, cancellationToken);
+    }
+
+    public async Task<IList<ClaimDto>> RemoveUserClaimsAsync(string userId, IEnumerable<ClaimDto> claims, CancellationToken cancellationToken = default)
+    {
+        var user = await identityService.GetUserByIdAsync(userId, cancellationToken);
+        if (user == null)
+            throw new UserNotFoundException(userId);
+
+        await identityService.RemoveUserClaimsAsync(user, claims, cancellationToken);
+        return await identityService.GetUserClaimsAsync(user, cancellationToken);
+    }
+
+    #endregion Claims
 
     #region Mapping
 
