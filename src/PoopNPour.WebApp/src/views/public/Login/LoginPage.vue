@@ -3,15 +3,17 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 import { RouteHelper } from "@/routes/helpers/RouteHelper";
-import { PUBLIC_ROUTES, SECURE_ROUTES } from "@/routes/constants";
+import { PUBLIC_ROUTES, SECURE_ROUTES, ADMIN_ROUTES } from "@/routes/constants";
 import { useAppToast } from "@/composables/useAppToast";
 import { authService } from "@/services/AuthService";
+import { useUserStore } from "@/stores/user";
 
 import LoginForm from "@/components/views/public/Login/LoginForm.vue";
 import type { LoginFormValues } from "@/components/views/public/Login/loginSchema";
 
 const router = useRouter();
 const toast = useAppToast();
+const userStore = useUserStore();
 const isSubmitting = ref(false);
 const errorMessage = ref<string | null>(null);
 
@@ -24,7 +26,10 @@ async function handleLogin(values: LoginFormValues) {
 
     if (response.success) {
       toast.success("Signed in!", "Welcome back.");
-      await router.push({ name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.DASHBOARD) });
+      const destination = userStore.hasRole("Administrator")
+        ? { name: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.DASHBOARD) }
+        : { name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.DASHBOARD) };
+      await router.push(destination);
     } else {
       const message = response.error.message ?? "Invalid credentials. Please try again.";
       errorMessage.value = message;
