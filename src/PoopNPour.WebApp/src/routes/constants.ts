@@ -15,4 +15,10 @@ export const ADMIN_ROUTES = {
   DASHBOARD: "dashboard",
   USERS: "users",
   SETTINGS: "settings",
+  FAMILIES: "families",
+  FAMILY_USERS: "family-users",
+  DEPENDENTS: "dependents",
+  DIAPER_LOGS: "diaper-logs",
+  FEED_LOGS: "feed-logs",
+  MEDICINE_LOGS: "medicine-logs",
 };
