@@ -10,6 +10,5 @@ public static class Roles
 
     public const string Administrator = nameof(Administrator);
 
-    public const string Family_Head = nameof(Family_Head);
-    public const string Family_Member = nameof(Family_Member);
+    public const string Tenant = nameof(Tenant);
 }

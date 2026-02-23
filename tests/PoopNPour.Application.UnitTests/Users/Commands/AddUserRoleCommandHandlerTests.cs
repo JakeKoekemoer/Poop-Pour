@@ -4,6 +4,7 @@ using PoopNPour.Abstractions.User;
 using PoopNPour.Application.UnitTests.TestHelpers;
 using PoopNPour.Application.Users.Commands;
 using PoopNPour.Application.Users.Exceptions;
+using PoopNPour.Domain.Common.Auth;
 using Xunit;
 
 namespace PoopNPour.Application.UnitTests.Users.Commands;
@@ -23,17 +24,17 @@ public class AddUserRoleCommandHandlerTests
     public async Task Handle_ValidRole_AddsRoleAndReturnsUpdatedUserDto()
     {
         var userId = Guid.NewGuid().ToString();
-        var existingUser = new UserDtoBuilder().WithId(userId).WithRoles("Family_Member").Build();
-        var updatedUser = new UserDtoBuilder().WithId(userId).WithRoles("Family_Member", "Family_Head").Build();
+        var existingUser = new UserDtoBuilder().WithId(userId).WithRoles(Roles.Tenant).Build();
+        var updatedUser = new UserDtoBuilder().WithId(userId).WithRoles(Roles.Tenant).Build();
 
         _userService.GetUserByIdAsync(userId, Arg.Any<CancellationToken>()).Returns(existingUser);
-        _userService.AddUserRoleAsync(userId, "Family_Head", Arg.Any<CancellationToken>()).Returns(updatedUser);
+        _userService.AddUserRoleAsync(userId, Roles.Tenant, Arg.Any<CancellationToken>()).Returns(updatedUser);
 
-        var command = new AddUserRoleCommand(userId, "Family_Head");
+        var command = new AddUserRoleCommand(userId, Roles.Tenant);
         var result = await _sut.Handle(command, CancellationToken.None);
 
-        result.Roles.Should().Contain("Family_Head");
-        await _userService.Received(1).AddUserRoleAsync(userId, "Family_Head", Arg.Any<CancellationToken>());
+        result.Roles.Should().Contain(Roles.Tenant);
+        await _userService.Received(1).AddUserRoleAsync(userId, Roles.Tenant, Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -42,7 +43,7 @@ public class AddUserRoleCommandHandlerTests
         var userId = Guid.NewGuid().ToString();
         _userService.GetUserByIdAsync(userId, Arg.Any<CancellationToken>()).Returns((UserDto?)null);
 
-        var command = new AddUserRoleCommand(userId, "Family_Head");
+        var command = new AddUserRoleCommand(userId, Roles.Tenant);
         var act = () => _sut.Handle(command, CancellationToken.None);
 
         await act.Should().ThrowAsync<UserNotFoundException>().WithMessage("*" + userId + "*");

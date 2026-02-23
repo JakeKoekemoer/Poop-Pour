@@ -129,11 +129,11 @@ public class IdentityServiceTests : IDisposable
     [Fact]
     public async Task AuthorizeAsync_UserDoesNotSatisfyPolicy_ReturnsFalse()
     {
-        var role = new IdentityRole(Roles.Family_Member);
+        var role = new IdentityRole(Roles.Tenant);
         await _roleManager.CreateAsync(role);
         var user = new ApplicationUser { UserName = "member", Email = "member@test.com" };
         await _userManager.CreateAsync(user);
-        await _userManager.AddToRoleAsync(user, Roles.Family_Member);
+        await _userManager.AddToRoleAsync(user, Roles.Tenant);
 
         var result = await _sut.AuthorizeAsync(user.Id, Policies.CanViewUsers);
 

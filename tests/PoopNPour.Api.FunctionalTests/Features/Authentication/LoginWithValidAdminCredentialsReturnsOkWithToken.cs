@@ -4,6 +4,7 @@ using FluentAssertions;
 using PoopNPour.Api.FunctionalTests.Constants;
 using PoopNPour.Api.FunctionalTests.Infrastructure;
 using PoopNPour.Application.Authentication.Models;
+using PoopNPour.Domain.Common.Auth;
 using Xunit;
 
 namespace PoopNPour.Api.FunctionalTests.Features.Authentication;
@@ -38,6 +39,6 @@ public class LoginWithValidAdminCredentialsReturnsOkWithToken : AuthenticatedTes
         result.ExpiresAt.Should().BeAfter(DateTime.UtcNow);
         result.User.UserName.Should().Be(TestUsers.Admin.UserName);
         result.User.Email.Should().Be(TestUsers.Admin.Email);
-        result.User.Roles.Should().Contain("Administrator");
+        result.User.Roles.Should().Contain(Roles.Administrator);
     }
 }

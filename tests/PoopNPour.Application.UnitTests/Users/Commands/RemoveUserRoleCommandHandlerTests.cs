@@ -4,6 +4,7 @@ using PoopNPour.Abstractions.User;
 using PoopNPour.Application.UnitTests.TestHelpers;
 using PoopNPour.Application.Users.Commands;
 using PoopNPour.Application.Users.Exceptions;
+using PoopNPour.Domain.Common.Auth;
 using Xunit;
 
 namespace PoopNPour.Application.UnitTests.Users.Commands;
@@ -23,18 +24,18 @@ public class RemoveUserRoleCommandHandlerTests
     public async Task Handle_ValidRole_RemovesRoleAndReturnsUpdatedUserDto()
     {
         var userId = Guid.NewGuid().ToString();
-        var existingUser = new UserDtoBuilder().WithId(userId).WithRoles("Family_Member", "Family_Head").Build();
-        var updatedUser = new UserDtoBuilder().WithId(userId).WithRoles("Family_Member").Build();
+        var existingUser = new UserDtoBuilder().WithId(userId).WithRoles(Roles.Tenant).Build();
+        var updatedUser = new UserDtoBuilder().WithId(userId).WithRoles(Roles.Tenant).Build();
 
         _userService.GetUserByIdAsync(userId, Arg.Any<CancellationToken>()).Returns(existingUser);
-        _userService.RemoveUserRoleAsync(userId, "Family_Head", Arg.Any<CancellationToken>()).Returns(updatedUser);
+        _userService.RemoveUserRoleAsync(userId, Roles.Tenant, Arg.Any<CancellationToken>()).Returns(updatedUser);
 
-        var command = new RemoveUserRoleCommand(userId, "Family_Head");
+        var command = new RemoveUserRoleCommand(userId, Roles.Tenant);
         var result = await _sut.Handle(command, CancellationToken.None);
 
-        result.Roles.Should().NotContain("Family_Head");
-        result.Roles.Should().Contain("Family_Member");
-        await _userService.Received(1).RemoveUserRoleAsync(userId, "Family_Head", Arg.Any<CancellationToken>());
+        result.Roles.Should().NotContain(Roles.Tenant);
+        result.Roles.Should().Contain(Roles.Tenant);
+        await _userService.Received(1).RemoveUserRoleAsync(userId, Roles.Tenant, Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -43,7 +44,7 @@ public class RemoveUserRoleCommandHandlerTests
         var userId = Guid.NewGuid().ToString();
         _userService.GetUserByIdAsync(userId, Arg.Any<CancellationToken>()).Returns((UserDto?)null);
 
-        var command = new RemoveUserRoleCommand(userId, "Family_Head");
+        var command = new RemoveUserRoleCommand(userId, Roles.Tenant);
         var act = () => _sut.Handle(command, CancellationToken.None);
 
         await act.Should().ThrowAsync<UserNotFoundException>().WithMessage("*" + userId + "*");

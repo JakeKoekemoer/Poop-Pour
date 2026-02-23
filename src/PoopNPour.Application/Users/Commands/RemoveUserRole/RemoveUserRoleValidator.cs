@@ -11,8 +11,7 @@ public class RemoveUserRoleCommandValidator : AbstractValidator<RemoveUserRoleCo
     private static readonly IReadOnlySet<string> ValidRoles = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     {
         Roles.Administrator,
-        Roles.Family_Head,
-        Roles.Family_Member,
+        Roles.Tenant,
         Roles.Web_Api,
         Roles.Mobile_Api
     };

@@ -19,7 +19,7 @@ public class RemoveRoleFromUserWithNonExistentIdReturnsNotFound : AuthenticatedT
         using var client = await CreateAdminClientAsync();
 
         var bogusId = Guid.NewGuid().ToString();
-        var response = await client.DeleteAsync($"/api/users/{bogusId}/roles/{Roles.Family_Head}");
+        var response = await client.DeleteAsync($"/api/users/{bogusId}/roles/{Roles.Tenant}");
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }

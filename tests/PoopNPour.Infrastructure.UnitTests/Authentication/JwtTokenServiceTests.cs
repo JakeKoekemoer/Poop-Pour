@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
+using PoopNPour.Domain.Common.Auth;
 using PoopNPour.Infrastructure.Authentication;
 using Xunit;
 
@@ -154,7 +155,7 @@ public class JwtTokenServiceTests
     {
         var sut = CreateSut();
         var userId = "user-123";
-        var roles = new[] { "Web_Api" };
+        var roles = new[] { Roles.Web_Api };
 
         var token = sut.GenerateApiToken(userId, roles);
 

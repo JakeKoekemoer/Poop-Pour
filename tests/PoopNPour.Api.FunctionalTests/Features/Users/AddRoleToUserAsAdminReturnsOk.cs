@@ -38,13 +38,13 @@ public class AddRoleToUserAsAdminReturnsOk : AuthenticatedTestBase
         var userId = registered!.User.Id;
 
         // Add Family_Head role to the new user
-        var command = new AddUserRoleCommand(userId, Roles.Family_Head);
+        var command = new AddUserRoleCommand(userId, Roles.Tenant);
         var response = await adminClient.PostAsJsonAsync($"/api/users/{userId}/roles", command);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var result = await response.Content.ReadFromJsonAsync<UserDto>();
         result.Should().NotBeNull();
-        result!.Roles.Should().Contain(Roles.Family_Head);
+        result!.Roles.Should().Contain(Roles.Tenant);
     }
 }

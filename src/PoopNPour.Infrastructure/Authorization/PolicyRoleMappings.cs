@@ -49,8 +49,7 @@ public static class PolicyRoleMappings
 
         options.AddPolicy(Policies.Can_ManageOwnProfile,
             policy => policy.RequireRole([
-                Roles.Family_Head,
-                Roles.Family_Member,
+                Roles.Tenant,
                 Roles.Administrator
             ])
         );
@@ -80,15 +79,14 @@ public static class PolicyRoleMappings
 
         options.AddPolicy(Policies.CanManageFamilies,
             policy => policy.RequireRole([
-                Roles.Family_Head,
+                Roles.Tenant,
                 Roles.Administrator
             ])
         );
 
         options.AddPolicy(Policies.CanViewFamilies,
             policy => policy.RequireRole([
-                Roles.Family_Head,
-                Roles.Family_Member,
+                Roles.Tenant,
                 Roles.Administrator
             ])
         );
@@ -99,15 +97,14 @@ public static class PolicyRoleMappings
 
         options.AddPolicy(Policies.CanManageDependents,
             policy => policy.RequireRole([
-                Roles.Family_Head,
+                Roles.Tenant,
                 Roles.Administrator
             ])
         );
 
         options.AddPolicy(Policies.CanViewDependents,
             policy => policy.RequireRole([
-                Roles.Family_Head,
-                Roles.Family_Member,
+                Roles.Tenant,
                 Roles.Administrator
             ])
         );
@@ -118,16 +115,14 @@ public static class PolicyRoleMappings
 
         options.AddPolicy(Policies.CanManageLogs,
             policy => policy.RequireRole([
-                Roles.Family_Head,
-                Roles.Family_Member,
+                Roles.Tenant,
                 Roles.Administrator
             ])
         );
 
         options.AddPolicy(Policies.CanViewLogs,
             policy => policy.RequireRole([
-                Roles.Family_Head,
-                Roles.Family_Member,
+                Roles.Tenant,
                 Roles.Administrator
             ])
         );

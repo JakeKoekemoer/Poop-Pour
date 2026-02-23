@@ -21,7 +21,7 @@ public class AddRoleToUserWithoutAuthReturnsUnauthorized : AuthenticatedTestBase
         var client = Factory.CreateClient();
 
         var bogusId = Guid.NewGuid().ToString();
-        var command = new AddUserRoleCommand(bogusId, Roles.Family_Head);
+        var command = new AddUserRoleCommand(bogusId, Roles.Tenant);
         var response = await client.PostAsJsonAsync($"/api/users/{bogusId}/roles", command);
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);

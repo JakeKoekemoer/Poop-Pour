@@ -5,6 +5,7 @@ using FluentAssertions;
 using PoopNPour.Api.FunctionalTests.Constants;
 using PoopNPour.Api.FunctionalTests.Infrastructure;
 using PoopNPour.Application.Authentication.Models;
+using PoopNPour.Domain.Common.Auth;
 using Xunit;
 
 namespace PoopNPour.Api.FunctionalTests.Setup;
@@ -69,7 +70,7 @@ public class InfrastructureValidationTests : IClassFixture<CustomWebApplicationF
         result!.Token.Should().NotBeNullOrEmpty("login should return a valid JWT token");
         result.User.Should().NotBeNull();
         result.User.UserName.Should().Be(TestUsers.Admin.UserName);
-        result.User.Roles.Should().Contain("Administrator");
+        result.User.Roles.Should().Contain(Roles.Administrator);
     }
 
     [Fact, TestPriority(3)]

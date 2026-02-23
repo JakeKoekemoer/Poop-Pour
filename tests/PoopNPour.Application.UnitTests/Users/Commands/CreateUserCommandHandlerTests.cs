@@ -3,6 +3,7 @@ using NSubstitute;
 using PoopNPour.Abstractions.User;
 using PoopNPour.Application.UnitTests.TestHelpers;
 using PoopNPour.Application.Users.Commands;
+using PoopNPour.Domain.Common.Auth;
 using Xunit;
 
 namespace PoopNPour.Application.UnitTests.Users.Commands;
@@ -26,7 +27,7 @@ public class CreateUserCommandHandlerTests
             .WithEmail("new@test.com")
             .WithFirstName("New")
             .WithLastName("User")
-            .WithRoles("Web_Api")
+            .WithRoles(Roles.Web_Api)
             .Build();
         _userService
             .CreateUserAsync("newuser", "new@test.com", "Password1!", "New", "User", null, Arg.Any<CancellationToken>())
@@ -45,18 +46,18 @@ public class CreateUserCommandHandlerTests
     {
         var expected = new UserDtoBuilder()
             .WithUserName("adminuser")
-            .WithRoles("Administrator")
+            .WithRoles(Roles.Administrator)
             .Build();
         _userService
-            .CreateUserAsync("adminuser", "admin@test.com", "Password1!", null, null, "Administrator", Arg.Any<CancellationToken>())
+            .CreateUserAsync("adminuser", "admin@test.com", "Password1!", null, null, Roles.Administrator, Arg.Any<CancellationToken>())
             .Returns(expected);
 
-        var command = new CreateUserCommand("adminuser", "admin@test.com", "Password1!", Role: "Administrator");
+        var command = new CreateUserCommand("adminuser", "admin@test.com", "Password1!", Role: Roles.Administrator);
         var result = await _sut.Handle(command, CancellationToken.None);
 
         result.Should().BeSameAs(expected);
         await _userService.Received(1).CreateUserAsync(
-            "adminuser", "admin@test.com", "Password1!", null, null, "Administrator", Arg.Any<CancellationToken>());
+            "adminuser", "admin@test.com", "Password1!", null, null, Roles.Administrator, Arg.Any<CancellationToken>());
     }
 
     [Fact]

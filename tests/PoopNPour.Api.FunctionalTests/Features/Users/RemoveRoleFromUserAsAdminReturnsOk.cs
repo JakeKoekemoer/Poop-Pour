@@ -37,18 +37,18 @@ public class RemoveRoleFromUserAsAdminReturnsOk : AuthenticatedTestBase
         var registered = await registerResponse.Content.ReadFromJsonAsync<RegisterResponseDto>();
         var userId = registered!.User.Id;
 
-        // First add the Family_Member role
-        var addCommand = new AddUserRoleCommand(userId, Roles.Family_Member);
+        // First add the Tenant role
+        var addCommand = new AddUserRoleCommand(userId, Roles.Tenant);
         var addResponse = await adminClient.PostAsJsonAsync($"/api/users/{userId}/roles", addCommand);
         addResponse.EnsureSuccessStatusCode();
 
         // Now remove it
-        var removeResponse = await adminClient.DeleteAsync($"/api/users/{userId}/roles/{Roles.Family_Member}");
+        var removeResponse = await adminClient.DeleteAsync($"/api/users/{userId}/roles/{Roles.Tenant}");
 
         removeResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var result = await removeResponse.Content.ReadFromJsonAsync<UserDto>();
         result.Should().NotBeNull();
-        result!.Roles.Should().NotContain(Roles.Family_Member);
+        result!.Roles.Should().NotContain(Roles.Tenant);
     }
 }

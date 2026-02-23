@@ -1,5 +1,6 @@
 using FluentValidation.TestHelper;
 using PoopNPour.Application.Users.Commands;
+using PoopNPour.Domain.Common.Auth;
 using Xunit;
 
 namespace PoopNPour.Application.UnitTests.Users.Commands;
@@ -19,7 +20,7 @@ public class CreateUserValidatorValidCommandPassesValidation
     [Fact]
     public void Validate_AllFieldsIncludingOptionals_PassesValidation()
     {
-        var command = new CreateUserCommand("newuser", "new@test.com", "Password1!", "John", "Doe", "Administrator");
+        var command = new CreateUserCommand("newuser", "new@test.com", "Password1!", "John", "Doe", Roles.Administrator);
         var result = _validator.TestValidate(command);
         result.ShouldNotHaveAnyValidationErrors();
     }

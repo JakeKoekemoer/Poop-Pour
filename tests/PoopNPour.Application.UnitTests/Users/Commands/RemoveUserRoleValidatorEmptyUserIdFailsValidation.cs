@@ -1,5 +1,6 @@
 using FluentValidation.TestHelper;
 using PoopNPour.Application.Users.Commands;
+using PoopNPour.Domain.Common.Auth;
 using Xunit;
 
 namespace PoopNPour.Application.UnitTests.Users.Commands;
@@ -13,7 +14,7 @@ public class RemoveUserRoleValidatorEmptyUserIdFailsValidation
     [InlineData(" ")]
     public void Validate_EmptyUserId_FailsValidation(string userId)
     {
-        var command = new RemoveUserRoleCommand(userId, "Family_Head");
+        var command = new RemoveUserRoleCommand(userId, Roles.Tenant);
         var result = _validator.TestValidate(command);
         result.ShouldHaveValidationErrorFor(x => x.UserId)
             .WithErrorMessage("User ID is required.");

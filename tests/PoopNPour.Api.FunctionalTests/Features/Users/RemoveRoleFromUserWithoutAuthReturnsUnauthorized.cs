@@ -19,7 +19,7 @@ public class RemoveRoleFromUserWithoutAuthReturnsUnauthorized : AuthenticatedTes
         var client = Factory.CreateClient();
 
         var bogusId = Guid.NewGuid().ToString();
-        var response = await client.DeleteAsync($"/api/users/{bogusId}/roles/{Roles.Family_Head}");
+        var response = await client.DeleteAsync($"/api/users/{bogusId}/roles/{Roles.Tenant}");
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }

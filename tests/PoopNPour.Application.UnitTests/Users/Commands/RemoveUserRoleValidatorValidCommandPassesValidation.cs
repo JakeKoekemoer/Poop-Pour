@@ -11,8 +11,7 @@ public class RemoveUserRoleValidatorValidCommandPassesValidation
 
     [Theory]
     [InlineData(Roles.Administrator)]
-    [InlineData(Roles.Family_Head)]
-    [InlineData(Roles.Family_Member)]
+    [InlineData(Roles.Tenant)]
     [InlineData(Roles.Web_Api)]
     [InlineData(Roles.Mobile_Api)]
     public void Validate_KnownRole_PassesValidation(string role)
