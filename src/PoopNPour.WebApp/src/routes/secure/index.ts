@@ -18,6 +18,11 @@ export const secureRoutes: RouteRecordRaw[] = [
         name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.PROFILE),
         component: () => import('@/views/secure/Profile/ProfilePage.vue'),
       },
+      {
+        path: 'families/create',
+        name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.CREATE_FAMILY),
+        component: () => import('@/views/secure/Families/CreateFamilyPage.vue'),
+      },
     ],
   },
 ]

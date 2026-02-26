@@ -9,6 +9,7 @@ export const PUBLIC_ROUTES = {
 export const SECURE_ROUTES = {
   DASHBOARD: "dashboard",
   PROFILE: "profile",
+  CREATE_FAMILY: "create-family",
 };
 
 export const ADMIN_ROUTES = {
@@ -19,6 +20,8 @@ export const ADMIN_ROUTES = {
   DELETE_USER: "delete-user",
   SETTINGS: "settings",
   FAMILIES: "families",
+  ADD_FAMILY: "add-family",
+  EDIT_FAMILY: "edit-family",
   FAMILY_USERS: "family-users",
   DEPENDENTS: "dependents",
   DIAPER_LOGS: "diaper-logs",
