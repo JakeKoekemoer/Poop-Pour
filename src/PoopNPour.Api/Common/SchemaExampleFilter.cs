@@ -1,8 +1,5 @@
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using PoopNPour.Application.Authentication.Models;
-using PoopNPour.Application.Users.Models;
+using Microsoft.OpenApi;
 
 namespace PoopNPour.Api.Common;
 
@@ -12,7 +9,7 @@ namespace PoopNPour.Api.Common;
 /// </summary>
 public class SchemaExampleFilter : ISchemaFilter
 {
-    public void Apply(OpenApiSchema schema, SchemaFilterContext context)
+    public void Apply(IOpenApiSchema schema, SchemaFilterContext context)
     {
         // if (context.Type == typeof(LoginRequestDto))
         // {
@@ -24,4 +21,5 @@ public class SchemaExampleFilter : ISchemaFilter
         //     return;
         // }
     }
+
 }

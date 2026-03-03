@@ -1,4 +1,4 @@
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using PoopNPour.Api.Common;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -46,19 +46,9 @@ public static class DependencyInjection
                 Scheme = "Bearer"
             });
 
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
             {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    []
-                }
+                [new OpenApiSecuritySchemeReference("Bearer", document)] = []
             });
 
             options.OperationFilter<EndpointDocumentationFilter>();  // Summary/Description

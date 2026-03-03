@@ -1,6 +1,6 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using PoopNPour.Application.Authorization;
 using Swashbuckle.AspNetCore.SwaggerGen;
 

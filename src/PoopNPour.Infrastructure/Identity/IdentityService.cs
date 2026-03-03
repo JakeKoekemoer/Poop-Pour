@@ -15,7 +15,6 @@ namespace PoopNPour.Infrastructure.Identity;
 public class IdentityService(
     UserManager<ApplicationUser> userManager,
     RoleManager<IdentityRole> roleManager,
-    ApplicationDbContext context,
     IAuthorizationService authorizationService) : IIdentityService
 {
     #region Authorization (Used by AuthorizationBehavior)
