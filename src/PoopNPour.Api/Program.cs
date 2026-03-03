@@ -8,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Load database configuration from separate file (not in version control)
 builder.Configuration.AddJsonFile("database.config.json", optional: true, reloadOnChange: true);
 
+// Load JWT configuration from separate file (not in version control)
+builder.Configuration.AddJsonFile("jwt.config.json", optional: true, reloadOnChange: true);
+
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddApiServices();

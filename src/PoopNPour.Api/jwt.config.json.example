@@ -1,0 +1,5 @@
+{
+  "Jwt": {
+    "SecretKey": "YourSecretKeyHere_MustBeAtLeast32CharactersLong_ChangeThis"
+  }
+}

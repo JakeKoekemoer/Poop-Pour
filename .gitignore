@@ -56,4 +56,7 @@ nunit-*.xml
 
 # Database Configuration (contains sensitive connection strings)
 **/database.config.json
+
+# JWT Configuration (contains signing key)
+**/jwt.config.json
 generated/api-client.ts
