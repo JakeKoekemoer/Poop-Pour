@@ -21,6 +21,7 @@ public static class Policies
     public const string CanManageUsers = nameof(CanManageUsers);
     public const string CanViewUserClaims = nameof(CanViewUserClaims);
     public const string CanManageUserClaims = nameof(CanManageUserClaims);
+    public const string CanViewRoles = nameof(CanViewRoles);
 
     #endregion User Management Policies
 

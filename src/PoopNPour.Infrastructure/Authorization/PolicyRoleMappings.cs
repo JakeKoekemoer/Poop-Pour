@@ -66,6 +66,9 @@ public static class PolicyRoleMappings
         options.AddPolicy(Policies.CanManageUserClaims,
             policy => policy.RequireRole(Roles.Administrator));
 
+        options.AddPolicy(Policies.CanViewRoles,
+            policy => policy.RequireRole(Roles.Administrator));
+
         #endregion User Management Policies
 
         #region Settings Policies

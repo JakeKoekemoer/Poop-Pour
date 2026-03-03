@@ -1,5 +1,4 @@
 using FluentValidation;
-using PoopNPour.Domain.Common.Auth;
 
 namespace PoopNPour.Application.Users.Commands;
 
@@ -10,10 +9,10 @@ public class RemoveUserRoleCommandValidator : AbstractValidator<RemoveUserRoleCo
 {
     private static readonly IReadOnlySet<string> ValidRoles = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     {
-        Roles.Administrator,
-        Roles.Tenant,
-        Roles.Web_Api,
-        Roles.Mobile_Api
+        PoopNPour.Domain.Common.Auth.Roles.Administrator,
+        PoopNPour.Domain.Common.Auth.Roles.Tenant,
+        PoopNPour.Domain.Common.Auth.Roles.Web_Api,
+        PoopNPour.Domain.Common.Auth.Roles.Mobile_Api
     };
 
     public RemoveUserRoleCommandValidator()

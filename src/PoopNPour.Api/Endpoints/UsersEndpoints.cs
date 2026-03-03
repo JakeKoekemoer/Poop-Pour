@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PoopNPour.Abstractions.User;
 using PoopNPour.Api.Common;
 using PoopNPour.Application.Common.Models;
+using PoopNPour.Application.Roles.Queries;
 using PoopNPour.Application.Users.Commands;
 using PoopNPour.Application.Users.Models;
 using PoopNPour.Application.Users.Queries;
@@ -22,6 +24,9 @@ public class UsersEndpoints : EndpointGroupBase
             .MapGet(GetUsersAsync, "", route => route
                 .WithDocumentation("List users", "Paginated list with optional search")
                 .WithResponse<PaginatedResponseDto<UserDto>>())
+            .MapGet(GetRolesAsync, "roles", route => route
+                .WithDocumentation("List roles", "Get the list of all application roles (admin only)")
+                .WithResponse<IReadOnlyList<string>>())
             .MapGet(GetUserByIdAsync, "{id}", route => route
                 .WithDocumentation("Get user", "Fetch a user by ID")
                 .WithResponse<UserDto>())
@@ -68,6 +73,14 @@ public class UsersEndpoints : EndpointGroupBase
         var query = new GetUsersQuery(page, pageSize, searchTerm);
         var result = await mediator.Send(query, cancellationToken);
         return Results.Ok(result);
+    }
+
+    public async Task<IResult> GetRolesAsync(
+        IMediator mediator,
+        CancellationToken cancellationToken)
+    {
+        var roles = await mediator.Send(new GetRolesQuery(), cancellationToken);
+        return Results.Ok(roles);
     }
 
     public async Task<IResult> GetUserByIdAsync(
