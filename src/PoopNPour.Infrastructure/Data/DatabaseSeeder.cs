@@ -128,8 +128,6 @@ public class DatabaseSeeder(
             return;
         }
 
-        var regenerateTokens = configuration.GetValue<bool>("RegenerateApiTokensOnStartup");
-
         foreach (var apiClientConfig in apiClients)
         {
             var userName = apiClientConfig["UserName"];
@@ -195,26 +193,7 @@ public class DatabaseSeeder(
             }
             else
             {
-                // User already exists - check if we should regenerate the token
-                if (!regenerateTokens)
-                {
-                    logger.LogInformation("API client user {UserName} already exists. Skipping token regeneration (RegenerateApiTokensOnStartup=false)", userName);
-                    continue;
-                }
-                
-                // Regenerate token for existing user
-                logger.LogInformation("API client user {UserName} already exists. Refreshing API token.", userName);
-                logger.LogInformation("Generating API token for {UserName} with role {Role}", userName, role);
-                var apiToken = jwtTokenService.GenerateApiToken(existingUser.Id, new[] { role });
-                
-                await identityService.SetAuthenticationTokenAsync(
-                    existingUser,
-                    "PoopNPour",
-                    "ApiToken",
-                    apiToken,
-                    cancellationToken);
-
-                logger.LogInformation("API Token for {UserName}: {Token}", userName, apiToken);
+                logger.LogInformation("API client user {UserName} already exists. Skipping.", userName);
             }
         }
 
