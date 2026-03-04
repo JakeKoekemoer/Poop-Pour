@@ -1,8 +1,14 @@
-import { BaseService } from '../BaseService';
-import type { ApiResponse } from '../types';
-import type { UpdateProfileRequestDto, RegisterRequestDto, UpdateUserCommand, ClaimDto, AddUserRoleCommand } from '@/api/api-client';
-import { useUserStore, type UserProfile } from '@/stores';
-import { toUserProfile } from '@/stores/user/types';
+import { BaseService } from "../BaseService";
+import type { ApiResponse } from "../types";
+import type {
+  UpdateProfileRequestDto,
+  CreateUserCommand,
+  UpdateUserCommand,
+  ClaimDto,
+  AddUserRoleCommand,
+} from "@/api/api-client";
+import { useUserStore, type UserProfile } from "@/stores";
+import { toUserProfile } from "@/stores/user/types";
 
 class UserService extends BaseService {
   async getMyProfile(): Promise<ApiResponse<UserProfile>> {
@@ -10,7 +16,7 @@ class UserService extends BaseService {
 
     if (response.success && response.data) {
       const userProfile = toUserProfile(response.data);
-      
+
       const userStore = useUserStore();
       userStore.updateUser(userProfile);
 
@@ -26,7 +32,7 @@ class UserService extends BaseService {
   async updateMyProfile(
     firstName?: string,
     lastName?: string,
-    email?: string
+    email?: string,
   ): Promise<ApiResponse<UserProfile>> {
     const dto: UpdateProfileRequestDto = {
       firstName,
@@ -38,7 +44,7 @@ class UserService extends BaseService {
 
     if (response.success && response.data) {
       const userProfile = toUserProfile(response.data);
-      
+
       const userStore = useUserStore();
       userStore.updateUser(userProfile);
 
@@ -54,21 +60,21 @@ class UserService extends BaseService {
   async getUsers(
     page?: number,
     pageSize?: number,
-    searchTerm?: string
-  ): Promise<ApiResponse<{
-    items: UserProfile[];
-    pageNumber: number;
-    pageSize: number;
-    totalCount: number;
-    totalPages: number;
-  }>> {
-    const response = await this.execute(() => 
-      this.client.getUsers(page, pageSize, searchTerm)
-    );
+    searchTerm?: string,
+  ): Promise<
+    ApiResponse<{
+      items: UserProfile[];
+      pageNumber: number;
+      pageSize: number;
+      totalCount: number;
+      totalPages: number;
+    }>
+  > {
+    const response = await this.execute(() => this.client.getUsers(page, pageSize, searchTerm));
 
     if (response.success && response.data) {
       const { items, pageNumber, pageSize: size, totalCount, totalPages } = response.data;
-      
+
       return {
         success: true,
         data: {
@@ -90,32 +96,30 @@ class UserService extends BaseService {
     }>;
   }
 
-  // Uses the register endpoint but does NOT affect the current admin's auth session.
   async createUser(
     email: string,
     userName: string,
     password: string,
     firstName?: string,
     lastName?: string,
+    role?: string,
   ): Promise<ApiResponse<UserProfile>> {
-    const dto: RegisterRequestDto = {
+    const dto: CreateUserCommand = {
       email,
       userName,
       password,
       firstName,
       lastName,
+      role,
     };
 
-    const response = await this.execute(() => this.client.register(dto));
+    const response = await this.execute(() => this.client.createUser(dto));
 
     if (response.success && response.data) {
-      const { user } = response.data;
-      if (user) {
-        return {
-          success: true,
-          data: toUserProfile(user),
-        };
-      }
+      return {
+        success: true,
+        data: toUserProfile(response.data),
+      };
     }
 
     return response as ApiResponse<UserProfile>;
@@ -228,6 +232,19 @@ class UserService extends BaseService {
 
   async deleteUser(id: string): Promise<ApiResponse<void>> {
     return this.executeVoid(() => this.client.deleteUser(id));
+  }
+
+  async getRoles(): Promise<ApiResponse<string[]>> {
+    const response = await this.execute(() => this.client.getRoles());
+
+    if (response.success && response.data) {
+      return {
+        success: true,
+        data: response.data ?? [],
+      };
+    }
+
+    return response as ApiResponse<string[]>;
   }
 }
 

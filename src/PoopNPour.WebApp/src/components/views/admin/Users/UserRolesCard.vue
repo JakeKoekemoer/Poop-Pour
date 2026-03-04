@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { X, Plus } from 'lucide-vue-next'
+import { onMounted, reactive, ref } from 'vue'
 
 import {
   Card,
@@ -9,9 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Switch } from '@/components/ui/switch'
+import { Label } from '@/components/ui/label'
 import { useAppToast } from '@/composables/useAppToast'
 import { userService } from '@/services/UserService'
 import { formatApiError } from '@/utils/formatApiError'
@@ -23,41 +22,52 @@ const props = defineProps<{
 
 const toast = useAppToast()
 
-const roles = ref<string[]>([...props.initialRoles])
-const removingRole = ref<string | null>(null)
-const isAdding = ref(false)
-const newRole = ref('')
+const allRoles = ref<string[]>([])
+const isLoadingRoles = ref(false)
+const rolesError = ref<string | null>(null)
 
-async function handleRemove(role: string) {
-  removingRole.value = role
+const userRoles = reactive(new Set<string>(props.initialRoles))
+const toggling = reactive(new Map<string, boolean>())
 
-  const response = await userService.removeUserRole(props.userId, role)
+onMounted(async () => {
+  isLoadingRoles.value = true
+  rolesError.value = null
+
+  const response = await userService.getRoles()
   if (response.success && response.data) {
-    roles.value = response.data
-    toast.success('Role removed', `"${role}" has been removed.`)
+    allRoles.value = response.data
   } else {
-    toast.error('Failed to remove role', response.error ? formatApiError(response.error) : 'Please try again.')
+    rolesError.value = response.error
+      ? formatApiError(response.error)
+      : 'Failed to load roles. Please try again.'
   }
 
-  removingRole.value = null
-}
+  isLoadingRoles.value = false
+})
 
-async function handleAdd() {
-  const role = newRole.value.trim()
-  if (!role) return
+async function handleToggle(role: string, checked: boolean) {
+  toggling.set(role, true)
 
-  isAdding.value = true
-
-  const response = await userService.addUserRole(props.userId, role)
-  if (response.success && response.data) {
-    roles.value = response.data
-    newRole.value = ''
-    toast.success('Role added', `"${role}" has been added.`)
+  if (checked) {
+    const response = await userService.addUserRole(props.userId, role)
+    if (response.success && response.data) {
+      response.data.forEach((r) => userRoles.add(r))
+      toast.success('Role added', `"${role}" has been assigned.`)
+    } else {
+      toast.error('Failed to add role', response.error ? formatApiError(response.error) : 'Please try again.')
+    }
   } else {
-    toast.error('Failed to add role', response.error ? formatApiError(response.error) : 'Please try again.')
+    const response = await userService.removeUserRole(props.userId, role)
+    if (response.success && response.data) {
+      userRoles.clear()
+      response.data.forEach((r) => userRoles.add(r))
+      toast.success('Role removed', `"${role}" has been removed.`)
+    } else {
+      toast.error('Failed to remove role', response.error ? formatApiError(response.error) : 'Please try again.')
+    }
   }
 
-  isAdding.value = false
+  toggling.set(role, false)
 }
 </script>
 
@@ -65,46 +75,40 @@ async function handleAdd() {
   <Card>
     <CardHeader>
       <CardTitle>User Roles</CardTitle>
-      <CardDescription>Manage roles assigned to this user account</CardDescription>
+      <CardDescription>Toggle roles assigned to this user account</CardDescription>
     </CardHeader>
     <CardContent class="space-y-4">
-      <div v-if="roles.length > 0" class="flex flex-wrap gap-2">
-        <div
-          v-for="role in roles"
-          :key="role"
-          class="flex items-center gap-1"
-        >
-          <Badge>{{ role }}</Badge>
-          <Button
-            size="icon"
-            variant="ghost"
-            class="h-5 w-5 text-muted-foreground hover:text-destructive"
-            :disabled="removingRole === role"
-            @click="handleRemove(role)"
-          >
-            <X class="h-3 w-3" />
-          </Button>
+      <div v-if="isLoadingRoles" class="space-y-3">
+        <div v-for="n in 3" :key="n" class="flex items-center justify-between">
+          <div class="h-4 w-24 bg-muted animate-pulse rounded" />
+          <div class="h-5 w-8 bg-muted animate-pulse rounded-full" />
         </div>
       </div>
-      <p v-else class="text-sm text-muted-foreground">No roles assigned to this user.</p>
 
-      <div class="flex gap-2">
-        <Input
-          v-model="newRole"
-          placeholder="e.g. Admin"
-          :disabled="isAdding"
-          class="max-w-xs"
-          @keyup.enter="handleAdd"
-        />
-        <Button
-          variant="outline"
-          size="sm"
-          :disabled="isAdding || !newRole.trim()"
-          @click="handleAdd"
+      <Alert v-else-if="rolesError" variant="destructive">
+        <AlertDescription>{{ rolesError }}</AlertDescription>
+      </Alert>
+
+      <p v-else-if="allRoles.length === 0" class="text-sm text-muted-foreground">
+        No roles are configured. Please contact an administrator.
+      </p>
+
+      <div v-else class="space-y-3">
+        <div
+          v-for="role in allRoles"
+          :key="role"
+          class="flex items-center justify-between"
         >
-          <Plus class="h-4 w-4 mr-1" />
-          Add Role
-        </Button>
+          <Label :for="`role-${role}`" class="text-sm font-medium cursor-pointer">
+            {{ role }}
+          </Label>
+          <Switch
+            :id="`role-${role}`"
+            :model-value="userRoles.has(role)"
+            :disabled="toggling.get(role) === true"
+            @update:model-value="handleToggle(role, $event)"
+          />
+        </div>
       </div>
     </CardContent>
   </Card>

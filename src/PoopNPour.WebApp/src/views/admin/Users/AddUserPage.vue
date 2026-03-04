@@ -11,14 +11,14 @@ import { ADMIN_ROUTES } from '@/routes/constants'
 import { useAppToast } from '@/composables/useAppToast'
 
 import AddUserForm from '@/components/views/admin/Users/AddUserForm.vue'
-import type { RegisterFormValues } from '@/components/views/public/Register/registerSchema'
+import type { AddUserFormValues } from '@/components/views/admin/Users/addUserSchema'
 
 const router = useRouter()
 const toast = useAppToast()
 const isSubmitting = ref(false)
 const errorMessage = ref<string | null>(null)
 
-async function handleSubmit(values: RegisterFormValues) {
+async function handleSubmit(values: AddUserFormValues) {
   isSubmitting.value = true
   errorMessage.value = null
 
@@ -29,6 +29,7 @@ async function handleSubmit(values: RegisterFormValues) {
       values.password,
       values.firstName,
       values.lastName,
+      values.role,
     )
 
     if (response.success) {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import { Shuffle } from 'lucide-vue-next'
@@ -17,8 +17,16 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { PasswordInput } from '@/components/generic/PasswordInput'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
-import { registerSchema, type RegisterFormValues } from '@/components/views/public/Register/registerSchema'
+import { addUserSchema, type AddUserFormValues } from './addUserSchema'
+import { userService } from '@/services/UserService'
 
 const props = defineProps<{
   isSubmitting: boolean
@@ -26,13 +34,17 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  submit: [values: RegisterFormValues]
+  submit: [values: AddUserFormValues]
   cancel: []
 }>()
 
 const form = useForm({
-  validationSchema: toTypedSchema(registerSchema),
+  validationSchema: toTypedSchema(addUserSchema),
 })
+
+const roles = ref<string[]>([])
+const isLoadingRoles = ref(false)
+const rolesError = ref<string | null>(null)
 
 const onSubmit = form.handleSubmit((values) => {
   emit('submit', values)
@@ -65,6 +77,22 @@ function handleGenerate() {
   form.setFieldValue('password', password)
   passwordInputRef.value?.reveal()
 }
+
+onMounted(async () => {
+  isLoadingRoles.value = true
+  rolesError.value = null
+
+  const response = await userService.getRoles()
+  if (response.success && response.data && response.data.length > 0) {
+    roles.value = response.data
+  } else if (!response.success) {
+    rolesError.value = response.error?.message || 'Failed to load roles. Please try again.'
+  } else {
+    rolesError.value = 'No roles are configured. Please contact an administrator.'
+  }
+
+  isLoadingRoles.value = false
+})
 </script>
 
 <template>
@@ -119,6 +147,37 @@ function handleGenerate() {
           <PasswordInput ref="passwordInputRef" v-bind="componentField" :disabled="props.isSubmitting" />
         </FormControl>
         <FormDescription>Must be at least 8 characters</FormDescription>
+        <FormMessage />
+      </FormItem>
+    </FormField>
+
+    <FormField v-slot="{ componentField }" name="role">
+      <FormItem>
+        <FormLabel>Role</FormLabel>
+        <FormControl>
+          <Select
+            :model-value="componentField.modelValue"
+            :disabled="props.isSubmitting || isLoadingRoles || !roles.length"
+            @update:model-value="componentField['onUpdate:modelValue']"
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select a role" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem
+                v-for="role in roles"
+                :key="role"
+                :value="role"
+              >
+                {{ role }}
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </FormControl>
+        <FormDescription v-if="isLoadingRoles">Loading roles...</FormDescription>
+        <FormDescription v-else-if="rolesError" class="text-destructive">
+          {{ rolesError }}
+        </FormDescription>
         <FormMessage />
       </FormItem>
     </FormField>
