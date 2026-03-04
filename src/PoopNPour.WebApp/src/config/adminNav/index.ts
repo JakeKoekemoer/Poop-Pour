@@ -1,4 +1,4 @@
-import { Users, Home, UserCheck, Baby, Droplets, Utensils, Pill } from 'lucide-vue-next'
+import { Users, Home, Baby, Droplets, Utensils, Pill } from 'lucide-vue-next'
 import { RouteHelper } from '@/routes/helpers/RouteHelper'
 import { ADMIN_ROUTES } from '@/routes/constants'
 import type { AdminNavItem } from './types'
@@ -16,12 +16,6 @@ export const adminNavItems: AdminNavItem[] = [
     label: 'Families',
     routeName: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.FAMILIES),
     icon: Home,
-    showOnDashboard: true,
-  },
-  {
-    label: 'Users in Family',
-    routeName: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.FAMILY_USERS),
-    icon: UserCheck,
     showOnDashboard: true,
   },
   {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { Pencil } from 'lucide-vue-next'
+import { Pencil, Users } from 'lucide-vue-next'
 import { DataTable, type PaginationState } from '@/components/generic/DataTable'
 import { Button } from '@/components/ui/button'
 import { familyService } from '@/services/FamilyService'
@@ -14,6 +14,10 @@ const router = useRouter()
 
 function goToEditFamily(id: string) {
   router.push({ name: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.EDIT_FAMILY), params: { id } })
+}
+
+function goToFamilyUsers(familyId: string) {
+  router.push({ name: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.FAMILY_USERS), params: { familyId } })
 }
 
 const families = ref<FamilyDto[]>([])
@@ -77,6 +81,9 @@ onMounted(fetchFamilies)
     </template>
     <template #cell-actions="{ row }">
       <div class="flex items-center justify-end gap-1">
+        <Button size="sm" variant="ghost" @click="goToFamilyUsers((row as FamilyDto).familyId!)">
+          <Users class="h-4 w-4" />
+        </Button>
         <Button size="sm" variant="ghost" @click="goToEditFamily((row as FamilyDto).familyId!)">
           <Pencil class="h-4 w-4" />
         </Button>

@@ -90,3 +90,30 @@ export function getAuthToken(): string {
   const client = getApiClient();
   return client.getAuthToken();
 }
+
+/**
+ * Sets the active family context for all subsequent API requests.
+ * Causes the X-Family-Id header to be included on every request.
+ *
+ * @param familyId - The UUID of the family to scope requests to
+ */
+export function setFamilyId(familyId: string): void {
+  getApiClient().setFamilyId(familyId);
+}
+
+/**
+ * Clears the active family context.
+ * Subsequent requests will not include the X-Family-Id header.
+ */
+export function clearFamilyId(): void {
+  getApiClient().clearFamilyId();
+}
+
+/**
+ * Gets the currently active family ID from the API client.
+ *
+ * @returns The current family UUID or empty string if not set
+ */
+export function getFamilyId(): string {
+  return getApiClient().getFamilyId();
+}

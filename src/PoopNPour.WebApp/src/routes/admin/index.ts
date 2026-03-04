@@ -54,7 +54,7 @@ export const adminRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/Families/EditFamilyPage.vue'),
       },
       {
-        path: 'family-users',
+        path: 'families/:familyId/users',
         name: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.FAMILY_USERS),
         component: () => import('@/views/admin/FamilyUsers/FamilyUsersPage.vue'),
       },

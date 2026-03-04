@@ -3,6 +3,7 @@ import { publicRoutes } from './public'
 import { secureRoutes } from './secure'
 import { adminRoutes } from './admin'
 import { authGuard } from './guards/authGuard'
+import { familyContextGuard } from './guards/familyContextGuard'
 import { RouteHelper } from './helpers/RouteHelper'
 import { PUBLIC_ROUTES } from './constants'
 
@@ -20,5 +21,6 @@ const router = createRouter({
 })
 
 router.beforeEach(authGuard)
+router.beforeEach(familyContextGuard)
 
 export default router
