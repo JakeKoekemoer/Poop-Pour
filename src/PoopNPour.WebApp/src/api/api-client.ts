@@ -21,6 +21,7 @@ export class ApiBase {
    */
 
   private authToken = "";
+  private familyId = "";
   private onTokenExpired?: () => void;
 
   protected constructor() {}
@@ -54,6 +55,40 @@ export class ApiBase {
    */
   getAuthToken(): string {
     return this.authToken;
+  }
+
+  /**
+   * Sets the active family context for all subsequent API requests.
+   * The value is sent as the `X-Family-Id` header, which the backend uses to scope
+   * family-level authorization checks (FamilyAuthorizationBehavior).
+   *
+   * Call this whenever the user switches family context (e.g. selects a family from a dropdown).
+   * Call `clearFamilyId()` when no family context should be active.
+   *
+   * @param familyId - The UUID of the family to scope requests to
+   * @example
+   * ```typescript
+   * client.setFamilyId('3fa85f64-5717-4562-b3fc-2c963f66afa6');
+   * ```
+   */
+  setFamilyId(familyId: string): void {
+    this.familyId = familyId;
+  }
+
+  /**
+   * Clears the active family context.
+   * Subsequent requests will not include the `X-Family-Id` header.
+   */
+  clearFamilyId(): void {
+    this.familyId = "";
+  }
+
+  /**
+   * Gets the currently active family ID.
+   * @returns The current family UUID or empty string if not set
+   */
+  getFamilyId(): string {
+    return this.familyId;
   }
 
   /**
@@ -170,6 +205,11 @@ export class ApiBase {
       if (apiKey) {
         headers.set("Authorization", `Bearer ${apiKey}`);
       }
+    }
+
+    // Add family context header if a family is currently active
+    if (this.familyId) {
+      headers.set("X-Family-Id", this.familyId);
     }
 
     // Return transformed options
