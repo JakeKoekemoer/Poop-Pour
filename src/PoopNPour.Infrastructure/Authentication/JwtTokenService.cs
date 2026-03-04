@@ -1,9 +1,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PoopNPour.Abstractions.Authentication;
+using PoopNPour.Abstractions.FamilyUser;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using DomainClaimTypes = PoopNPour.Domain.Common.Auth.ClaimTypes;
 
 namespace PoopNPour.Infrastructure.Authentication;
 
@@ -16,7 +18,8 @@ public class JwtTokenService(IConfiguration configuration) : IJwtTokenService
         string userId,
         string email,
         string userName,
-        IEnumerable<string> roles)
+        IEnumerable<string> roles,
+        IEnumerable<FamilyUserDto>? familyMemberships = null)
     {
         var jwtSettings = configuration.GetSection("Jwt");
         var secretKey = jwtSettings["SecretKey"]
@@ -32,14 +35,19 @@ public class JwtTokenService(IConfiguration configuration) : IJwtTokenService
 
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, userId),
-            new Claim(ClaimTypes.Email, email ?? string.Empty),
-            new Claim(ClaimTypes.Name, userName ?? string.Empty)
+            new Claim(System.Security.Claims.ClaimTypes.NameIdentifier, userId),
+            new Claim(System.Security.Claims.ClaimTypes.Email, email ?? string.Empty),
+            new Claim(System.Security.Claims.ClaimTypes.Name, userName ?? string.Empty)
         };
 
         foreach (var role in roles)
         {
-            claims.Add(new Claim(ClaimTypes.Role, role));
+            claims.Add(new Claim(System.Security.Claims.ClaimTypes.Role, role));
+        }
+
+        foreach (var membership in familyMemberships ?? [])
+        {
+            claims.Add(new Claim(DomainClaimTypes.FamilyMember, membership.FamilyId.ToString()));
         }
 
         var expiresAt = DateTime.UtcNow.AddMinutes(expirationMinutes);
@@ -74,13 +82,13 @@ public class JwtTokenService(IConfiguration configuration) : IJwtTokenService
 
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, userId),
+            new Claim(System.Security.Claims.ClaimTypes.NameIdentifier, userId),
             new Claim("token_type", "api_token")
         };
 
         foreach (var role in roles)
         {
-            claims.Add(new Claim(ClaimTypes.Role, role));
+            claims.Add(new Claim(System.Security.Claims.ClaimTypes.Role, role));
         }
 
         var expiresAt = DateTime.UtcNow.AddDays(apiTokenExpirationDays);

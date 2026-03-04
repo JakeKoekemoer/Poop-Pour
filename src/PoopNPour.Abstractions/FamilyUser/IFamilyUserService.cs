@@ -38,4 +38,11 @@ public interface IFamilyUserService
         Guid? familyId = null,
         string? userId = null,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets all family memberships for a given user, used to embed family_member claims in the JWT at login.
+    /// </summary>
+    Task<IEnumerable<FamilyUserDto>> GetUserFamilyMembershipsAsync(
+        string userId,
+        CancellationToken cancellationToken = default);
 }

@@ -2942,9 +2942,17 @@ export interface FamilyDtoPaginatedResponseDto {
     readonly totalPages?: number;
 }
 
+export enum FamilyRole {
+    _0 = 0,
+    _10 = 10,
+    _20 = 20,
+    _30 = 30,
+}
+
 export interface FamilyUserDto {
     familyId?: string;
     userId?: string | null;
+    role?: FamilyRole;
     createdOn?: Date;
     createdBy?: string | null;
     lastModifiedOn?: Date;

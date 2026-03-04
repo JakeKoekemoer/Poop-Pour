@@ -29,4 +29,10 @@ public interface IUser
     /// Indicates whether the user is an administrator
     /// </summary>
     bool IsAdmin { get; }
+
+    /// <summary>
+    /// The IDs of all families the user is a member of, parsed from JWT family_member claims.
+    /// Used as a fast in-memory gate before any DB lookup.
+    /// </summary>
+    IEnumerable<Guid> FamilyIds { get; }
 }

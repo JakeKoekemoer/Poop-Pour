@@ -1,10 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using PoopNPour.Domain.Common.Auth;
 using PoopNPour.Infrastructure.Authentication;
 using Xunit;
+using SysClaimTypes = System.Security.Claims.ClaimTypes;
 
 namespace PoopNPour.Infrastructure.UnitTests.Authentication;
 
@@ -62,9 +62,9 @@ public class JwtTokenServiceTests
         var handler = new JwtSecurityTokenHandler();
         var jsonToken = handler.ReadJwtToken(token);
         jsonToken.Should().NotBeNull();
-        jsonToken.Claims.Should().Contain(c => c.Type == ClaimTypes.NameIdentifier && c.Value == userId);
-        jsonToken.Claims.Should().Contain(c => c.Type == ClaimTypes.Email && c.Value == email);
-        jsonToken.Claims.Should().Contain(c => c.Type == ClaimTypes.Name && c.Value == userName);
+        jsonToken.Claims.Should().Contain(c => c.Type == SysClaimTypes.NameIdentifier && c.Value == userId);
+        jsonToken.Claims.Should().Contain(c => c.Type == SysClaimTypes.Email && c.Value == email);
+        jsonToken.Claims.Should().Contain(c => c.Type == SysClaimTypes.Name && c.Value == userName);
     }
 
     [Fact]
@@ -77,9 +77,9 @@ public class JwtTokenServiceTests
 
         var handler = new JwtSecurityTokenHandler();
         var jsonToken = handler.ReadJwtToken(token);
-        jsonToken.Claims.Where(c => c.Type == ClaimTypes.Role).Should().HaveCount(2);
-        jsonToken.Claims.Should().Contain(c => c.Type == ClaimTypes.Role && c.Value == "Admin");
-        jsonToken.Claims.Should().Contain(c => c.Type == ClaimTypes.Role && c.Value == "Manager");
+        jsonToken.Claims.Where(c => c.Type == SysClaimTypes.Role).Should().HaveCount(2);
+        jsonToken.Claims.Should().Contain(c => c.Type == SysClaimTypes.Role && c.Value == "Admin");
+        jsonToken.Claims.Should().Contain(c => c.Type == SysClaimTypes.Role && c.Value == "Manager");
     }
 
     [Fact]
@@ -162,7 +162,7 @@ public class JwtTokenServiceTests
         token.Should().NotBeNullOrEmpty();
         var handler = new JwtSecurityTokenHandler();
         var jsonToken = handler.ReadJwtToken(token);
-        jsonToken.Claims.Should().Contain(c => c.Type == ClaimTypes.NameIdentifier && c.Value == userId);
+        jsonToken.Claims.Should().Contain(c => c.Type == SysClaimTypes.NameIdentifier && c.Value == userId);
         jsonToken.Claims.Should().Contain(c => c.Type == "token_type" && c.Value == "api_token");
     }
 

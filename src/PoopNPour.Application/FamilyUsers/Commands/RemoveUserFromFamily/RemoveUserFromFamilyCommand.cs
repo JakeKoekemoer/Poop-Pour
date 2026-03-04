@@ -2,6 +2,7 @@ using FluentValidation;
 using MediatR;
 using PoopNPour.Abstractions.FamilyUser;
 using PoopNPour.Application.Authorization;
+using PoopNPour.Application.Common.Interfaces;
 using PoopNPour.Application.FamilyUsers.Exceptions;
 using PoopNPour.Domain.Common.Auth;
 
@@ -11,10 +12,11 @@ namespace PoopNPour.Application.FamilyUsers.Commands.RemoveUserFromFamily;
 /// Command to remove a user from a family
 /// </summary>
 [Authorize(Policy = Policies.CanManageFamilies)]
+[AuthorizeFamilyMember(FamilyRole.Owner)]
 public record RemoveUserFromFamilyCommand(
     Guid FamilyId,
     string UserId) 
-    : IRequest<Unit>;
+    : IRequest<Unit>, IFamilyRequest;
 
 /// <summary>
 /// Validator for RemoveUserFromFamilyCommand

@@ -4,7 +4,7 @@ using MediatR;
 using PoopNPour.Application.Authorization;
 using PoopNPour.Domain.Common.Auth;
 
-namespace PoopNPour.Application.Roles.Queries;
+namespace PoopNPour.Application.RoleManagement.Queries;
 
 [Authorize(Policy = Policies.CanViewRoles)]
 public record GetRolesQuery() : IRequest<IReadOnlyList<string>>;

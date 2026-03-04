@@ -2350,6 +2350,16 @@
         },
         "additionalProperties": false
       },
+      "FamilyRole": {
+        "enum": [
+          0,
+          10,
+          20,
+          30
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
       "FamilyUserDto": {
         "type": "object",
         "properties": {
@@ -2360,6 +2370,9 @@
           "userId": {
             "type": "string",
             "nullable": true
+          },
+          "role": {
+            "$ref": "#/components/schemas/FamilyRole"
           },
           "createdOn": {
             "type": "string",

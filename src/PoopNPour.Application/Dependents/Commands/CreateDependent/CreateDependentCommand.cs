@@ -2,6 +2,7 @@ using FluentValidation;
 using MediatR;
 using PoopNPour.Abstractions.Dependent;
 using PoopNPour.Application.Authorization;
+using PoopNPour.Application.Common.Interfaces;
 using PoopNPour.Application.Dependents.Exceptions;
 using PoopNPour.Domain.Common.Auth;
 
@@ -11,12 +12,13 @@ namespace PoopNPour.Application.Dependents.Commands.CreateDependent;
 /// Command to create a new dependent
 /// </summary>
 [Authorize(Policy = Policies.CanManageDependents)]
+[AuthorizeFamilyMember(FamilyRole.Admin)]
 public record CreateDependentCommand(
     Guid FamilyId,
     string DependentName,
     string DependentSurname,
     DateTimeOffset DateOfBirth) 
-    : IRequest<DependentDto>;
+    : IRequest<DependentDto>, IFamilyRequest;
 
 /// <summary>
 /// Validator for CreateDependentCommand

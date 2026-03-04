@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using PoopNPour.Abstractions.Identity;
 using System.Security.Claims;
+using DomainClaimTypes = PoopNPour.Domain.Common.Auth.ClaimTypes;
 
 namespace PoopNPour.Infrastructure.Identity;
 
@@ -18,4 +19,12 @@ public class CurrentUser(IHttpContextAccessor httpContextAccessor) : IUser
     public bool IsAuthenticated => httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
 
     public bool IsAdmin => httpContextAccessor.HttpContext?.User?.IsInRole(Domain.Common.Auth.Roles.Administrator) ?? false;
+
+    public IEnumerable<Guid> FamilyIds =>
+        httpContextAccessor.HttpContext?.User?
+            .FindAll(DomainClaimTypes.FamilyMember)
+            .Select(c => Guid.TryParse(c.Value, out var g) ? g : (Guid?)null)
+            .Where(g => g.HasValue)
+            .Select(g => g!.Value)
+        ?? [];
 }

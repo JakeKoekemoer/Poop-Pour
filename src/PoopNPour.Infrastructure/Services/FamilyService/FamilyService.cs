@@ -29,7 +29,8 @@ public class FamilyService(ApplicationDbContext context) : IFamilyService
             var familyUser = new Domain.Entities.FamilyUser
             {
                 FamilyId = family.FamilyId,
-                UserId = creatorUserId
+                UserId = creatorUserId,
+                Role = Domain.Common.Auth.FamilyRole.Owner
             };
 
             context.FamilyUsers.Add(familyUser);

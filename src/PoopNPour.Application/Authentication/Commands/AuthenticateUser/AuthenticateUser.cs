@@ -1,5 +1,6 @@
 using MediatR;
 using PoopNPour.Abstractions.Authentication;
+using PoopNPour.Abstractions.FamilyUser;
 using PoopNPour.Abstractions.User;
 using PoopNPour.Application.Authentication.Exceptions;
 using PoopNPour.Application.Authentication.Models;
@@ -20,7 +21,8 @@ public record AuthenticateUserCommand(string Username, string Password)
 /// </summary>
 public class AuthenticateUserCommandHandler(
     IUserService userService,
-    IJwtTokenService jwtTokenService) : IRequestHandler<AuthenticateUserCommand, LoginResponseDto>
+    IJwtTokenService jwtTokenService,
+    IFamilyUserService familyUserService) : IRequestHandler<AuthenticateUserCommand, LoginResponseDto>
 {
     public async Task<LoginResponseDto> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
     {
@@ -34,11 +36,16 @@ public class AuthenticateUserCommandHandler(
             throw new InvalidCredentialsException();
         }
 
+        var familyMemberships = await familyUserService.GetUserFamilyMembershipsAsync(
+            user.Id,
+            cancellationToken);
+
         (string token, DateTime expiresAt) = await jwtTokenService.GenerateTokenAsync(
             user.Id,
             user.Email,
             user.UserName,
-            user.Roles);
+            user.Roles,
+            familyMemberships);
 
         return new LoginResponseDto
         {

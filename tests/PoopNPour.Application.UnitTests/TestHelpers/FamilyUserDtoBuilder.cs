@@ -1,4 +1,5 @@
 using PoopNPour.Abstractions.FamilyUser;
+using PoopNPour.Domain.Common.Auth;
 
 namespace PoopNPour.Application.UnitTests.TestHelpers;
 
@@ -9,6 +10,7 @@ public class FamilyUserDtoBuilder
 {
     private Guid _familyId = Guid.NewGuid();
     private string _userId = Guid.NewGuid().ToString();
+    private FamilyRole _role = FamilyRole.Member;
     private DateTimeOffset _createdOn = new DateTimeOffset(2025, 1, 1, 0, 0, 0, TimeSpan.Zero);
     private string? _createdBy = "test-user";
     private DateTimeOffset _lastModifiedOn = new DateTimeOffset(2025, 1, 1, 0, 0, 0, TimeSpan.Zero);
@@ -23,6 +25,12 @@ public class FamilyUserDtoBuilder
     public FamilyUserDtoBuilder WithUserId(string userId)
     {
         _userId = userId;
+        return this;
+    }
+
+    public FamilyUserDtoBuilder WithRole(FamilyRole role)
+    {
+        _role = role;
         return this;
     }
 
@@ -56,6 +64,7 @@ public class FamilyUserDtoBuilder
         {
             FamilyId = _familyId,
             UserId = _userId,
+            Role = _role,
             CreatedOn = _createdOn,
             CreatedBy = _createdBy,
             LastModifiedOn = _lastModifiedOn,

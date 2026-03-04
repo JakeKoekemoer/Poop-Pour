@@ -44,7 +44,7 @@ public class IdentityServiceTests : IDisposable
         _roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         _authorizationService = serviceProvider.GetRequiredService<IAuthorizationService>();
 
-        _sut = new IdentityService(_userManager, _roleManager, _context, _authorizationService);
+        _sut = new IdentityService(_userManager, _roleManager, _authorizationService);
     }
 
     [Fact]

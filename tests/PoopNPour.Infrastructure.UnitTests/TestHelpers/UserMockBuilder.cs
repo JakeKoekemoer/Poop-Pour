@@ -11,6 +11,7 @@ public static class UserMockBuilder
         user.Id.Returns(id);
         user.IsAuthenticated.Returns(true);
         user.IsAdmin.Returns(false);
+        user.FamilyIds.Returns(Enumerable.Empty<Guid>());
         return user;
     }
 
@@ -20,6 +21,7 @@ public static class UserMockBuilder
         user.Id.Returns(id);
         user.IsAuthenticated.Returns(true);
         user.IsAdmin.Returns(true);
+        user.FamilyIds.Returns(Enumerable.Empty<Guid>());
         return user;
     }
 
@@ -29,6 +31,7 @@ public static class UserMockBuilder
         user.Id.Returns((string?)null);
         user.IsAuthenticated.Returns(false);
         user.IsAdmin.Returns(false);
+        user.FamilyIds.Returns(Enumerable.Empty<Guid>());
         return user;
     }
 }

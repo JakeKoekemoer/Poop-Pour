@@ -6,4 +6,10 @@ namespace PoopNPour.Domain.Common.Auth;
 public static class ClaimTypes
 {
     public const string Policy = nameof(Policy);
+
+    /// <summary>
+    /// Claim type for family membership. One claim per family the user belongs to.
+    /// Value is the family GUID as a string.
+    /// </summary>
+    public const string FamilyMember = "family_member";
 }

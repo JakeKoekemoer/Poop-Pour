@@ -32,7 +32,8 @@ public class FamilyUserService(ApplicationDbContext context) : IFamilyUserServic
         var familyUser = new Domain.Entities.FamilyUser
         {
             FamilyId = familyId,
-            UserId = userId
+            UserId = userId,
+            Role = Domain.Common.Auth.FamilyRole.Member
         };
 
         context.FamilyUsers.Add(familyUser);
@@ -104,12 +105,25 @@ public class FamilyUserService(ApplicationDbContext context) : IFamilyUserServic
         return (entities.Select(MapToDto), totalCount);
     }
 
+    public async Task<IEnumerable<FamilyUserDto>> GetUserFamilyMembershipsAsync(
+        string userId,
+        CancellationToken cancellationToken = default)
+    {
+        var memberships = await context.FamilyUsers
+            .AsNoTracking()
+            .Where(fu => fu.UserId == userId)
+            .ToListAsync(cancellationToken);
+
+        return memberships.Select(MapToDto);
+    }
+
     private static FamilyUserDto MapToDto(Domain.Entities.FamilyUser familyUser)
     {
         return new FamilyUserDto
         {
             FamilyId = familyUser.FamilyId,
             UserId = familyUser.UserId,
+            Role = familyUser.Role,
             CreatedOn = familyUser.CreatedOn,
             CreatedBy = familyUser.CreatedBy,
             LastModifiedOn = familyUser.LastModifiedOn,

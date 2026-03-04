@@ -14,6 +14,11 @@ public class FamilyUserConfiguration : IEntityTypeConfiguration<FamilyUser>
         // Composite Primary Key
         builder.HasKey(fu => new { fu.FamilyId, fu.UserId });
 
+        // Properties
+        builder.Property(fu => fu.Role)
+            .IsRequired()
+            .HasDefaultValue(Domain.Common.Auth.FamilyRole.Member);
+
         // Relationships
         builder.HasOne(fu => fu.Family)
             .WithMany(f => f.Users)

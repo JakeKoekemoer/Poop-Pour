@@ -25,7 +25,7 @@ public class RemoveUserRoleCommandHandlerTests
     {
         var userId = Guid.NewGuid().ToString();
         var existingUser = new UserDtoBuilder().WithId(userId).WithRoles(Roles.Tenant).Build();
-        var updatedUser = new UserDtoBuilder().WithId(userId).WithRoles(Roles.Tenant).Build();
+        var updatedUser = new UserDtoBuilder().WithId(userId).Build(); // role removed
 
         _userService.GetUserByIdAsync(userId, Arg.Any<CancellationToken>()).Returns(existingUser);
         _userService.RemoveUserRoleAsync(userId, Roles.Tenant, Arg.Any<CancellationToken>()).Returns(updatedUser);
@@ -34,7 +34,6 @@ public class RemoveUserRoleCommandHandlerTests
         var result = await _sut.Handle(command, CancellationToken.None);
 
         result.Roles.Should().NotContain(Roles.Tenant);
-        result.Roles.Should().Contain(Roles.Tenant);
         await _userService.Received(1).RemoveUserRoleAsync(userId, Roles.Tenant, Arg.Any<CancellationToken>());
     }
 

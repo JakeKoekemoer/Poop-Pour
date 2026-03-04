@@ -1,3 +1,5 @@
+using PoopNPour.Domain.Common.Auth;
+
 namespace PoopNPour.Abstractions.FamilyUser;
 
 /// <summary>
@@ -7,7 +9,8 @@ public class FamilyUserDto
 {
     public Guid FamilyId { get; set; }
     public string UserId { get; set; } = string.Empty;
-    
+    public FamilyRole Role { get; set; } = FamilyRole.Member;
+
     // Audit fields
     public DateTimeOffset CreatedOn { get; set; }
     public string? CreatedBy { get; set; }

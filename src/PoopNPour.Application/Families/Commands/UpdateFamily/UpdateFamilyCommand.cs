@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using PoopNPour.Abstractions.Family;
 using PoopNPour.Application.Authorization;
+using PoopNPour.Application.Common.Interfaces;
 using PoopNPour.Application.Families.Exceptions;
 using PoopNPour.Domain.Common.Auth;
 using System.Security.Claims;
@@ -13,11 +14,12 @@ namespace PoopNPour.Application.Families.Commands.UpdateFamily;
 /// Command to update an existing family
 /// </summary>
 [Authorize(Policy = Policies.CanManageFamilies)]
+[AuthorizeFamilyMember(FamilyRole.Owner)]
 public record UpdateFamilyCommand(
     Guid FamilyId,
     string? FamilyName = null,
     string? FamilyLastName = null) 
-    : IRequest<FamilyDto>;
+    : IRequest<FamilyDto>, IFamilyRequest;
 
 /// <summary>
 /// Validator for UpdateFamilyCommand
