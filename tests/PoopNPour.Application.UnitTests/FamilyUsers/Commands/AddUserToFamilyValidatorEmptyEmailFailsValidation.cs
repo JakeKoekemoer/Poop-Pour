@@ -4,19 +4,19 @@ using Xunit;
 
 namespace PoopNPour.Application.UnitTests.FamilyUsers.Commands;
 
-public class AddUserToFamilyValidatorValidCommandPassesValidation
+public class AddUserToFamilyValidatorEmptyEmailFailsValidation
 {
     private readonly AddUserToFamilyCommandValidator _validator = new();
 
     [Fact]
-    public void Validate_ValidCommand_PassesValidation()
+    public void Validate_EmptyEmail_FailsValidation()
     {
         var command = new AddUserToFamilyCommand(
             FamilyId: Guid.NewGuid(),
-            Email: "john.smith@example.com");
+            Email: "");
 
         var result = _validator.TestValidate(command);
 
-        result.ShouldNotHaveAnyValidationErrors();
+        result.ShouldHaveValidationErrorFor(x => x.Email);
     }
 }

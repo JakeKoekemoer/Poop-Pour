@@ -13,7 +13,7 @@ public class AddUserToFamilyValidatorEmptyFamilyIdFailsValidation
     {
         var command = new AddUserToFamilyCommand(
             FamilyId: Guid.Empty,
-            UserId: Guid.NewGuid().ToString());
+            Email: "john.smith@example.com");
 
         var result = _validator.TestValidate(command);
 

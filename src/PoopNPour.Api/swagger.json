@@ -2071,7 +2071,7 @@
             "type": "string",
             "format": "uuid"
           },
-          "userId": {
+          "email": {
             "type": "string",
             "nullable": true
           }

@@ -13,11 +13,11 @@ public class AddUserToFamilyValidatorMultipleErrorsReturnsAllErrors
     {
         var command = new AddUserToFamilyCommand(
             FamilyId: Guid.Empty,
-            UserId: "");
+            Email: "");
 
         var result = _validator.TestValidate(command);
 
         result.ShouldHaveValidationErrorFor(x => x.FamilyId);
-        result.ShouldHaveValidationErrorFor(x => x.UserId);
+        result.ShouldHaveValidationErrorFor(x => x.Email);
     }
 }

@@ -3006,7 +3006,7 @@ export interface AddUserRoleCommand {
 
 export interface AddUserToFamilyCommand {
     familyId?: string;
-    userId?: string | null;
+    email?: string | null;
 }
 
 export interface ClaimDto {
