@@ -305,6 +305,20 @@ export interface IClient {
     getFamilyUserById(familyId: string, userId: string, signal?: AbortSignal): Promise<SwaggerResponse<FamilyUserDto>>;
 
     /**
+     * List family members
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @return OK
+     */
+    getFamilyMembers(familyId: string, page?: number | undefined, pageSize?: number | undefined, signal?: AbortSignal): Promise<SwaggerResponse<FamilyMemberDtoPaginatedResponseDto>>;
+
+    /**
+     * Get family member
+     * @return OK
+     */
+    getFamilyMember(familyId: string, userId: string, signal?: AbortSignal): Promise<SwaggerResponse<FamilyMemberDto>>;
+
+    /**
      * Create feed log
      * @return OK
      */
@@ -1504,6 +1518,129 @@ export class Client extends ApiBase implements IClient {
             });
         }
         return Promise.resolve<SwaggerResponse<FamilyUserDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * List family members
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @return OK
+     */
+    getFamilyMembers(familyId: string, page?: number | undefined, pageSize?: number | undefined, signal?: AbortSignal): Promise<SwaggerResponse<FamilyMemberDtoPaginatedResponseDto>> {
+        let url_ = this.baseUrl + "/api/family-users/{familyId}/members?";
+        if (familyId === undefined || familyId === null)
+            throw new globalThis.Error("The parameter 'familyId' must be defined.");
+        url_ = url_.replace("{familyId}", encodeURIComponent("" + familyId));
+        if (page === null)
+            throw new globalThis.Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetFamilyMembers(_response);
+        });
+    }
+
+    protected processGetFamilyMembers(response: Response): Promise<SwaggerResponse<FamilyMemberDtoPaginatedResponseDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FamilyMemberDtoPaginatedResponseDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            return throwException("Not Found", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<FamilyMemberDtoPaginatedResponseDto>>(new SwaggerResponse(status, _headers, null as any));
+    }
+
+    /**
+     * Get family member
+     * @return OK
+     */
+    getFamilyMember(familyId: string, userId: string, signal?: AbortSignal): Promise<SwaggerResponse<FamilyMemberDto>> {
+        let url_ = this.baseUrl + "/api/family-users/{familyId}/members/{userId}";
+        if (familyId === undefined || familyId === null)
+            throw new globalThis.Error("The parameter 'familyId' must be defined.");
+        url_ = url_.replace("{familyId}", encodeURIComponent("" + familyId));
+        if (userId === undefined || userId === null)
+            throw new globalThis.Error("The parameter 'userId' must be defined.");
+        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            signal,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetFamilyMember(_response);
+        });
+    }
+
+    protected processGetFamilyMember(response: Response): Promise<SwaggerResponse<FamilyMemberDto>> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FamilyMemberDto;
+            return new SwaggerResponse(status, _headers, result200);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            return throwException("Not Found", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SwaggerResponse<FamilyMemberDto>>(new SwaggerResponse(status, _headers, null as any));
     }
 
     /**
@@ -2936,6 +3073,27 @@ export interface FamilyDto {
 
 export interface FamilyDtoPaginatedResponseDto {
     items?: FamilyDto[] | null;
+    pageNumber?: number;
+    pageSize?: number;
+    totalCount?: number;
+    readonly totalPages?: number;
+}
+
+export interface FamilyMemberDto {
+    userId?: string | null;
+    userName?: string | null;
+    email?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    familyId?: string;
+    familyName?: string | null;
+    familyLastName?: string | null;
+    role?: FamilyRole;
+    joinedOn?: Date;
+}
+
+export interface FamilyMemberDtoPaginatedResponseDto {
+    items?: FamilyMemberDto[] | null;
     pageNumber?: number;
     pageSize?: number;
     totalCount?: number;

@@ -45,4 +45,23 @@ public interface IFamilyUserService
     Task<IEnumerable<FamilyUserDto>> GetUserFamilyMembershipsAsync(
         string userId,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets a paginated, enriched list of members for a specific family.
+    /// Includes user identity (name, email) and family name via EF navigation joins.
+    /// </summary>
+    Task<(IEnumerable<FamilyMemberDto> members, int totalCount)> GetFamilyMembersAsync(
+        Guid familyId,
+        int pageNumber,
+        int pageSize,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets a single enriched family member record.
+    /// Returns null if the user is not a member of the family.
+    /// </summary>
+    Task<FamilyMemberDto?> GetFamilyMemberAsync(
+        Guid familyId,
+        string userId,
+        CancellationToken cancellationToken = default);
 }

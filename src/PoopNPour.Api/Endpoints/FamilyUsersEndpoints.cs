@@ -5,6 +5,8 @@ using PoopNPour.Api.Common;
 using PoopNPour.Application.Common.Models;
 using PoopNPour.Application.FamilyUsers.Commands.AddUserToFamily;
 using PoopNPour.Application.FamilyUsers.Commands.RemoveUserFromFamily;
+using PoopNPour.Application.FamilyUsers.Queries.GetFamilyMember;
+using PoopNPour.Application.FamilyUsers.Queries.GetFamilyMembers;
 using PoopNPour.Application.FamilyUsers.Queries.GetFamilyUserById;
 using PoopNPour.Application.FamilyUsers.Queries.GetFamilyUsersList;
 
@@ -30,7 +32,13 @@ public class FamilyUsersEndpoints : EndpointGroupBase
                 .WithResponse<FamilyUserDto>())
             .MapGet(GetFamilyUsersAsync, "", route => route
                 .WithDocumentation("List family users", "Paginated list with optional filters")
-                .WithResponse<PaginatedResponseDto<FamilyUserDto>>());
+                .WithResponse<PaginatedResponseDto<FamilyUserDto>>())
+            .MapGet(GetFamilyMembersAsync, "{familyId:guid}/members", route => route
+                .WithDocumentation("List family members", "Paginated list of enriched members (includes user name, email, family name)")
+                .WithResponse<PaginatedResponseDto<FamilyMemberDto>>())
+            .MapGet(GetFamilyMemberAsync, "{familyId:guid}/members/{userId}", route => route
+                .WithDocumentation("Get family member", "Fetch a single enriched family member by userId")
+                .WithResponse<FamilyMemberDto>());
     }
 
     public async Task<IResult> AddUserToFamilyAsync(
@@ -73,6 +81,29 @@ public class FamilyUsersEndpoints : EndpointGroupBase
         CancellationToken cancellationToken = default)
     {
         var query = new GetFamilyUsersListQuery(page, pageSize, familyId, userId);
+        var result = await mediator.Send(query, cancellationToken);
+        return Results.Ok(result);
+    }
+
+    public async Task<IResult> GetFamilyMembersAsync(
+        IMediator mediator,
+        [FromRoute] Guid familyId,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20,
+        CancellationToken cancellationToken = default)
+    {
+        var query = new GetFamilyMembersQuery(familyId, page, pageSize);
+        var result = await mediator.Send(query, cancellationToken);
+        return Results.Ok(result);
+    }
+
+    public async Task<IResult> GetFamilyMemberAsync(
+        IMediator mediator,
+        [FromRoute] Guid familyId,
+        [FromRoute] string userId,
+        CancellationToken cancellationToken = default)
+    {
+        var query = new GetFamilyMemberQuery(familyId, userId);
         var result = await mediator.Send(query, cancellationToken);
         return Results.Ok(result);
     }

@@ -117,6 +117,43 @@ public class FamilyUserService(ApplicationDbContext context) : IFamilyUserServic
         return memberships.Select(MapToDto);
     }
 
+    public async Task<(IEnumerable<FamilyMemberDto> members, int totalCount)> GetFamilyMembersAsync(
+        Guid familyId,
+        int pageNumber,
+        int pageSize,
+        CancellationToken cancellationToken = default)
+    {
+        var query = context.FamilyUsers
+            .AsNoTracking()
+            .Include(fu => fu.User)
+            .Include(fu => fu.Family)
+            .Where(fu => fu.FamilyId == familyId);
+
+        var totalCount = await query.CountAsync(cancellationToken);
+
+        var entities = await query
+            .OrderBy(fu => fu.CreatedOn)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return (entities.Select(MapToMemberDto), totalCount);
+    }
+
+    public async Task<FamilyMemberDto?> GetFamilyMemberAsync(
+        Guid familyId,
+        string userId,
+        CancellationToken cancellationToken = default)
+    {
+        var familyUser = await context.FamilyUsers
+            .AsNoTracking()
+            .Include(fu => fu.User)
+            .Include(fu => fu.Family)
+            .FirstOrDefaultAsync(fu => fu.FamilyId == familyId && fu.UserId == userId, cancellationToken);
+
+        return familyUser == null ? null : MapToMemberDto(familyUser);
+    }
+
     private static FamilyUserDto MapToDto(Domain.Entities.FamilyUser familyUser)
     {
         return new FamilyUserDto
@@ -130,4 +167,18 @@ public class FamilyUserService(ApplicationDbContext context) : IFamilyUserServic
             LastModifiedBy = familyUser.LastModifiedBy
         };
     }
+
+    private static FamilyMemberDto MapToMemberDto(Domain.Entities.FamilyUser fu) => new()
+    {
+        UserId         = fu.UserId,
+        UserName       = fu.User?.UserName ?? string.Empty,
+        Email          = fu.User?.Email ?? string.Empty,
+        FirstName      = fu.User?.FirstName,
+        LastName       = fu.User?.LastName,
+        FamilyId       = fu.FamilyId,
+        FamilyName     = fu.Family?.FamilyName ?? string.Empty,
+        FamilyLastName = fu.Family?.FamilyLastName ?? string.Empty,
+        Role           = fu.Role,
+        JoinedOn       = fu.CreatedOn,
+    };
 }
