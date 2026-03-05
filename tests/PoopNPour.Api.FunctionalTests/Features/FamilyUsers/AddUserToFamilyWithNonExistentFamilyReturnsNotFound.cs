@@ -19,7 +19,7 @@ public class AddUserToFamilyWithNonExistentFamilyReturnsNotFound : Authenticated
     {
         using var client = await CreateAdminClientAsync();
         var nonExistentFamilyId = Guid.NewGuid();
-        var command = new AddUserToFamilyCommand(nonExistentFamilyId, "some-user-id");
+        var command = new AddUserToFamilyCommand(nonExistentFamilyId, "nonexistent@example.com");
 
         var response = await client.PostAsJsonAsync("/api/family-users", command);
 

@@ -39,13 +39,13 @@ public class AddUserToFamilyWithValidDataReturnsCreatedWithFamilyUser : Authenti
         var registerResponse = await webApiClient.PostAsJsonAsync("/api/authentication/register", registerRequest);
         var registerResult = await registerResponse.Content.ReadFromJsonAsync<RegisterResponseDto>();
 
-        var command = new AddUserToFamilyCommand(family!.FamilyId, registerResult!.User.Id);
+        var command = new AddUserToFamilyCommand(family!.FamilyId, registerRequest.Email);
         var response = await client.PostAsJsonAsync("/api/family-users", command);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         var result = await response.Content.ReadFromJsonAsync<FamilyUserDto>();
         result.Should().NotBeNull();
         result!.FamilyId.Should().Be(family.FamilyId);
-        result.UserId.Should().Be(registerResult.User.Id);
+        result.UserId.Should().Be(registerResult!.User.Id);
     }
 }

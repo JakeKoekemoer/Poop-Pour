@@ -38,7 +38,7 @@ public class AddUserToFamilyWithDuplicateUserReturnsBadRequest : AuthenticatedTe
         var registerResponse = await webApiClient.PostAsJsonAsync("/api/authentication/register", registerRequest);
         var registerResult = await registerResponse.Content.ReadFromJsonAsync<RegisterResponseDto>();
 
-        var command = new AddUserToFamilyCommand(family!.FamilyId, registerResult!.User.Id);
+        var command = new AddUserToFamilyCommand(family!.FamilyId, registerRequest.Email);
         await client.PostAsJsonAsync("/api/family-users", command);
         var response = await client.PostAsJsonAsync("/api/family-users", command);
 

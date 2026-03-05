@@ -109,12 +109,18 @@ public class FamilyUserService(ApplicationDbContext context) : IFamilyUserServic
         string userId,
         CancellationToken cancellationToken = default)
     {
-        var memberships = await context.FamilyUsers
-            .AsNoTracking()
-            .Where(fu => fu.UserId == userId)
-            .ToListAsync(cancellationToken);
+        // AsUser() sets the tenant filter override so the global FamilyTenantFilter
+        // evaluates against the userId being looked up, not the HTTP context user.
+        // This is necessary at login time when the caller is not yet authenticated.
+        using (context.AsUser(userId))
+        {
+            var memberships = await context.FamilyUsers
+                .AsNoTracking()
+                .Where(fu => fu.UserId == userId)
+                .ToListAsync(cancellationToken);
 
-        return memberships.Select(MapToDto);
+            return memberships.Select(MapToDto);
+        }
     }
 
     public async Task<(IEnumerable<FamilyMemberDto> members, int totalCount)> GetFamilyMembersAsync(
@@ -123,8 +129,12 @@ public class FamilyUserService(ApplicationDbContext context) : IFamilyUserServic
         int pageSize,
         CancellationToken cancellationToken = default)
     {
+        // IgnoreQueryFilters is safe here: FamilyAuthorizationBehavior has already verified
+        // the caller is a member of this family before this method is reached.
+        // The tenant filter would otherwise restrict results to the caller's own record only.
         var query = context.FamilyUsers
             .AsNoTracking()
+            .IgnoreQueryFilters()
             .Include(fu => fu.User)
             .Include(fu => fu.Family)
             .Where(fu => fu.FamilyId == familyId);
@@ -145,8 +155,11 @@ public class FamilyUserService(ApplicationDbContext context) : IFamilyUserServic
         string userId,
         CancellationToken cancellationToken = default)
     {
+        // IgnoreQueryFilters is safe here: FamilyAuthorizationBehavior has already verified
+        // the caller is a member of this family before this method is reached.
         var familyUser = await context.FamilyUsers
             .AsNoTracking()
+            .IgnoreQueryFilters()
             .Include(fu => fu.User)
             .Include(fu => fu.Family)
             .FirstOrDefaultAsync(fu => fu.FamilyId == familyId && fu.UserId == userId, cancellationToken);

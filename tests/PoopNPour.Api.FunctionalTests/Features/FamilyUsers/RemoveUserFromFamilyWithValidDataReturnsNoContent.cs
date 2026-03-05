@@ -38,7 +38,7 @@ public class RemoveUserFromFamilyWithValidDataReturnsNoContent : AuthenticatedTe
         var registerResponse = await webApiClient.PostAsJsonAsync("/api/authentication/register", registerRequest);
         var registerResult = await registerResponse.Content.ReadFromJsonAsync<RegisterResponseDto>();
 
-        var addCommand = new AddUserToFamilyCommand(family!.FamilyId, registerResult!.User.Id);
+        var addCommand = new AddUserToFamilyCommand(family!.FamilyId, registerRequest.Email);
         await client.PostAsJsonAsync("/api/family-users", addCommand);
 
         var response = await client.DeleteAsync($"/api/family-users/{family.FamilyId}/users/{registerResult.User.Id}");

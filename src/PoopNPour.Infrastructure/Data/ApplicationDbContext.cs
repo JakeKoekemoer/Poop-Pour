@@ -9,8 +9,9 @@ namespace PoopNPour.Infrastructure.Data;
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     private readonly IUser? _currentUser;
+    private string? _overrideUserId;
 
-    private string? CurrentUserId => _currentUser?.Id;
+    private string? CurrentUserId => _overrideUserId ?? _currentUser?.Id;
 
     // Defaults to true when no user is present (e.g. design-time / migrations)
     private bool IsAdmin => _currentUser?.IsAdmin ?? true;
@@ -19,6 +20,23 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         : base(options)
     {
         _currentUser = currentUser;
+    }
+
+    /// <summary>
+    /// Temporarily overrides the user ID used by the global tenant query filter.
+    /// Use this when querying on behalf of a specific user whose identity is known
+    /// but not yet present in the HTTP context (e.g. during login).
+    /// The override is cleared when the returned IDisposable is disposed.
+    /// </summary>
+    public IDisposable AsUser(string userId)
+    {
+        _overrideUserId = userId;
+        return new UserOverrideScope(() => _overrideUserId = null);
+    }
+
+    private sealed class UserOverrideScope(Action onDispose) : IDisposable
+    {
+        public void Dispose() => onDispose();
     }
 
     public DbSet<Setting> Settings { get; set; } = null!;
