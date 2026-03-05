@@ -43,7 +43,7 @@ public class RegisterUserCommandHandler(
             request.Password,
             request.FirstName,
             request.LastName,
-            null, // A role should be assigned on Email confirmation. Not here.
+            Roles.Tenant,
             cancellationToken);
 
         (string token, DateTime expiresAt) = await jwtTokenService.GenerateTokenAsync(
