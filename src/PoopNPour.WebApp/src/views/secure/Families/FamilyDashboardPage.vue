@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { Home, ArrowLeft, Users, Loader2, Trash2 } from 'lucide-vue-next'
+import { Home, ArrowLeft, Users, Baby, Loader2, Trash2 } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { ConfirmDeleteDialog } from '@/components/generic/ConfirmDeleteDialog'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -42,6 +42,13 @@ function goToDashboard() {
 function goToManageUsers() {
   router.push({
     name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.FAMILY_MEMBERS),
+    params: { familyId: familyContextStore.familyId! },
+  })
+}
+
+function goToManageDependents() {
+  router.push({
+    name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.FAMILY_DEPENDENTS),
     params: { familyId: familyContextStore.familyId! },
   })
 }
@@ -135,6 +142,14 @@ onMounted(loadFamily)
       >
         <Users class="w-10 h-10" />
         <span class="text-sm font-medium text-center">Manage users in the family</span>
+      </Button>
+      <Button
+        variant="ghost"
+        class="flex flex-col items-center justify-center gap-3 rounded-xl border bg-card p-6 h-auto text-card-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer"
+        @click="goToManageDependents"
+      >
+        <Baby class="w-10 h-10" />
+        <span class="text-sm font-medium text-center">Manage dependents</span>
       </Button>
     </div>
 

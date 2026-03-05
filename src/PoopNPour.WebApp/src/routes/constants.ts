@@ -13,6 +13,8 @@ export const SECURE_ROUTES = {
   FAMILY_DASHBOARD: "family-dashboard",
   FAMILY_MEMBERS: "family-members",
   ADD_FAMILY_MEMBER: "add-family-member",
+  FAMILY_DEPENDENTS: "family-dependents",
+  ADD_FAMILY_DEPENDENT: "add-family-dependent",
 };
 
 export const ADMIN_ROUTES = {
@@ -28,6 +30,8 @@ export const ADMIN_ROUTES = {
   FAMILY_USERS: "family-users",
   ADD_FAMILY_MEMBER: "add-family-member",
   DEPENDENTS: "dependents",
+  ADD_DEPENDENT: "add-dependent",
+  EDIT_DEPENDENT: "edit-dependent",
   DIAPER_LOGS: "diaper-logs",
   FEED_LOGS: "feed-logs",
   MEDICINE_LOGS: "medicine-logs",

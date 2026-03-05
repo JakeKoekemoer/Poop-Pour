@@ -1,0 +1,1 @@
+export { dependentService } from './DependentService';

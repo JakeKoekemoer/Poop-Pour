@@ -34,6 +34,16 @@ export const secureRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/secure/Families/FamilyMembersPage.vue'),
       },
       {
+        path: 'families/:familyId/dependents/add',
+        name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.ADD_FAMILY_DEPENDENT),
+        component: () => import('@/views/secure/Families/AddFamilyDependentPage.vue'),
+      },
+      {
+        path: 'families/:familyId/dependents',
+        name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.FAMILY_DEPENDENTS),
+        component: () => import('@/views/secure/Families/FamilyDependentsPage.vue'),
+      },
+      {
         path: 'families/:familyId',
         name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.FAMILY_DASHBOARD),
         component: () => import('@/views/secure/Families/FamilyDashboardPage.vue'),

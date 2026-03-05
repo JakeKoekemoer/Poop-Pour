@@ -69,6 +69,16 @@ export const adminRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/Dependents/DependentsPage.vue'),
       },
       {
+        path: 'dependents/add',
+        name: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.ADD_DEPENDENT),
+        component: () => import('@/views/admin/Dependents/AddDependentPage.vue'),
+      },
+      {
+        path: 'dependents/:id/edit',
+        name: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.EDIT_DEPENDENT),
+        component: () => import('@/views/admin/Dependents/EditDependentPage.vue'),
+      },
+      {
         path: 'diaper-logs',
         name: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.DIAPER_LOGS),
         component: () => import('@/views/admin/DiaperLogs/DiaperLogsPage.vue'),
