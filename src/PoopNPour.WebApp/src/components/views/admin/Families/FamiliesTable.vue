@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { Pencil, Users } from 'lucide-vue-next'
+import { Pencil, Trash2, Users } from 'lucide-vue-next'
 import { DataTable, type PaginationState } from '@/components/generic/DataTable'
 import { Button } from '@/components/ui/button'
+import { ConfirmDeleteDialog } from '@/components/generic/ConfirmDeleteDialog'
 import { familyService } from '@/services/FamilyService'
+import { useAppToast } from '@/composables/useAppToast'
 import { RouteHelper } from '@/routes/helpers/RouteHelper'
 import { ADMIN_ROUTES } from '@/routes/constants'
 import type { FamilyDto } from '@/api/api-client'
 import { columns } from './Columns'
 
 const router = useRouter()
+const toast = useAppToast()
 
 function goToEditFamily(id: string) {
   router.push({ name: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.EDIT_FAMILY), params: { id } })
@@ -25,6 +28,45 @@ const pagination = ref<PaginationState>({ page: 1, total: 0 })
 const pageSize = ref(10)
 const searchTerm = ref('')
 const loading = ref(false)
+const familyToDelete = ref<FamilyDto | null>(null)
+const deleteDialogOpen = ref(false)
+const isDeletingFamily = ref(false)
+
+function getFamilyDisplayName(family: FamilyDto) {
+  const lastName = family.familyLastName && family.familyLastName !== family.familyName
+    ? ` ${family.familyLastName}`
+    : ''
+  return `${family.familyName ?? ''}${lastName}`
+}
+
+function openDeleteFamilyDialog(family: FamilyDto) {
+  familyToDelete.value = family
+  deleteDialogOpen.value = true
+}
+
+async function confirmDeleteFamily() {
+  if (!familyToDelete.value?.familyId) return
+
+  isDeletingFamily.value = true
+  try {
+    const response = await familyService.deleteFamily(familyToDelete.value.familyId)
+
+    if (response.success) {
+      deleteDialogOpen.value = false
+      familyToDelete.value = null
+      await fetchFamilies()
+      toast.success('Family deleted', 'The family has been removed.')
+    } else {
+      const message = response.error?.message ?? 'Failed to delete family. Please try again.'
+      toast.error('Delete failed', message)
+    }
+  } catch (error) {
+    toast.error('Something went wrong', 'An unexpected error occurred. Please try again.')
+    console.error('Delete family error:', error)
+  } finally {
+    isDeletingFamily.value = false
+  }
+}
 
 async function fetchFamilies() {
   loading.value = true
@@ -87,7 +129,23 @@ onMounted(fetchFamilies)
         <Button size="sm" variant="ghost" @click="goToEditFamily((row as FamilyDto).familyId!)">
           <Pencil class="h-4 w-4" />
         </Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          class="text-destructive hover:text-destructive"
+          @click="openDeleteFamilyDialog(row as FamilyDto)"
+        >
+          <Trash2 class="h-4 w-4" />
+        </Button>
       </div>
     </template>
   </DataTable>
+
+  <ConfirmDeleteDialog
+    v-model:open="deleteDialogOpen"
+    title="Delete family"
+    :description="familyToDelete ? `Are you sure you want to delete ${getFamilyDisplayName(familyToDelete)}? This action cannot be undone.` : ''"
+    :loading="isDeletingFamily"
+    @confirm="confirmDeleteFamily"
+  />
 </template>

@@ -4,6 +4,7 @@ import type {
   FamilyDto,
   CreateFamilyCommand,
   UpdateFamilyCommand,
+  SwaggerResponse,
 } from '@/api/api-client';
 
 class FamilyService extends BaseService {
@@ -56,6 +57,12 @@ class FamilyService extends BaseService {
 
   async getFamilyById(id: string): Promise<ApiResponse<FamilyDto>> {
     return this.execute(() => this.client.getFamilyById(id));
+  }
+
+  async deleteFamily(id: string): Promise<ApiResponse<void>> {
+    return this.executeVoid(
+      () => this.client.deleteFamily(id) as Promise<SwaggerResponse<void>>
+    );
   }
 }
 

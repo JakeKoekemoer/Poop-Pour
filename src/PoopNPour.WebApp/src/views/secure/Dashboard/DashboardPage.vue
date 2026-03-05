@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { LayoutDashboard, Home, Loader2 } from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { secureNavItems } from '@/config/secureNav'
 import { familyService } from '@/services/FamilyService'
@@ -84,17 +85,18 @@ onMounted(loadFamilies)
       </p>
 
       <div v-else class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-        <button
+        <Button
           v-for="family in families"
           :key="family.familyId"
-          class="flex flex-col items-center justify-center gap-3 rounded-xl border bg-card p-6 text-card-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer"
+          variant="ghost"
+          class="flex flex-col items-center justify-center gap-3 rounded-xl border bg-card p-6 h-auto text-card-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer"
           @click="handleFamilyClick(family)"
         >
           <Home class="w-10 h-10" />
           <span class="text-sm font-medium text-center">
             {{ family.familyName }}{{ family.familyLastName && family.familyLastName !== family.familyName ? ' ' + family.familyLastName : '' }}
           </span>
-        </button>
+        </Button>
       </div>
     </div>
 
@@ -104,15 +106,16 @@ onMounted(loadFamilies)
     <div class="space-y-3">
       <h2 class="text-lg font-semibold">Actions</h2>
       <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-        <button
+        <Button
           v-for="item in secureNavItems"
           :key="item.routeName"
-          class="flex flex-col items-center justify-center gap-3 rounded-xl border bg-card p-6 text-card-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer"
+          variant="ghost"
+          class="flex flex-col items-center justify-center gap-3 rounded-xl border bg-card p-6 h-auto text-card-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer"
           @click="navigate(item.routeName)"
         >
           <component :is="item.icon" class="w-10 h-10" />
           <span class="text-sm font-medium text-center">{{ item.label }}</span>
-        </button>
+        </Button>
       </div>
     </div>
   </div>

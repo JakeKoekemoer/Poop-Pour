@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ShieldCheck } from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { adminNavItems } from '@/config/adminNav'
 
@@ -28,15 +29,16 @@ function navigate(routeName: string) {
     <Separator />
 
     <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-      <button
+      <Button
         v-for="item in dashboardItems"
         :key="item.routeName"
-        class="flex flex-col items-center justify-center gap-3 rounded-xl border bg-card p-6 text-card-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer"
+        variant="ghost"
+        class="flex flex-col items-center justify-center gap-3 rounded-xl border bg-card p-6 h-auto text-card-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer"
         @click="navigate(item.routeName)"
       >
         <component :is="item.icon" class="w-10 h-10" />
         <span class="text-sm font-medium text-center">{{ item.label }}</span>
-      </button>
+      </Button>
     </div>
   </div>
 </template>
