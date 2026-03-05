@@ -51,4 +51,10 @@ public interface IDependentService
         string dependentSurname,
         Guid? excludeDependentId = null,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Deletes a dependent and all related data (FeedLogs, DiperLogs, MedicineLogs)
+    /// </summary>
+    /// <returns>True if the dependent was found and deleted, false if not found</returns>
+    Task<bool> DeleteDependentAsync(Guid dependentId, CancellationToken cancellationToken = default);
 }

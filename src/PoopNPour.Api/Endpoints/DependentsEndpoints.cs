@@ -4,6 +4,7 @@ using PoopNPour.Abstractions.Dependent;
 using PoopNPour.Api.Common;
 using PoopNPour.Application.Common.Models;
 using PoopNPour.Application.Dependents.Commands.CreateDependent;
+using PoopNPour.Application.Dependents.Commands.DeleteDependent;
 using PoopNPour.Application.Dependents.Commands.UpdateDependent;
 using PoopNPour.Application.Dependents.Queries.GetDependentById;
 using PoopNPour.Application.Dependents.Queries.GetDependentList;
@@ -25,6 +26,9 @@ public class DependentsEndpoints : EndpointGroupBase
             .MapPut(UpdateDependentAsync, "{id:guid}", route => route
                 .WithDocumentation("Update dependent", "Update an existing dependent")
                 .WithRequestResponse<UpdateDependentCommand, DependentDto>())
+            .MapDelete(DeleteDependentAsync, "{id:guid}", route => route
+                .WithDocumentation("Delete dependent", "Delete a dependent and all related data")
+                .WithResponse<object>())
             .MapGet(GetDependentByIdAsync, "{id:guid}", route => route
                 .WithDocumentation("Get dependent", "Fetch a dependent by ID")
                 .WithResponse<DependentDto>())
@@ -51,6 +55,16 @@ public class DependentsEndpoints : EndpointGroupBase
         var updatedCommand = command with { DependentId = id };
         var result = await mediator.Send(updatedCommand, cancellationToken);
         return Results.Ok(result);
+    }
+
+    public async Task<IResult> DeleteDependentAsync(
+        IMediator mediator,
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken)
+    {
+        var command = new DeleteDependentCommand(id);
+        await mediator.Send(command, cancellationToken);
+        return Results.NoContent();
     }
 
     public async Task<IResult> GetDependentByIdAsync(

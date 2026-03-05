@@ -125,6 +125,19 @@ public class DependentService(ApplicationDbContext context) : IDependentService
         return await query.AnyAsync(cancellationToken);
     }
 
+    public async Task<bool> DeleteDependentAsync(Guid dependentId, CancellationToken cancellationToken = default)
+    {
+        var dependent = await context.Dependents
+            .FirstOrDefaultAsync(d => d.DependentId == dependentId, cancellationToken);
+
+        if (dependent == null)
+            return false;
+
+        context.Dependents.Remove(dependent);
+        await context.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+
     private static DependentDto MapToDto(Domain.Entities.Dependent dependent)
     {
         return new DependentDto
