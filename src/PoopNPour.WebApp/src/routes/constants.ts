@@ -23,6 +23,7 @@ export const ADMIN_ROUTES = {
   ADD_FAMILY: "add-family",
   EDIT_FAMILY: "edit-family",
   FAMILY_USERS: "family-users",
+  ADD_FAMILY_MEMBER: "add-family-member",
   DEPENDENTS: "dependents",
   DIAPER_LOGS: "diaper-logs",
   FEED_LOGS: "feed-logs",

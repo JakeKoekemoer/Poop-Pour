@@ -3,12 +3,11 @@ import type { ApiResponse } from '../types';
 import type {
   FamilyUserDto,
   FamilyMemberDto,
-  AddUserToFamilyCommand,
 } from '@/api/api-client';
 
 class FamilyUserService extends BaseService {
-  async addUserToFamily(body: AddUserToFamilyCommand): Promise<ApiResponse<FamilyUserDto>> {
-    return this.execute(() => this.client.addUserToFamily(body));
+  async addUserToFamily(familyId: string, email: string): Promise<ApiResponse<FamilyUserDto>> {
+    return this.execute(() => this.client.addUserToFamily({ familyId, email }));
   }
 
   async getFamilyUsers(
