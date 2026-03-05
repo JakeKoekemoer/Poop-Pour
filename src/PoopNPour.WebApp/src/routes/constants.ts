@@ -10,6 +10,9 @@ export const SECURE_ROUTES = {
   DASHBOARD: "dashboard",
   PROFILE: "profile",
   CREATE_FAMILY: "create-family",
+  FAMILY_DASHBOARD: "family-dashboard",
+  FAMILY_MEMBERS: "family-members",
+  ADD_FAMILY_MEMBER: "add-family-member",
 };
 
 export const ADMIN_ROUTES = {

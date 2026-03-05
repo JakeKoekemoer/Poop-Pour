@@ -5,42 +5,41 @@ import { LayoutDashboard, Home, Loader2 } from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { secureNavItems } from '@/config/secureNav'
-import { useUserStore } from '@/stores/user'
-import { familyUserService } from '@/services/FamilyUserService'
 import { familyService } from '@/services/FamilyService'
+import { useFamilyContextStore } from '@/stores'
+import { RouteHelper } from '@/routes/helpers/RouteHelper'
+import { SECURE_ROUTES } from '@/routes/constants'
 import type { FamilyDto } from '@/api/api-client'
 
 const router = useRouter()
-const userStore = useUserStore()
+const familyContextStore = useFamilyContextStore()
 
 const families = ref<FamilyDto[]>([])
 const isLoadingFamilies = ref(true)
 
 async function loadFamilies() {
-  const userId = userStore.user?.id
-  if (!userId) return
-
   isLoadingFamilies.value = true
   try {
-    const membershipsResponse = await familyUserService.getFamilyUsers(
-      undefined,
-      undefined,
-      undefined,
-      userId
-    )
+    const response = await familyService.getFamilies(1, 50)
 
-    if (membershipsResponse.success && membershipsResponse.data?.items.length) {
-      const familyResults = await Promise.all(
-        membershipsResponse.data.items
-          .filter((m) => !!m.familyId)
-          .map((m) => familyService.getFamilyById(m.familyId!))
-      )
+    if (response.success && response.data) {
+      families.value = response.data.items ?? []
 
-      families.value = familyResults
-        .filter((r) => r.success && r.data)
-        .map((r) => r.data!)
+      if (
+        families.value.length === 1 &&
+        !familyContextStore.preventSingleFamilyAutoRedirect
+      ) {
+        const family = families.value[0]!
+        if (family.familyId) {
+          router.push({
+            name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.FAMILY_DASHBOARD),
+            params: { familyId: family.familyId },
+          })
+        }
+      }
     }
   } finally {
+    familyContextStore.setPreventSingleFamilyAutoRedirect(false)
     isLoadingFamilies.value = false
   }
 }
@@ -50,10 +49,10 @@ function navigate(routeName: string) {
 }
 
 function handleFamilyClick(family: FamilyDto) {
-  const lastName = family.familyLastName && family.familyLastName !== family.familyName
-    ? ` ${family.familyLastName}`
-    : ''
-  alert(`TODO: manage family "${family.familyName}${lastName}"`)
+  router.push({
+    name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.FAMILY_DASHBOARD),
+    params: { familyId: family.familyId! },
+  })
 }
 
 onMounted(loadFamilies)

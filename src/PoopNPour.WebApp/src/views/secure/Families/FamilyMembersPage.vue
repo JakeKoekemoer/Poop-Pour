@@ -5,7 +5,7 @@ import { UserCheck, ArrowLeft, UserPlus } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { useFamilyContextStore } from '@/stores'
 import { RouteHelper } from '@/routes/helpers/RouteHelper'
-import { ADMIN_ROUTES } from '@/routes/constants'
+import { SECURE_ROUTES } from '@/routes/constants'
 import FamilyMembersTable from '@/components/family/FamilyMembersTable.vue'
 
 const router = useRouter()
@@ -13,13 +13,16 @@ const familyContextStore = useFamilyContextStore()
 
 const familyId = computed(() => familyContextStore.familyId)
 
-function goToFamilies() {
-  router.push({ name: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.FAMILIES) })
+function goToFamilyDashboard() {
+  router.push({
+    name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.FAMILY_DASHBOARD),
+    params: { familyId: familyContextStore.familyId! },
+  })
 }
 
 function goToAddMember() {
   router.push({
-    name: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.ADD_FAMILY_MEMBER),
+    name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.ADD_FAMILY_MEMBER),
     params: { familyId: familyContextStore.familyId! },
   })
 }
@@ -28,9 +31,9 @@ function goToAddMember() {
 <template>
   <div class="space-y-6">
     <div class="flex items-center gap-3">
-      <Button variant="ghost" size="sm" @click="goToFamilies">
+      <Button variant="ghost" size="sm" @click="goToFamilyDashboard">
         <ArrowLeft class="w-4 h-4 mr-1" />
-        Families
+        Back to Family
       </Button>
     </div>
 
@@ -48,7 +51,7 @@ function goToAddMember() {
     <FamilyMembersTable v-if="familyId" :family-id="familyId" />
 
     <div v-else class="text-muted-foreground">
-      No family selected. Please navigate from the Families list.
+      No family selected. Please navigate from the family dashboard.
     </div>
   </div>
 </template>

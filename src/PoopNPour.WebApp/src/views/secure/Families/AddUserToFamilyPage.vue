@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { familyUserService } from '@/services/FamilyUserService'
 import { useFamilyContextStore } from '@/stores'
 import { RouteHelper } from '@/routes/helpers/RouteHelper'
-import { ADMIN_ROUTES } from '@/routes/constants'
+import { SECURE_ROUTES } from '@/routes/constants'
 import { useAppToast } from '@/composables/useAppToast'
 
 import AddUserToFamilyForm, { type AddUserToFamilyFormValues } from '@/components/family/AddUserToFamilyForm.vue'
@@ -33,7 +33,7 @@ async function handleSubmit(values: AddUserToFamilyFormValues) {
     if (response.success) {
       toast.success('Member added!', `${values.email} has been added to the family.`)
       await router.push({
-        name: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.FAMILY_USERS),
+        name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.FAMILY_MEMBERS),
         params: { familyId },
       })
     } else {
@@ -54,7 +54,7 @@ async function handleSubmit(values: AddUserToFamilyFormValues) {
 function handleCancel() {
   const familyId = familyContextStore.familyId
   router.push({
-    name: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.FAMILY_USERS),
+    name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.FAMILY_MEMBERS),
     params: familyId ? { familyId } : {},
   })
 }

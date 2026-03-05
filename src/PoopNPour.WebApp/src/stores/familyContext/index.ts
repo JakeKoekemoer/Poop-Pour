@@ -7,6 +7,7 @@ export type { FamilyContextState } from './types'
 export const useFamilyContextStore = defineStore('familyContext', {
   state: (): FamilyContextState => ({
     familyId: null,
+    preventSingleFamilyAutoRedirect: false,
   }),
 
   getters: {
@@ -22,6 +23,10 @@ export const useFamilyContextStore = defineStore('familyContext', {
     clearFamilyContext(): void {
       this.familyId = null
       clearClientFamilyId()
+    },
+
+    setPreventSingleFamilyAutoRedirect(value: boolean): void {
+      this.preventSingleFamilyAutoRedirect = value
     },
   },
 })
