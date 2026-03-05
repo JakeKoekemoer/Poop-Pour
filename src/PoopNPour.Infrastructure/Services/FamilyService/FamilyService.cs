@@ -123,6 +123,21 @@ public class FamilyService(ApplicationDbContext context) : IFamilyService
         return await query.AnyAsync(cancellationToken);
     }
 
+    public async Task<bool> DeleteFamilyAsync(
+        Guid familyId,
+        CancellationToken cancellationToken = default)
+    {
+        var family = await context.Families
+            .FirstOrDefaultAsync(f => f.FamilyId == familyId, cancellationToken);
+
+        if (family == null)
+            return false;
+
+        context.Families.Remove(family);
+        await context.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+
     private static FamilyDto MapToDto(Domain.Entities.Family family)
     {
         return new FamilyDto

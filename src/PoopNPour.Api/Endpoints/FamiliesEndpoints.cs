@@ -4,6 +4,7 @@ using PoopNPour.Abstractions.Family;
 using PoopNPour.Api.Common;
 using PoopNPour.Application.Common.Models;
 using PoopNPour.Application.Families.Commands.CreateFamily;
+using PoopNPour.Application.Families.Commands.DeleteFamily;
 using PoopNPour.Application.Families.Commands.UpdateFamily;
 using PoopNPour.Application.Families.Queries.GetFamilyById;
 using PoopNPour.Application.Families.Queries.GetFamilyList;
@@ -25,6 +26,9 @@ public class FamiliesEndpoints : EndpointGroupBase
             .MapPut(UpdateFamilyAsync, "{id:guid}", route => route
                 .WithDocumentation("Update family", "Update an existing family")
                 .WithRequestResponse<UpdateFamilyCommand, FamilyDto>())
+            .MapDelete(DeleteFamilyAsync, "{id:guid}", route => route
+                .WithDocumentation("Delete family", "Delete a family and all related data")
+                .WithResponse<object>())
             .MapGet(GetFamilyByIdAsync, "{id:guid}", route => route
                 .WithDocumentation("Get family", "Fetch a family by ID")
                 .WithResponse<FamilyDto>())
@@ -52,6 +56,16 @@ public class FamiliesEndpoints : EndpointGroupBase
         var updatedCommand = command with { FamilyId = id };
         var result = await mediator.Send(updatedCommand, cancellationToken);
         return Results.Ok(result);
+    }
+
+    public async Task<IResult> DeleteFamilyAsync(
+        IMediator mediator,
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken)
+    {
+        var command = new DeleteFamilyCommand(id);
+        await mediator.Send(command, cancellationToken);
+        return Results.NoContent();
     }
 
     public async Task<IResult> GetFamilyByIdAsync(

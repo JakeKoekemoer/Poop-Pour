@@ -47,4 +47,12 @@ public interface IFamilyService
         string userId,
         Guid? excludeFamilyId = null,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Deletes a family and all related data (FamilyUsers, Dependents, logs) via cascade.
+    /// </summary>
+    /// <returns>True if the family was found and deleted; false if not found.</returns>
+    Task<bool> DeleteFamilyAsync(
+        Guid familyId,
+        CancellationToken cancellationToken = default);
 }
