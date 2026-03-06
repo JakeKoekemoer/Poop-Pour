@@ -57,6 +57,8 @@ app.UseSwaggerUI(options =>
     options.RoutePrefix = "swagger";
 });
 
+// TODO: Errors with swagger gen in production - need to investigate and fix
+
 app.Run();
 
 // Make Program class accessible for functional tests (WebApplicationFactory<Program>)
