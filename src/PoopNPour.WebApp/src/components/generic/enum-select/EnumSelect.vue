@@ -11,7 +11,7 @@ import type { EnumOption } from "@/utils/logEnums";
 
 const props = withDefaults(
   defineProps<{
-    modelValue: number | null;
+    modelValue?: number | null;
     options: EnumOption[];
     placeholder?: string;
     disabled?: boolean;

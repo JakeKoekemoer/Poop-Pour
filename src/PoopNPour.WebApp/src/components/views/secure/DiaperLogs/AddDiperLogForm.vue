@@ -22,7 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { EnumSelect } from '@/components/generic/enum-select'
 import { FECAL_DISCHARGE_COLOUR_OPTIONS, URINAL_DISCHARGE_COLOUR_OPTIONS } from '@/utils/logEnums'
 import { dependentService } from '@/services/DependentService'
 import type { DependentDto } from '@/api/api-client'
@@ -142,13 +141,28 @@ onMounted(async () => {
       <FormItem>
         <FormLabel>Fecal Colour</FormLabel>
         <FormControl>
-          <EnumSelect
-            :model-value="componentField.modelValue"
-            :options="FECAL_DISCHARGE_COLOUR_OPTIONS"
-            placeholder="Select colour"
-            :disabled="props.isSubmitting"
-            @update:model-value="componentField['onUpdate:modelValue']"
-          />
+          <div class="flex flex-wrap gap-3">
+            <button
+              v-for="opt in FECAL_DISCHARGE_COLOUR_OPTIONS"
+              :key="opt.value"
+              type="button"
+              class="flex flex-col items-center gap-1.5 group disabled:opacity-50 disabled:pointer-events-none"
+              :disabled="props.isSubmitting"
+              :aria-pressed="componentField.modelValue === opt.value"
+              :aria-label="opt.label"
+              @click="form.setFieldValue('fecalDischargeColour', opt.value)"
+            >
+              <span
+                class="size-10 rounded-full border-2 transition-all shrink-0"
+                :class="[
+                  componentField.modelValue === opt.value ? 'border-primary ring-2 ring-primary/30 scale-110' : 'border-muted-foreground/20 hover:border-muted-foreground/50',
+                  opt.value === -1 && 'border-dashed'
+                ]"
+                :style="{ backgroundColor: opt.colour ?? '#94a3b8' }"
+              />
+              <span class="text-xs text-muted-foreground group-hover:text-foreground">{{ opt.label }}</span>
+            </button>
+          </div>
         </FormControl>
         <FormMessage />
       </FormItem>
@@ -158,13 +172,28 @@ onMounted(async () => {
       <FormItem>
         <FormLabel>Urinary Colour</FormLabel>
         <FormControl>
-          <EnumSelect
-            :model-value="componentField.modelValue"
-            :options="URINAL_DISCHARGE_COLOUR_OPTIONS"
-            placeholder="Select colour"
-            :disabled="props.isSubmitting"
-            @update:model-value="componentField['onUpdate:modelValue']"
-          />
+          <div class="flex flex-wrap gap-3">
+            <button
+              v-for="opt in URINAL_DISCHARGE_COLOUR_OPTIONS"
+              :key="opt.value"
+              type="button"
+              class="flex flex-col items-center gap-1.5 group disabled:opacity-50 disabled:pointer-events-none"
+              :disabled="props.isSubmitting"
+              :aria-pressed="componentField.modelValue === opt.value"
+              :aria-label="opt.label"
+              @click="form.setFieldValue('urinaryDischargeColour', opt.value)"
+            >
+              <span
+                class="size-10 rounded-full border-2 transition-all shrink-0"
+                :class="[
+                  componentField.modelValue === opt.value ? 'border-primary ring-2 ring-primary/30 scale-110' : 'border-muted-foreground/20 hover:border-muted-foreground/50',
+                  opt.value === -1 && 'border-dashed'
+                ]"
+                :style="{ backgroundColor: opt.colour ?? '#94a3b8' }"
+              />
+              <span class="text-xs text-muted-foreground group-hover:text-foreground">{{ opt.label }}</span>
+            </button>
+          </div>
         </FormControl>
         <FormMessage />
       </FormItem>

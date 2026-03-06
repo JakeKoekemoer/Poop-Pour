@@ -22,7 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { EnumSelect } from '@/components/generic/enum-select'
 import { FEED_LOG_TYPE_OPTIONS } from '@/utils/logEnums'
 import { dependentService } from '@/services/DependentService'
 import type { DependentDto } from '@/api/api-client'
@@ -126,13 +125,20 @@ onMounted(async () => {
       <FormItem>
         <FormLabel>Feed Type</FormLabel>
         <FormControl>
-          <EnumSelect
-            :model-value="componentField.modelValue"
-            :options="FEED_LOG_TYPE_OPTIONS"
-            placeholder="Select feed type"
-            :disabled="props.isSubmitting"
-            @update:model-value="componentField['onUpdate:modelValue']"
-          />
+          <div class="flex flex-wrap gap-2">
+            <Button
+              v-for="opt in FEED_LOG_TYPE_OPTIONS"
+              :key="opt.value"
+              type="button"
+              :variant="componentField.modelValue === opt.value ? 'default' : 'outline'"
+              size="lg"
+              class="flex-1 min-w-0"
+              :disabled="props.isSubmitting"
+              @click="form.setFieldValue('feedType', opt.value)"
+            >
+              {{ opt.label }}
+            </Button>
+          </div>
         </FormControl>
         <FormMessage />
       </FormItem>
