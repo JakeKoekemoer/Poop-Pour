@@ -22,7 +22,7 @@ public class GetFeedLogListQueryHandlerTests
     public async Task Handle_ReturnsPaginatedResults()
     {
         var logs = new[] { new FeedLogDtoBuilder().Build(), new FeedLogDtoBuilder().Build() };
-        _feedLogService.GetFeedLogsAsync(1, 10, null, null, null, Arg.Any<CancellationToken>()).Returns((logs, 2));
+        _feedLogService.GetFeedLogsAsync(1, 10, null, null, null, null, Arg.Any<CancellationToken>()).Returns((logs, 2));
 
         var query = new GetFeedLogListQuery(1, 10);
         var result = await _sut.Handle(query, CancellationToken.None);

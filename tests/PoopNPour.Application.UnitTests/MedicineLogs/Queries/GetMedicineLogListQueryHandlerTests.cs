@@ -22,7 +22,7 @@ public class GetMedicineLogListQueryHandlerTests
     public async Task Handle_ReturnsPaginatedResults()
     {
         var logs = new[] { new MedicineLogDtoBuilder().Build(), new MedicineLogDtoBuilder().Build() };
-        _medicineLogService.GetMedicineLogsAsync(1, 10, null, null, null, null, Arg.Any<CancellationToken>()).Returns((logs, 2));
+        _medicineLogService.GetMedicineLogsAsync(1, 10, null, null, null, null, null, Arg.Any<CancellationToken>()).Returns((logs, 2));
 
         var query = new GetMedicineLogListQuery(1, 10);
         var result = await _sut.Handle(query, CancellationToken.None);

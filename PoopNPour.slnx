@@ -5,10 +5,6 @@
     <Project Path="src/PoopNPour.Application/PoopNPour.Application.csproj" Id="fdeaa81b-ca3b-4ad8-8924-4b5d6d6dac97" />
     <Project Path="src/PoopNPour.Domain/PoopNPour.Domain.csproj" Id="bbde2401-70b4-446a-adb7-7038c8f91925" />
     <Project Path="src/PoopNPour.Infrastructure/PoopNPour.Infrastructure.csproj" Id="65409fe2-58f1-4693-ab35-c89b013e4cbc" />
-    <Project Path="src/PoopNPour.WebApp/PoopNPour.WebApp.esproj">
-      <Build />
-      <Deploy />
-    </Project>
   </Folder>
   <Folder Name="/Tests/">
     <Project Path="tests/PoopNPour.Api.FunctionalTests/PoopNPour.Api.FunctionalTests.csproj" />

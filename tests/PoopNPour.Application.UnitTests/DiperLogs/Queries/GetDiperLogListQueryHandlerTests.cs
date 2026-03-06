@@ -22,7 +22,7 @@ public class GetDiperLogListQueryHandlerTests
     public async Task Handle_ReturnsPaginatedResults()
     {
         var logs = new[] { new DiperLogDtoBuilder().Build(), new DiperLogDtoBuilder().Build() };
-        _diperLogService.GetDiperLogsAsync(1, 10, null, null, null, Arg.Any<CancellationToken>()).Returns((logs, 2));
+        _diperLogService.GetDiperLogsAsync(1, 10, null, null, null, null, Arg.Any<CancellationToken>()).Returns((logs, 2));
 
         var query = new GetDiperLogListQuery(1, 10);
         var result = await _sut.Handle(query, CancellationToken.None);
