@@ -58,6 +58,7 @@ app.UseSwaggerUI(options =>
 });
 
 // TODO: Errors with swagger gen in production - need to investigate and fix
+Console.WriteLine("IMPORTANT TODO: Investigate and fix errors with Swagger generation in production environment.");
 
 app.Run();
 
