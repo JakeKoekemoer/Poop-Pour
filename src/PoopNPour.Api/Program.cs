@@ -46,18 +46,16 @@ using (var scope = app.Services.CreateScope())
 app.MapEndpointGroups();
 
 // Serve Vue app for all non-API routes (supports Vue Router history mode)
-app.MapFallbackToFile("index.html");
+//app.MapFallbackToFile("index.html");
 
-if (app.Environment.IsDevelopment())
+
+// Enable Swagger UI (custom theme via static index.html with Tailwind + Alpine.js)
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    // Enable Swagger UI (custom theme via static index.html with Tailwind + Alpine.js)
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Poop & Pour API v1");
-        options.RoutePrefix = "swagger";
-    });
-}
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Poop & Pour API v1");
+    options.RoutePrefix = "swagger";
+});
 
 app.Run();
 

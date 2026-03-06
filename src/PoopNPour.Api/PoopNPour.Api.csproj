@@ -9,15 +9,8 @@
     <DockerfileContext>.</DockerfileContext>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <SpaRoot>..\PoopNPour.WebApp\</SpaRoot>
-    <SpaProxyServerUrl>http://localhost:51500</SpaProxyServerUrl>
-    <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="MediatR" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaProxy" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
       <PrivateAssets>all</PrivateAssets>
