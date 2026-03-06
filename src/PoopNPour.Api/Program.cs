@@ -11,6 +11,9 @@ builder.Configuration.AddJsonFile("database.config.json", optional: true, reload
 // Load JWT configuration from separate file (not in version control)
 builder.Configuration.AddJsonFile("jwt.config.json", optional: true, reloadOnChange: true);
 
+// Load seed configuration from separate file (not in version control)
+builder.Configuration.AddJsonFile("seed.config.json", optional: true, reloadOnChange: true);
+
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddApiServices();

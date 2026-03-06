@@ -59,4 +59,7 @@ nunit-*.xml
 
 # JWT Configuration (contains signing key)
 **/jwt.config.json
+
+# Seed Configuration (contains default admin and API client credentials)
+**/seed.config.json
 generated/api-client.ts
