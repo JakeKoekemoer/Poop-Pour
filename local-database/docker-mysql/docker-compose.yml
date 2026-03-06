@@ -1,0 +1,29 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: poopnpour-mysql
+    hostname: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=MyR0otP!ssw0rd
+      - MYSQL_DATABASE=PoopNPourDb
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - poopnpour-network
+    restart: unless-stopped
+    healthcheck:
+      test: mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  poopnpour-network:
+    driver: bridge

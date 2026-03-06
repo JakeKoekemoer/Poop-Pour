@@ -1,0 +1,9 @@
+# Environment files with sensitive data
+.env
+
+# Backup files
+*.tar.gz
+*.bak
+
+# MySQL error logs (if mounted locally)
+*.log

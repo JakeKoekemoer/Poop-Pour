@@ -25,10 +25,10 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
             .Build();
 
         var connectionString = config.GetConnectionString("DefaultConnection")
-            ?? "Server=(localdb)\\mssqllocaldb;Database=PoopNPour_DesignTime;Trusted_Connection=True;";
+            ?? "server=localhost;port=3306;database=PoopNPour_DesignTime;user=root;password=MyR0otP!ssw0rd;";
 
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseSqlServer(connectionString)
+            .UseMySQL(connectionString)
             .Options;
 
         // currentUser intentionally omitted — IsAdmin defaults to true so filters are bypassed

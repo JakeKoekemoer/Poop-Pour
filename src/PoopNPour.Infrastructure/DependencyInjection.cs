@@ -64,13 +64,13 @@ public static class DependencyInjection
         {
             options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
 
-            options.UseSqlServer(connectionString, sqlOptions =>
+            options.UseMySQL(connectionString, mysqlOptions =>
             {
-                sqlOptions.CommandTimeout(commandTimeout);
-                
+                mysqlOptions.CommandTimeout(commandTimeout);
+
                 if (enableRetryOnFailure)
                 {
-                    sqlOptions.EnableRetryOnFailure(
+                    mysqlOptions.EnableRetryOnFailure(
                         maxRetryCount: maxRetryCount,
                         maxRetryDelay: maxRetryDelay,
                         errorNumbersToAdd: null);
