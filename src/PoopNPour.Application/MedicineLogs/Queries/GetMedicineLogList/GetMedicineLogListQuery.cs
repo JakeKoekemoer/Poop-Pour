@@ -16,7 +16,8 @@ public record GetMedicineLogListQuery(
     Guid? DependentId = null,
     string? MedicineName = null,
     DateTimeOffset? StartDate = null,
-    DateTimeOffset? EndDate = null) 
+    DateTimeOffset? EndDate = null,
+    Guid? FamilyId = null) 
     : IRequest<PaginatedResponseDto<MedicineLogDto>>;
 
 /// <summary>
@@ -33,6 +34,7 @@ public class GetMedicineLogListQueryHandler(IMedicineLogService medicineLogServi
             request.MedicineName,
             request.StartDate,
             request.EndDate,
+            request.FamilyId,
             cancellationToken);
 
         return new PaginatedResponseDto<MedicineLogDto>

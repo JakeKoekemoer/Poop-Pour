@@ -2,7 +2,7 @@
   "DefaultAdmin": {
     "UserName": "admin",
     "Email": "admin@poopnpour.com",
-    "Password": "your_admin_password",
+    "Password": "YourAdmin@123",
     "FirstName": "Admin",
     "LastName": "User"
   },
@@ -10,7 +10,7 @@
     {
       "UserName": "webapi",
       "Email": "webapi@poopnpour.com",
-      "Password": "your_webapi_password",
+      "Password": "WebApi@123!Secure",
       "Role": "Web_Api",
       "FirstName": "Web",
       "LastName": "API Client"
@@ -18,7 +18,7 @@
     {
       "UserName": "mobileapi",
       "Email": "mobileapi@poopnpour.com",
-      "Password": "your_mobileapi_password",
+      "Password": "MobileApi@123!Secure",
       "Role": "Mobile_Api",
       "FirstName": "Mobile",
       "LastName": "API Client"

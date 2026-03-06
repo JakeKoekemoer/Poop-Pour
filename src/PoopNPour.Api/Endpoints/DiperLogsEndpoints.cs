@@ -65,6 +65,7 @@ public class DiperLogsEndpoints : EndpointGroupBase
 
     public async Task<IResult> GetDiperLogsAsync(
         IMediator mediator,
+        HttpContext httpContext,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 10,
         [FromQuery] Guid? dependentId = null,
@@ -72,7 +73,10 @@ public class DiperLogsEndpoints : EndpointGroupBase
         [FromQuery] DateTimeOffset? endDate = null,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetDiperLogListQuery(page, pageSize, dependentId, startDate, endDate);
+        Guid? familyId = httpContext.Request.Headers.TryGetValue("X-Family-Id", out var h)
+            && Guid.TryParse(h, out var g) ? g : null;
+
+        var query = new GetDiperLogListQuery(page, pageSize, dependentId, startDate, endDate, familyId);
         var result = await mediator.Send(query, cancellationToken);
         return Results.Ok(result);
     }

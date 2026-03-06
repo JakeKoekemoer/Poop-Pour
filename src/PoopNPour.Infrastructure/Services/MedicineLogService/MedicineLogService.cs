@@ -84,6 +84,7 @@ public class MedicineLogService(ApplicationDbContext context) : IMedicineLogServ
         string? medicineName = null,
         DateTimeOffset? startDate = null,
         DateTimeOffset? endDate = null,
+        Guid? familyId = null,
         CancellationToken cancellationToken = default)
     {
         var query = context.MedicineLogs.AsNoTracking();
@@ -92,6 +93,11 @@ public class MedicineLogService(ApplicationDbContext context) : IMedicineLogServ
         if (dependentId.HasValue)
         {
             query = query.Where(m => m.DependentId == dependentId.Value);
+        }
+
+        if (familyId.HasValue)
+        {
+            query = query.Where(m => m.Dependent!.FamilyId == familyId.Value);
         }
 
         if (!string.IsNullOrWhiteSpace(medicineName))

@@ -15,7 +15,8 @@ public record GetDiperLogListQuery(
     int PageSize = 10,
     Guid? DependentId = null,
     DateTimeOffset? StartDate = null,
-    DateTimeOffset? EndDate = null) 
+    DateTimeOffset? EndDate = null,
+    Guid? FamilyId = null) 
     : IRequest<PaginatedResponseDto<DiperLogDto>>;
 
 /// <summary>
@@ -31,6 +32,7 @@ public class GetDiperLogListQueryHandler(IDiperLogService diperLogService) : IRe
             request.DependentId,
             request.StartDate,
             request.EndDate,
+            request.FamilyId,
             cancellationToken);
 
         return new PaginatedResponseDto<DiperLogDto>

@@ -84,6 +84,7 @@ public class DiperLogService(ApplicationDbContext context) : IDiperLogService
         Guid? dependentId = null,
         DateTimeOffset? startDate = null,
         DateTimeOffset? endDate = null,
+        Guid? familyId = null,
         CancellationToken cancellationToken = default)
     {
         var query = context.DiperLogs.AsNoTracking();
@@ -92,6 +93,11 @@ public class DiperLogService(ApplicationDbContext context) : IDiperLogService
         if (dependentId.HasValue)
         {
             query = query.Where(d => d.DependentId == dependentId.Value);
+        }
+
+        if (familyId.HasValue)
+        {
+            query = query.Where(d => d.Dependent!.FamilyId == familyId.Value);
         }
 
         if (startDate.HasValue)

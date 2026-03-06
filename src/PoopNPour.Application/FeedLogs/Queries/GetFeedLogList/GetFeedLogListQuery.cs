@@ -15,7 +15,8 @@ public record GetFeedLogListQuery(
     int PageSize = 10,
     Guid? DependentId = null,
     DateTimeOffset? StartDate = null,
-    DateTimeOffset? EndDate = null) 
+    DateTimeOffset? EndDate = null,
+    Guid? FamilyId = null) 
     : IRequest<PaginatedResponseDto<FeedLogDto>>;
 
 /// <summary>
@@ -31,6 +32,7 @@ public class GetFeedLogListQueryHandler(IFeedLogService feedLogService) : IReque
             request.DependentId,
             request.StartDate,
             request.EndDate,
+            request.FamilyId,
             cancellationToken);
 
         return new PaginatedResponseDto<FeedLogDto>

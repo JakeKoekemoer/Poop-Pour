@@ -65,6 +65,7 @@ public class FeedLogsEndpoints : EndpointGroupBase
 
     public async Task<IResult> GetFeedLogsAsync(
         IMediator mediator,
+        HttpContext httpContext,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 10,
         [FromQuery] Guid? dependentId = null,
@@ -72,7 +73,10 @@ public class FeedLogsEndpoints : EndpointGroupBase
         [FromQuery] DateTimeOffset? endDate = null,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetFeedLogListQuery(page, pageSize, dependentId, startDate, endDate);
+        Guid? familyId = httpContext.Request.Headers.TryGetValue("X-Family-Id", out var h)
+            && Guid.TryParse(h, out var g) ? g : null;
+
+        var query = new GetFeedLogListQuery(page, pageSize, dependentId, startDate, endDate, familyId);
         var result = await mediator.Send(query, cancellationToken);
         return Results.Ok(result);
     }

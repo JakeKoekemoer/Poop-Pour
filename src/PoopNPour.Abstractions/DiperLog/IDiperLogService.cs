@@ -45,6 +45,7 @@ public interface IDiperLogService
         Guid? dependentId = null,
         DateTimeOffset? startDate = null,
         DateTimeOffset? endDate = null,
+        Guid? familyId = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>

@@ -23,6 +23,7 @@ using PoopNPour.Infrastructure.Authentication;
 using PoopNPour.Infrastructure.Authorization;
 using PoopNPour.Infrastructure.Data;
 using PoopNPour.Infrastructure.Data.Interceptors;
+using PoopNPour.Infrastructure.Data.Seeders;
 using PoopNPour.Infrastructure.Identity;
 using PoopNPour.Infrastructure.Repositories.SettingsRepository;
 using PoopNPour.Infrastructure.Repositories.UserRepository;
@@ -158,7 +159,11 @@ public static class DependencyInjection
         // Register Settings Repository
         services.AddScoped<ISettingsRepository, SettingsRepository>();
 
-        // Register Database Seeder
+        // Register Database Seeders (order matters: roles -> admin -> api clients -> fake data)
+        services.AddScoped<ISeeder, DefaultRolesSeeder>();
+        services.AddScoped<ISeeder, DefaultAdminSeeder>();
+        services.AddScoped<ISeeder, ApiClientsSeeder>();
+        services.AddScoped<ISeeder, FakeDataSeeder>();
         services.AddScoped<DatabaseSeeder>();
 
         // Register Family services

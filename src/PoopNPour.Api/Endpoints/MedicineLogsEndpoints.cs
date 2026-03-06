@@ -65,6 +65,7 @@ public class MedicineLogsEndpoints : EndpointGroupBase
 
     public async Task<IResult> GetMedicineLogsAsync(
         IMediator mediator,
+        HttpContext httpContext,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 10,
         [FromQuery] Guid? dependentId = null,
@@ -73,7 +74,10 @@ public class MedicineLogsEndpoints : EndpointGroupBase
         [FromQuery] DateTimeOffset? endDate = null,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetMedicineLogListQuery(page, pageSize, dependentId, medicineName, startDate, endDate);
+        Guid? familyId = httpContext.Request.Headers.TryGetValue("X-Family-Id", out var h)
+            && Guid.TryParse(h, out var g) ? g : null;
+
+        var query = new GetMedicineLogListQuery(page, pageSize, dependentId, medicineName, startDate, endDate, familyId);
         var result = await mediator.Send(query, cancellationToken);
         return Results.Ok(result);
     }

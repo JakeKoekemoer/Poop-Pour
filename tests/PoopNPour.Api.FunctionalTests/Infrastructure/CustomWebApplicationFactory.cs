@@ -70,6 +70,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
                 // Disable EF retry for in-memory provider
                 ["EntityFramework:EnableRetryOnFailure"] = "false",
 
+                // Disable fake data seeding for tests
+                ["SeedFakeData"] = "false",
+
                 // Quiet logging for tests
                 ["Logging:LogLevel:Default"] = "Warning",
             });

@@ -84,6 +84,7 @@ public class FeedLogService(ApplicationDbContext context) : IFeedLogService
         Guid? dependentId = null,
         DateTimeOffset? startDate = null,
         DateTimeOffset? endDate = null,
+        Guid? familyId = null,
         CancellationToken cancellationToken = default)
     {
         var query = context.FeedLogs.AsNoTracking();
@@ -92,6 +93,11 @@ public class FeedLogService(ApplicationDbContext context) : IFeedLogService
         if (dependentId.HasValue)
         {
             query = query.Where(f => f.DependentId == dependentId.Value);
+        }
+
+        if (familyId.HasValue)
+        {
+            query = query.Where(f => f.Dependent!.FamilyId == familyId.Value);
         }
 
         if (startDate.HasValue)

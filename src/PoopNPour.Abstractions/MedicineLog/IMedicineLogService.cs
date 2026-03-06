@@ -44,6 +44,7 @@ public interface IMedicineLogService
         string? medicineName = null,
         DateTimeOffset? startDate = null,
         DateTimeOffset? endDate = null,
+        Guid? familyId = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>
