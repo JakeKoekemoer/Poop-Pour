@@ -15,6 +15,15 @@ export const SECURE_ROUTES = {
   ADD_FAMILY_MEMBER: "add-family-member",
   FAMILY_DEPENDENTS: "family-dependents",
   ADD_FAMILY_DEPENDENT: "add-family-dependent",
+  FEED_LOGS: "feed-logs",
+  ADD_FEED_LOG: "add-feed-log",
+  EDIT_FEED_LOG: "edit-feed-log",
+  DIAPER_LOGS: "diaper-logs",
+  ADD_DIAPER_LOG: "add-diaper-log",
+  EDIT_DIAPER_LOG: "edit-diaper-log",
+  MEDICINE_LOGS: "medicine-logs",
+  ADD_MEDICINE_LOG: "add-medicine-log",
+  EDIT_MEDICINE_LOG: "edit-medicine-log",
 };
 
 export const ADMIN_ROUTES = {
@@ -32,6 +41,7 @@ export const ADMIN_ROUTES = {
   DEPENDENTS: "dependents",
   ADD_DEPENDENT: "add-dependent",
   EDIT_DEPENDENT: "edit-dependent",
+  DEPENDENT_LOGS: "dependent-logs",
   DIAPER_LOGS: "diaper-logs",
   FEED_LOGS: "feed-logs",
   MEDICINE_LOGS: "medicine-logs",

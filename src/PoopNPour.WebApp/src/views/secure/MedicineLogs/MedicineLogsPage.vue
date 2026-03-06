@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
-import { Pill } from 'lucide-vue-next'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { Pill, ArrowLeft, Plus, Pencil } from 'lucide-vue-next'
+import { Button } from '@/components/ui/button'
 import { DataTable, type PaginationState } from '@/components/generic/DataTable'
 import {
   Select,
@@ -11,8 +13,17 @@ import {
 } from '@/components/ui/select'
 import { medicineLogService } from '@/services/MedicineLogService'
 import { dependentService } from '@/services/DependentService'
+import { useFamilyContextStore } from '@/stores'
+import { RouteHelper } from '@/routes/helpers/RouteHelper'
+import { SECURE_ROUTES } from '@/routes/constants'
 import type { MedicineLogDto, DependentDto } from '@/api/api-client'
 import { columns } from '@/components/views/secure/MedicineLogs/MedicineLogsColumns'
+
+const route = useRoute()
+const router = useRouter()
+const familyContextStore = useFamilyContextStore()
+
+const familyId = computed(() => (route.params.familyId as string) || familyContextStore.familyId)
 
 const medicineLogs = ref<MedicineLogDto[]>([])
 const dependents = ref<DependentDto[]>([])
@@ -29,8 +40,39 @@ function getDependentDisplayName(dependent: DependentDto) {
   return `${name} ${surname}`.trim() || (dependent.dependentId ?? '—')
 }
 
+function goToFamilyDashboard() {
+  if (familyId.value) {
+    familyContextStore.setFamilyContext(familyId.value)
+    router.push({
+      name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.FAMILY_DASHBOARD),
+      params: { familyId: familyId.value },
+    })
+  } else {
+    router.push({ name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.DASHBOARD) })
+  }
+}
+
+function goToAddMedicineLog() {
+  if (familyId.value) {
+    router.push({
+      name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.ADD_MEDICINE_LOG),
+      params: { familyId: familyId.value },
+    })
+  }
+}
+
+function goToEditMedicineLog(id: string) {
+  if (familyId.value) {
+    router.push({
+      name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.EDIT_MEDICINE_LOG),
+      params: { familyId: familyId.value, id },
+    })
+  }
+}
+
 async function loadDependents() {
-  const response = await dependentService.getDependents(1, 200, undefined)
+  if (!familyId.value) return
+  const response = await dependentService.getDependents(1, 200, familyId.value)
   if (response.success && response.data) {
     dependents.value = response.data.items
     const map: Record<string, string> = {}
@@ -42,6 +84,7 @@ async function loadDependents() {
 }
 
 async function fetchMedicineLogs() {
+  if (!familyId.value) return
   loading.value = true
   const dependentIdFilter =
     selectedDependentId.value && selectedDependentId.value !== ALL_DEPENDENTS
@@ -84,11 +127,24 @@ onMounted(async () => {
 <template>
   <div class="space-y-6">
     <div class="flex items-center gap-3">
-      <Pill class="w-8 h-8 text-primary" />
-      <h1 class="text-3xl font-bold">Medicine Logs</h1>
+      <Button variant="ghost" size="sm" @click="goToFamilyDashboard">
+        <ArrowLeft class="w-4 h-4 mr-1" />
+        Family
+      </Button>
     </div>
 
-    <div class="space-y-4">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <Pill class="w-8 h-8 text-primary" />
+        <h1 class="text-3xl font-bold">Medicine Logs</h1>
+      </div>
+      <Button v-if="familyId" @click="goToAddMedicineLog">
+        <Plus class="w-4 h-4 mr-2" />
+        Add Medicine Log
+      </Button>
+    </div>
+
+    <div v-if="familyId" class="space-y-4">
       <div class="flex items-center gap-4">
         <Select v-model="selectedDependentId">
           <SelectTrigger class="w-[240px]">
@@ -111,7 +167,7 @@ onMounted(async () => {
         :columns="columns"
         :data="medicineLogs"
         title="Medicine Logs"
-        description="View medicine logs across all dependents"
+        description="Log medicine administration for dependents"
         :loading="loading"
         :pagination="pagination"
         empty-message="No medicine logs found."
@@ -133,10 +189,22 @@ onMounted(async () => {
         <template #cell-createdOn="{ row }">
           {{ (row as MedicineLogDto).createdOn ? new Date((row as MedicineLogDto).createdOn!).toLocaleDateString() : '—' }}
         </template>
-        <template #cell-actions>
-          <!-- Admin view is read-only, no actions -->
+        <template #cell-actions="{ row }">
+          <div class="flex items-center justify-end gap-1">
+            <Button
+              size="sm"
+              variant="ghost"
+              @click="goToEditMedicineLog((row as MedicineLogDto).medicineLogId!)"
+            >
+              <Pencil class="h-4 w-4" />
+            </Button>
+          </div>
         </template>
       </DataTable>
+    </div>
+
+    <div v-else class="text-muted-foreground">
+      No family selected. Please navigate from the Family dashboard.
     </div>
   </div>
 </template>

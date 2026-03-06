@@ -44,6 +44,51 @@ export const secureRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/secure/Families/FamilyDependentsPage.vue'),
       },
       {
+        path: 'families/:familyId/feed-logs/add',
+        name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.ADD_FEED_LOG),
+        component: () => import('@/views/secure/FeedLogs/AddFeedLogPage.vue'),
+      },
+      {
+        path: 'families/:familyId/feed-logs/:id/edit',
+        name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.EDIT_FEED_LOG),
+        component: () => import('@/views/secure/FeedLogs/EditFeedLogPage.vue'),
+      },
+      {
+        path: 'families/:familyId/feed-logs',
+        name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.FEED_LOGS),
+        component: () => import('@/views/secure/FeedLogs/FeedLogsPage.vue'),
+      },
+      {
+        path: 'families/:familyId/diaper-logs/add',
+        name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.ADD_DIAPER_LOG),
+        component: () => import('@/views/secure/DiaperLogs/AddDiaperLogPage.vue'),
+      },
+      {
+        path: 'families/:familyId/diaper-logs/:id/edit',
+        name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.EDIT_DIAPER_LOG),
+        component: () => import('@/views/secure/DiaperLogs/EditDiaperLogPage.vue'),
+      },
+      {
+        path: 'families/:familyId/diaper-logs',
+        name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.DIAPER_LOGS),
+        component: () => import('@/views/secure/DiaperLogs/DiaperLogsPage.vue'),
+      },
+      {
+        path: 'families/:familyId/medicine-logs/add',
+        name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.ADD_MEDICINE_LOG),
+        component: () => import('@/views/secure/MedicineLogs/AddMedicineLogPage.vue'),
+      },
+      {
+        path: 'families/:familyId/medicine-logs/:id/edit',
+        name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.EDIT_MEDICINE_LOG),
+        component: () => import('@/views/secure/MedicineLogs/EditMedicineLogPage.vue'),
+      },
+      {
+        path: 'families/:familyId/medicine-logs',
+        name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.MEDICINE_LOGS),
+        component: () => import('@/views/secure/MedicineLogs/MedicineLogsPage.vue'),
+      },
+      {
         path: 'families/:familyId',
         name: RouteHelper.GetSecureRouteName(SECURE_ROUTES.FAMILY_DASHBOARD),
         component: () => import('@/views/secure/Families/FamilyDashboardPage.vue'),

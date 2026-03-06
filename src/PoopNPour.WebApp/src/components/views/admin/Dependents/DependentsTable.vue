@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { Pencil, Trash2 } from 'lucide-vue-next'
+import { Pencil, Trash2, ScrollText } from 'lucide-vue-next'
 import { DataTable, type PaginationState } from '@/components/generic/DataTable'
 import { Button } from '@/components/ui/button'
 import { ConfirmDeleteDialog } from '@/components/generic/ConfirmDeleteDialog'
@@ -149,6 +149,19 @@ onMounted(async () => {
     </template>
     <template #cell-actions="{ row }">
       <div class="flex items-center justify-end gap-1">
+        <Button
+          size="sm"
+          variant="ghost"
+          title="View logs"
+          @click="
+            router.push({
+              name: RouteHelper.GetAdminRouteName(ADMIN_ROUTES.DEPENDENT_LOGS),
+              params: { id: (row as DependentDto).dependentId },
+            })
+          "
+        >
+          <ScrollText class="h-4 w-4" />
+        </Button>
         <Button size="sm" variant="ghost" @click="goToEditDependent((row as DependentDto).dependentId!)">
           <Pencil class="h-4 w-4" />
         </Button>
