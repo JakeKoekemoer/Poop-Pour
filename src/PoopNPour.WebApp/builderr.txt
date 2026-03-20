@@ -1,0 +1,101 @@
+
+> poopnpour.webapp@0.0.0 build
+> run-p type-check "build-only {@}" -- -
+
+
+> poopnpour.webapp@0.0.0 type-check
+> vue-tsc --build
+
+
+> poopnpour.webapp@0.0.0 build-only
+> vite build -
+
+[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32m✓[39m 2791 modules transformed.
+rendering chunks...
+computing gzip size...
+[2m../PoopNPour.Api/wwwroot/[22m[32mindex.html                                                                  [39m[1m[2m  0.43 kB[22m[1m[22m[2m │ gzip:   0.29 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[35massets/index-mqPHl3w6.css                                                   [39m[1m[2m 88.18 kB[22m[1m[22m[2m │ gzip:  13.27 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/chevron-left-t2UxnbGC.js                                             [39m[1m[2m  0.13 kB[22m[1m[22m[2m │ gzip:   0.14 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/loader-circle-EgZb9E45.js                                            [39m[1m[2m  0.14 kB[22m[1m[22m[2m │ gzip:   0.15 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/plus-nmuxsMys.js                                                     [39m[1m[2m  0.15 kB[22m[1m[22m[2m │ gzip:   0.15 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/arrow-left-BbOXyX4n.js                                               [39m[1m[2m  0.16 kB[22m[1m[22m[2m │ gzip:   0.16 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/FeedLogsColumns-CLEkiwYX.js                                          [39m[1m[2m  0.25 kB[22m[1m[22m[2m │ gzip:   0.16 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/MedicineLogsColumns-CXVApGaS.js                                      [39m[1m[2m  0.27 kB[22m[1m[22m[2m │ gzip:   0.16 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/DiaperLogsColumns-BTCWxQ48.js                                        [39m[1m[2m  0.27 kB[22m[1m[22m[2m │ gzip:   0.16 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/pencil-Bwgp0Fr0.js                                                   [39m[1m[2m  0.27 kB[22m[1m[22m[2m │ gzip:   0.22 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/Skeleton.vue_vue_type_script_setup_true_lang-CE9Lyrs8.js             [39m[1m[2m  0.28 kB[22m[1m[22m[2m │ gzip:   0.23 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/CardDescription.vue_vue_type_script_setup_true_lang-CEP_e3Uz.js      [39m[1m[2m  0.30 kB[22m[1m[22m[2m │ gzip:   0.24 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/user-plus-CxE-6wFr.js                                                [39m[1m[2m  0.31 kB[22m[1m[22m[2m │ gzip:   0.23 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/CardFooter.vue_vue_type_script_setup_true_lang-D7vkVW6a.js           [39m[1m[2m  0.31 kB[22m[1m[22m[2m │ gzip:   0.25 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/trash-2-B0BulSUm.js                                                  [39m[1m[2m  0.33 kB[22m[1m[22m[2m │ gzip:   0.21 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/FormDescription.vue_vue_type_script_setup_true_lang-DWOiWslb.js      [39m[1m[2m  0.44 kB[22m[1m[22m[2m │ gzip:   0.32 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/FeedLogService-C8dLQdus.js                                           [39m[1m[2m  0.63 kB[22m[1m[22m[2m │ gzip:   0.31 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/DiperLogService-Gkcf-iC8.js                                          [39m[1m[2m  0.64 kB[22m[1m[22m[2m │ gzip:   0.31 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/MedicineLogService-DVLkMg8_.js                                       [39m[1m[2m  0.66 kB[22m[1m[22m[2m │ gzip:   0.32 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/FamilyService-e9OX7snz.js                                            [39m[1m[2m  0.69 kB[22m[1m[22m[2m │ gzip:   0.33 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/DependentService-BDPt_Wpn.js                                         [39m[1m[2m  0.72 kB[22m[1m[22m[2m │ gzip:   0.33 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/logEnums-C3JSKWyx.js                                                 [39m[1m[2m  0.76 kB[22m[1m[22m[2m │ gzip:   0.33 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/Textarea.vue_vue_type_script_setup_true_lang-wQvv5Bjh.js             [39m[1m[2m  0.94 kB[22m[1m[22m[2m │ gzip:   0.55 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/Input.vue_vue_type_script_setup_true_lang-Giuht4QR.js                [39m[1m[2m  1.13 kB[22m[1m[22m[2m │ gzip:   0.61 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/FamilyUserService-ucAzBqSi.js                                        [39m[1m[2m  1.27 kB[22m[1m[22m[2m │ gzip:   0.53 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/EnumSelect.vue_vue_type_script_setup_true_lang-DKDhdsgI.js           [39m[1m[2m  1.31 kB[22m[1m[22m[2m │ gzip:   0.67 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/index-DKGZLMvC.js                                                    [39m[1m[2m  1.32 kB[22m[1m[22m[2m │ gzip:   0.65 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/UnauthorizedPage-DsMj-vrf.js                                         [39m[1m[2m  1.40 kB[22m[1m[22m[2m │ gzip:   0.83 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/DashboardPage-CQmGwIZW.js                                            [39m[1m[2m  1.51 kB[22m[1m[22m[2m │ gzip:   0.89 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/NotFoundPage-Dq67_1in.js                                             [39m[1m[2m  1.58 kB[22m[1m[22m[2m │ gzip:   0.86 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/AddUserToFamilyForm.vue_vue_type_script_setup_true_lang-VuJz-kRX.js  [39m[1m[2m  1.59 kB[22m[1m[22m[2m │ gzip:   0.82 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/TableHeader.vue_vue_type_script_setup_true_lang-CYASzECJ.js          [39m[1m[2m  1.64 kB[22m[1m[22m[2m │ gzip:   0.57 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/AddFamilyPage-BOE1vQFn.js                                            [39m[1m[2m  1.73 kB[22m[1m[22m[2m │ gzip:   0.92 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/CreateFamilyPage-BsQjajUx.js                                         [39m[1m[2m  1.74 kB[22m[1m[22m[2m │ gzip:   0.92 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/AddUserToFamilyPage-DvZN--7d.js                                      [39m[1m[2m  1.83 kB[22m[1m[22m[2m │ gzip:   0.97 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/AddUserToFamilyPage-P2t9D9kH.js                                      [39m[1m[2m  1.84 kB[22m[1m[22m[2m │ gzip:   0.98 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/AddFamilyForm.vue_vue_type_script_setup_true_lang-CbDYrhEe.js        [39m[1m[2m  1.96 kB[22m[1m[22m[2m │ gzip:   0.84 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/FamilyUsersPage-DtlUEBL7.js                                          [39m[1m[2m  1.96 kB[22m[1m[22m[2m │ gzip:   0.92 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/AddDependentPage-ByloOdcU.js                                         [39m[1m[2m  1.98 kB[22m[1m[22m[2m │ gzip:   1.00 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/FamilyMembersPage-CIFK0_QT.js                                        [39m[1m[2m  2.02 kB[22m[1m[22m[2m │ gzip:   0.94 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/AddFamilyDependentPage-BgSQvhKw.js                                   [39m[1m[2m  2.10 kB[22m[1m[22m[2m │ gzip:   1.05 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/FamilyMembersTable.vue_vue_type_script_setup_true_lang-CNIcnF1x.js   [39m[1m[2m  2.24 kB[22m[1m[22m[2m │ gzip:   1.18 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/AddFeedLogPage-Dwh0TSGy.js                                           [39m[1m[2m  2.25 kB[22m[1m[22m[2m │ gzip:   1.16 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/UserService-DsAi3fyW.js                                              [39m[1m[2m  2.26 kB[22m[1m[22m[2m │ gzip:   0.66 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/AddMedicineLogPage-BTxTHjZ-.js                                       [39m[1m[2m  2.28 kB[22m[1m[22m[2m │ gzip:   1.14 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/AddDiaperLogPage-D7HldoAq.js                                         [39m[1m[2m  2.29 kB[22m[1m[22m[2m │ gzip:   1.16 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/UsersPage-BKwdxwb0.js                                                [39m[1m[2m  2.91 kB[22m[1m[22m[2m │ gzip:   1.31 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/MedicineLogsPage-DhRwS_Dz.js                                         [39m[1m[2m  3.25 kB[22m[1m[22m[2m │ gzip:   1.39 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/FeedLogsPage-C4aT2muD.js                                             [39m[1m[2m  3.25 kB[22m[1m[22m[2m │ gzip:   1.42 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/DiaperLogsPage-DvW6KN4e.js                                           [39m[1m[2m  3.32 kB[22m[1m[22m[2m │ gzip:   1.43 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/DashboardPage-C5NO-sEq.js                                            [39m[1m[2m  3.35 kB[22m[1m[22m[2m │ gzip:   1.41 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/ProfilePage-B-rGdyMs.js                                              [39m[1m[2m  3.95 kB[22m[1m[22m[2m │ gzip:   1.32 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/LoginPage-Bwry_DZ9.js                                                [39m[1m[2m  3.96 kB[22m[1m[22m[2m │ gzip:   1.71 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/FamiliesPage-DD_yfpuG.js                                             [39m[1m[2m  4.22 kB[22m[1m[22m[2m │ gzip:   1.81 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/EditFamilyPage-BFisa2vt.js                                           [39m[1m[2m  4.23 kB[22m[1m[22m[2m │ gzip:   1.79 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/AddDependentForm.vue_vue_type_script_setup_true_lang-BpwmemlA.js     [39m[1m[2m  4.31 kB[22m[1m[22m[2m │ gzip:   1.51 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/AddMedicineLogForm.vue_vue_type_script_setup_true_lang-Do3bZgSN.js   [39m[1m[2m  4.33 kB[22m[1m[22m[2m │ gzip:   1.54 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/PasswordInput.vue_vue_type_script_setup_true_lang-D5MxWl72.js        [39m[1m[2m  4.56 kB[22m[1m[22m[2m │ gzip:   1.79 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/FeedLogsPage-DvkiFfL5.js                                             [39m[1m[2m  4.64 kB[22m[1m[22m[2m │ gzip:   1.93 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/AddFeedLogForm.vue_vue_type_script_setup_true_lang-iZ4PKOIE.js       [39m[1m[2m  4.64 kB[22m[1m[22m[2m │ gzip:   1.70 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/MedicineLogsPage-lP7CcZUb.js                                         [39m[1m[2m  4.65 kB[22m[1m[22m[2m │ gzip:   1.91 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/DiaperLogsPage-BMLkDlLs.js                                           [39m[1m[2m  4.72 kB[22m[1m[22m[2m │ gzip:   1.94 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/DeleteUserPage-CHI-deCf.js                                           [39m[1m[2m  4.79 kB[22m[1m[22m[2m │ gzip:   2.05 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/FamilyDependentsPage-C8x6WiT9.js                                     [39m[1m[2m  4.93 kB[22m[1m[22m[2m │ gzip:   2.09 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/EditDependentPage-BzL1B4Qn.js                                        [39m[1m[2m  4.95 kB[22m[1m[22m[2m │ gzip:   1.97 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/DependentsPage-BYXKg_s0.js                                           [39m[1m[2m  5.11 kB[22m[1m[22m[2m │ gzip:   2.17 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/RegisterPage-j9cXplwV.js                                             [39m[1m[2m  5.19 kB[22m[1m[22m[2m │ gzip:   1.83 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/EditMedicineLogPage-3Lu3os3w.js                                      [39m[1m[2m  5.53 kB[22m[1m[22m[2m │ gzip:   2.11 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/EditFeedLogPage-CyVX98XC.js                                          [39m[1m[2m  5.83 kB[22m[1m[22m[2m │ gzip:   2.28 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/DependentLogsPage-CyCKYzBC.js                                        [39m[1m[2m  5.85 kB[22m[1m[22m[2m │ gzip:   1.90 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/AddDiperLogForm.vue_vue_type_script_setup_true_lang-rANQB64X.js      [39m[1m[2m  5.98 kB[22m[1m[22m[2m │ gzip:   1.96 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/EditDiaperLogPage-CIlfX2wg.js                                        [39m[1m[2m  6.08 kB[22m[1m[22m[2m │ gzip:   2.24 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/SettingsPage-B698T6yD.js                                             [39m[1m[2m  6.39 kB[22m[1m[22m[2m │ gzip:   1.75 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/TabsTrigger.vue_vue_type_script_setup_true_lang-vQd71_J6.js          [39m[1m[2m  6.52 kB[22m[1m[22m[2m │ gzip:   2.18 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/ConfirmDeleteDialog.vue_vue_type_script_setup_true_lang-BZG-62vn.js  [39m[1m[2m  7.00 kB[22m[1m[22m[2m │ gzip:   1.96 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/AddUserPage-Djq4V1pw.js                                              [39m[1m[2m  7.19 kB[22m[1m[22m[2m │ gzip:   2.67 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/DataTable.vue_vue_type_script_setup_true_lang-D7_w5cQg.js            [39m[1m[2m  7.35 kB[22m[1m[22m[2m │ gzip:   2.45 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/HomePage-BQLkDPUg.js                                                 [39m[1m[2m 11.71 kB[22m[1m[22m[2m │ gzip:   4.05 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/EditUserPage-vzw0mEOf.js                                             [39m[1m[2m 15.10 kB[22m[1m[22m[2m │ gzip:   4.95 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/FamilyDashboardPage-DUkH7DAE.js                                      [39m[1m[2m 16.50 kB[22m[1m[22m[2m │ gzip:   4.26 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/SelectValue.vue_vue_type_script_setup_true_lang-DZ3tP7ex.js          [39m[1m[2m 30.80 kB[22m[1m[22m[2m │ gzip:   9.10 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/FormMessage.vue_vue_type_script_setup_true_lang-D87Eqzg9.js          [39m[1m[2m 90.66 kB[22m[1m[22m[2m │ gzip:  25.25 kB[22m
+[2m../PoopNPour.Api/wwwroot/[22m[36massets/index-Bi6__R02.js                                                    [39m[1m[2m427.29 kB[22m[1m[22m[2m │ gzip: 126.45 kB[22m
+[32m✓ built in 7.54s[39m

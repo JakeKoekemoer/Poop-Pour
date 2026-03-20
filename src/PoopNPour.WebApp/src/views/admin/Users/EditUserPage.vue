@@ -18,7 +18,7 @@ const router = useRouter()
 const route = useRoute()
 const toast = useAppToast()
 
-const userId = route.params.id as string
+const userId = route.params['id'] as string
 
 const isLoading = ref(true)
 const isSubmitting = ref(false)

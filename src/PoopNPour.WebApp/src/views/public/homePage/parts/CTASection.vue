@@ -2,7 +2,6 @@
 import { Button } from '@/components/ui/button'
 import { Heading } from '@/components/ui_parts/Heading'
 import { Subheading } from '@/components/ui_parts/Subheading'
-import { Logo, LOGO_STYLES } from '@/components/ui_parts/Logo'
 </script>
 
 <template>

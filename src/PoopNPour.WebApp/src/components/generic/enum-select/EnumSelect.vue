@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import type { AcceptableValue } from "reka-ui";
 import type { EnumOption } from "@/utils/logEnums";
 
 const props = withDefaults(
@@ -24,12 +25,12 @@ const emit = defineEmits<{
   "update:modelValue": [value: number | null];
 }>();
 
-function handleUpdate(value: string) {
-  if (value === "" || value === undefined) {
+function handleUpdate(value: AcceptableValue) {
+  if (value === null || value === "" || value === undefined) {
     emit("update:modelValue", null);
     return;
   }
-  const num = Number(value);
+  const num = Number(String(value));
   emit("update:modelValue", Number.isNaN(num) ? null : num);
 }
 

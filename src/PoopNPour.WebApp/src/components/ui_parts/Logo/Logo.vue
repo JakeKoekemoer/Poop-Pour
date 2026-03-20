@@ -35,7 +35,7 @@ const getAltText = (suffix: string) => `${props.alt} - ${suffix}`
 </script>
 
 <template>
-  <div v-if="isCombined" :class="['flex items-center gap-2', $attrs.class]">
+  <div v-if="isCombined" :class="['flex items-center gap-2', $attrs['class']]">
     <img
       v-if="isBottleLeft"
       :src="bottleLogo"
@@ -58,6 +58,6 @@ const getAltText = (suffix: string) => `${props.alt} - ${suffix}`
     v-else
     :src="logoImage"
     :alt="alt"
-    :class="['Logo', $attrs.class]"
+    :class="['Logo', $attrs['class']]"
   />
 </template>

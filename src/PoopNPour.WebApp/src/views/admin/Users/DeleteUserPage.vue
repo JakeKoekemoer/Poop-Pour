@@ -26,7 +26,7 @@ const router = useRouter()
 const route = useRoute()
 const toast = useAppToast()
 
-const userId = route.params.id as string
+const userId = route.params['id'] as string
 
 const CONFIRM_PHRASE = 'I understand'
 

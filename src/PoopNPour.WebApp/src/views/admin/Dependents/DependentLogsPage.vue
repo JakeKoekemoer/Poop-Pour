@@ -26,7 +26,7 @@ import { columns as medicineColumns } from '@/components/views/secure/MedicineLo
 const route = useRoute()
 const router = useRouter()
 
-const dependentId = computed(() => route.params.id as string)
+const dependentId = computed(() => route.params['id'] as string)
 const dependent = ref<DependentDto | null>(null)
 
 const diaperLogs = ref<DiperLogDto[]>([])

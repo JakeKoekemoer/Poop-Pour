@@ -14,7 +14,7 @@ withDefaults(defineProps<{
   <div class="relative w-full">
     <!-- Phone Frame (CSS-based) -->
     <div 
-      :class="['relative mx-auto w-full', $attrs.class]"
+      :class="['relative mx-auto w-full', $attrs['class']]"
       :style="{ 
         aspectRatio: aspectRatio,
         maxHeight: maxHeight !== 'none' ? maxHeight : undefined

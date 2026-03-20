@@ -12,7 +12,7 @@ const route = useRoute()
 const router = useRouter()
 const familyContextStore = useFamilyContextStore()
 
-const familyId = computed(() => (route.params.familyId as string) || familyContextStore.familyId)
+const familyId = computed(() => (route.params['familyId'] as string) || familyContextStore.familyId)
 
 function goToFamilyDashboard() {
   if (familyId.value) {

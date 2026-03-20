@@ -9,9 +9,9 @@ const router = useRouter()
 
 const navLinks = computed(() => {
   return router.getRoutes()
-    .filter((route) => route.meta?.showInNavbar === true)
+    .filter((route) => route.meta?.['showInNavbar'] === true)
     .map((route) => ({
-      name: route.meta?.navbarLabel as string || route.name as string,
+      name: (route.meta?.['navbarLabel'] as string) || (route.name as string),
       to: route.path,
     }))
 })

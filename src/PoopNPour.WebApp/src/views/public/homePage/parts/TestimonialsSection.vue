@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Star, User } from 'lucide-vue-next'
+import { Star } from 'lucide-vue-next'
 
 const testimonials = [
   {

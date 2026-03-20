@@ -10,7 +10,7 @@ withDefaults(defineProps<{
 <template>
   <component
     :is="tag"
-    :class="['text-2xl font-semibold mb-2', $attrs.class]"
+    :class="['text-2xl font-semibold mb-2', $attrs['class']]"
   >
     <slot />
   </component>

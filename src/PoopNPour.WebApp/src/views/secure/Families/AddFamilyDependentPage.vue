@@ -16,7 +16,7 @@ const router = useRouter()
 const route = useRoute()
 const toast = useAppToast()
 
-const familyId = route.params.familyId as string
+const familyId = route.params['familyId'] as string
 
 const isSubmitting = ref(false)
 const errorMessage = ref<string | null>(null)

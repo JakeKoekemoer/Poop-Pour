@@ -14,8 +14,8 @@ const router = useRouter()
 const route = useRoute()
 const toast = useAppToast()
 
-const familyId = computed(() => route.params.familyId as string)
-const medicineLogId = computed(() => route.params.id as string)
+const familyId = computed(() => route.params['familyId'] as string)
+const medicineLogId = computed(() => route.params['id'] as string)
 
 const isLoading = ref(true)
 const isSubmitting = ref(false)

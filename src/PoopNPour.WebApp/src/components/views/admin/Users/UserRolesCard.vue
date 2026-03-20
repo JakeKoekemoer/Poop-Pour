@@ -34,7 +34,7 @@ onMounted(async () => {
   rolesError.value = null
 
   const response = await userService.getRoles()
-  if (response.success && response.data) {
+  if (response.success) {
     allRoles.value = response.data
   } else {
     rolesError.value = response.error
@@ -50,20 +50,20 @@ async function handleToggle(role: string, checked: boolean) {
 
   if (checked) {
     const response = await userService.addUserRole(props.userId, role)
-    if (response.success && response.data) {
+    if (response.success) {
       response.data.forEach((r) => userRoles.add(r))
       toast.success('Role added', `"${role}" has been assigned.`)
     } else {
-      toast.error('Failed to add role', response.error ? formatApiError(response.error) : 'Please try again.')
+      toast.error('Failed to add role', formatApiError(response.error))
     }
   } else {
     const response = await userService.removeUserRole(props.userId, role)
-    if (response.success && response.data) {
+    if (response.success) {
       userRoles.clear()
       response.data.forEach((r) => userRoles.add(r))
       toast.success('Role removed', `"${role}" has been removed.`)
     } else {
-      toast.error('Failed to remove role', response.error ? formatApiError(response.error) : 'Please try again.')
+      toast.error('Failed to remove role', formatApiError(response.error))
     }
   }
 

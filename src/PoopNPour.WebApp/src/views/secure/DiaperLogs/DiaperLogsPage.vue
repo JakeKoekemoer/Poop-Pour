@@ -28,7 +28,7 @@ const route = useRoute()
 const router = useRouter()
 const familyContextStore = useFamilyContextStore()
 
-const familyId = computed(() => (route.params.familyId as string) || familyContextStore.familyId)
+const familyId = computed(() => (route.params['familyId'] as string) || familyContextStore.familyId)
 
 const diaperLogs = ref<DiperLogDto[]>([])
 const dependents = ref<DependentDto[]>([])

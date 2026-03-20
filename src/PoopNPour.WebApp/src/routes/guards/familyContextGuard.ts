@@ -7,7 +7,7 @@ export const familyContextGuard = (
   next: NavigationGuardNext,
 ): void => {
   const familyContextStore = useFamilyContextStore()
-  const incomingFamilyId = to.params.familyId
+  const incomingFamilyId = to.params['familyId']
 
   if (incomingFamilyId && typeof incomingFamilyId === 'string') {
     familyContextStore.setFamilyContext(incomingFamilyId)
